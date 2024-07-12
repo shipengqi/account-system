@@ -1,0 +1,41 @@
+<ul nz-menu nzMode="inline" class="h-100" [nzInlineCollapsed]="_collapsed">
+  <ng-container *ngTemplateOutlet="menuTmpl; context: { $implicit: menus }"></ng-container>
+  <ng-template #menuTmpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <li
+        *ngIf="!menu.children"
+        nz-menu-item
+        nz-tooltip=""
+        nzMatchRouter
+        [routerLink]="menu.routerLink"
+        [nzMatchRouterExact]="menu.routerExact"
+        [nzPaddingLeft]="menu.level * 24"
+        [nzDisabled]="menu.disabled"
+        [nzSelected]="menu.selected"
+        nzTooltipPlacement="right"
+        [nzTooltipTitle]="_collapsed ? (menu.title | translate) : ''"
+        (click)="selectSideMenu(menu)"
+      >
+        <span nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></span>
+        <span>{{ menu.title | translate }}</span>
+      </li>
+      <li
+        *ngIf="menu.children"
+        nz-submenu
+        [nzPaddingLeft]="menu.level * 24"
+        [nzOpen]="menu.open"
+        [nzTitle]="menu.title | translate"
+        [nzIcon]="menu.icon"
+        [nzDisabled]="menu.disabled"
+      >
+        <ul>
+          <ng-container *ngTemplateOutlet="menuTmpl; context: { $implicit: menu.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ng-template>
+  <div *ngIf="collapsible" class="layout-side-trigger border-top-1 bg-blue-lighter"
+       [style.width.px]="siderWidth()" (click)="setCollapsed(!_collapsed)">
+      <span nz-icon [nzType]="_collapsed ? 'menu-unfold' : 'menu-fold'"></span>
+  </div>
+</ul>

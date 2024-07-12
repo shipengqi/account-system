@@ -1,0 +1,36 @@
+@import './theme-default';
+
+.layout-side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 14;
+  height: calc(100% - @layout-header-height);
+  margin-top: @layout-header-height;
+  overflow: hidden;
+  background-color: @layout-sider-bg;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: all .3s;
+  -webkit-overflow-scrolling: touch;
+
+  &-trigger {
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    background: transparent;
+    cursor: pointer;
+    transition: all .3s;
+  }
+}
+
+.bg-blue-lighter {
+  transition: all .3s;
+}
+
+.bg-blue-lighter:hover {
+  background-color: @blue-1 !important;
+}

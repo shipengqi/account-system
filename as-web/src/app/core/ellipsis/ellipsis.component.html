@@ -1,0 +1,22 @@
+<div #orgEl style="display: none"><ng-content></ng-content></div>
+<ng-template #tooltipTpl let-con>
+  <span
+    *ngIf="tooltip && truncated; else con"
+    nz-tooltip
+    [nzTooltipTitle]="titleTpl"
+    [nzTooltipOverlayStyle]="{ 'overflow-wrap': 'break-word', 'word-wrap': 'break-word' }"
+  >
+    <ng-container *ngTemplateOutlet="con"></ng-container>
+    <ng-template #titleTpl><div [innerHTML]="orgHtml"></div></ng-template>
+  </span>
+</ng-template>
+<ng-container>
+  <div class="ellipsis">
+    <ng-template [ngTemplateOutlet]="tooltipTpl" [ngTemplateOutletContext]="{ $implicit: lineTpl }"></ng-template>
+    <ng-template #lineTpl>{{ lineText }}</ng-template>
+    <div class="ellipsis__shadow" #shadowOrgEl [innerHTML]="orgHtml"></div>
+    <div class="ellipsis__shadow" #shadowTextEl>
+      <span>{{ text }}</span>
+    </div>
+  </div>
+</ng-container>

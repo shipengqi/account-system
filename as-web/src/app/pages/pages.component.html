@@ -1,0 +1,12 @@
+<div class="layout-content-inner bc-default">
+  <div class="layout-side" [style.width.px]="siderWidth()">
+    <app-layout-sider
+      [collapsible]="true"
+      [menus]="sideMenus"
+      [collapsed]="sideCollapsed"></app-layout-sider>
+  </div>
+  <div class="layout-content-inner-content bc-default"
+       [style.margin-left.px]="layoutContentLeftWidth()">
+    <router-outlet></router-outlet>
+  </div>
+</div>

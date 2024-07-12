@@ -1,0 +1,27 @@
+<ng-template #badgeTpl>
+  <nz-badge [nzCount]="count" [nzDot]="showDot" [nzStyle]="{ 'box-shadow': 'none' }">
+    <i nz-icon nzType="bell" class="layout-nav-item-icon"></i>
+  </nz-badge>
+</ng-template>
+<div *ngIf="data!.length === 0" class="layout-nav-item d-flex layout-header-items-center px-sm">
+  <ng-template [ngTemplateOutlet]="badgeTpl"></ng-template>
+</div>
+<div *ngIf="data!.length > 0"
+     class="layout-nav-item d-flex layout-header-items-center px-md"
+     nzTrigger="click"
+     nz-dropdown
+     nzPlacement="bottomRight"
+     [nzDropdownMenu]="noticeMenu">
+  <ng-template [ngTemplateOutlet]="badgeTpl"></ng-template>
+</div>
+<nz-dropdown-menu #noticeMenu="nzDropdownMenu">
+  <div nz-menu class="header-notify">
+    <div *ngIf="loading" class="header-notify-spin-container"><nz-spin nzSimple></nz-spin></div>
+    <nz-card *ngIf="!loading" nzTitle="{{ notifyTitle | translate }}" nzBordered="false" class="ant-card-body-no-padding">
+      <app-header-notify-item *ngFor="let i of data" [data]="i" (click)="onSelect(i)"></app-header-notify-item>
+      <div nz-row *ngIf="showSeeAll">
+        <div nz-col [nzSpan]="24" class="pt-md border-top-1 text-center text-grey point" (click)="seeAll.emit()"> {{ seeAllTitle | translate }} </div>
+      </div>
+    </nz-card>
+  </div>
+</nz-dropdown-menu>

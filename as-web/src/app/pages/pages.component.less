@@ -1,0 +1,24 @@
+@import '../core/layout/style/index';
+
+nz-breadcrumb {
+  margin: 16px 0;
+}
+
+.layout-content-inner {
+  height: 100%;
+  margin: -@layout-default-content-padding;
+
+  &-content {
+    height: 100%;
+    padding: @layout-default-content-padding;
+    transition: all .3s;
+  }
+
+  &-content.layout-content-collapsed {
+    margin-left: @layout-sider-collapsed-width;
+  }
+
+  &-content.layout-content-expanded {
+    margin-left: @layout-sider-expanded-width;
+  }
+}

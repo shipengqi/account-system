@@ -1,0 +1,99 @@
+@import './theme-default';
+
+.layout-header {
+  z-index: 19;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: @layout-header-height;
+  padding: 0 16px;
+  background-color: @layout-header-bg;
+  box-shadow: 0 1px 10px #0003;
+
+  &-logo {
+    height: 100%;
+    width: @layout-header-logo-width;
+    margin-left: -16px;
+    transition: all .3s cubic-bezier(.25, 0, .15, 1);
+    background-color: @layout-header-logo-bg;
+
+    &-link {
+      display: block;
+      text-align: center;
+    }
+
+    &-full {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: inline-block;
+      max-width: 100%;
+      max-height: 36px;
+      vertical-align: middle;
+      animation: fadeIn 1s;
+    }
+
+    &-text {
+      color: @layout-header-logo-text-color;
+      font-size: @layout-header-logo-text-fs;
+      line-height: @layout-header-height;
+      text-transform: uppercase;
+      font-weight: @layout-header-logo-text-fw;
+    }
+  }
+
+  &-items-center {
+    align-items: center !important;
+  }
+}
+
+.layout-nav {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  &-wrap {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  &-middle {
+    flex: 1;
+  }
+
+  > li {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+
+  nz-badge {
+    color: @layout-white-bg;
+  }
+
+  &-item {
+    display: block;
+    min-width: 50px;
+    padding: 8px 2px;
+    line-height: 100%;
+    text-align: center;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 300ms;
+    color: @layout-white-bg;
+    height: 100%;
+
+    > li,
+    &-icon {
+      font-size: 16px !important;
+      transform: none !important;
+    }
+
+    &:hover {
+      color: @layout-white-bg;
+      background-color: @layout-header-nav-hover-color !important;
+    }
+  }
+}

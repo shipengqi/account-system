@@ -20,3 +20,8 @@
 # Go workspace file
 go.work
 go.work.sum
+
+.idea
+as-web/node_modules
+as-web/.angular
+as-web/.vscode

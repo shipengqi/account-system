@@ -1,0 +1,18 @@
+@import './theme-default';
+
+html {
+  height: 100%; // http://updates.html5rocks.com/2013/12/300ms-tap-delay-gone-away
+  direction: ltr;
+  touch-action: manipulation;
+}
+
+html,
+body,
+app-root {
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  background-color: @layout-default-bg;
+}

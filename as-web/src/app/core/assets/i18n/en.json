@@ -1,0 +1,8 @@
+{
+  "core": {
+    "notify": {
+      "title": "Notifications",
+      "see-all": "See All"
+    }
+  }
+}

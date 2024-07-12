@@ -1,0 +1,109 @@
+{
+  "core": {
+    "notify": {
+      "title": "Notifications",
+      "see-all": "See All"
+    }
+  },
+  "header": {
+    "account": {
+      "center": "Account Center",
+      "settings": "Account Settings",
+      "logout": "Logout"
+    }
+  },
+  "sider": {
+    "dashboard": "Dashboard",
+    "drivers": "Drivers",
+    "expenditure": "Expenditure",
+    "orders": "Orders",
+    "projects": "Projects",
+    "vehicles": "Vehicles"
+  },
+  "passport": {
+    "login": {
+      "title": "Login",
+      "tab-login-credentials": "Credentials",
+      "tab-login-mobile": "Mobile Number",
+      "signup": "Sign up",
+      "stay-signed-in": "Stay signed in",
+      "forgot-password": "Forgot your password?",
+      "username": "Username",
+      "password": "Password",
+      "validation": {
+        "username-required": "Please input your username!",
+        "password-required": "Please input your password!",
+        "phone-number-required": "Please input your phone number!",
+        "phone-wrong-format": "Invalid phone number!",
+        "verification-code-required": "Please input the verification code!"
+      },
+      "get-verification-code": "Get Code"
+    },
+    "register": {
+      "title": "Register",
+      "sign-in": "Already have an account?",
+      "email": "Email",
+      "confirm": "Confirm Password",
+      "captcha": "Captcha",
+      "phone": "Phone number",
+      "validation": {
+        "email-required": "Please input your email address!",
+        "email-wrong-format": "Invalid email address!",
+        "password-strong": "Strength: strong",
+        "password-medium": "Strength: medium",
+        "password-short": "Strength: too short",
+        "password-twice": "The passwords entered twice do not match!",
+        "password-strength-msg": "Please enter at least 6 characters and don't use passwords that are easy to guess.",
+        "confirm-password": "Please confirm your password!"
+      },
+      "success": "Register successfully!",
+      "failed": "Registration failed!"
+    },
+    "forget-pass": {
+      "title": "Reset Password",
+      "reset-success": "Your password has been reset.",
+      "reset-failed": "Your password reset failed."
+    },
+    "logout": {
+      "success": "You are now logged out."
+    },
+    "result-common-title": "Your operation has been executed.",
+    "result-common-desc": "If you believe you have reached this page because of an error please contact your administrator."
+  },
+  "global": {
+    "ok": "OK",
+    "yes": "Yes",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "id": "ID",
+    "comment": "Comment",
+    "updated_at": "Updated At",
+    "created_at": "Created At",
+    "action": "Action",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "reset": "Reset",
+    "save-success": "Save successfully",
+    "update-success": "Update successfully",
+    "delete-success": "Delete successfully",
+    "unknown": "Unknown",
+    "total": "Total",
+    "item": "items"
+  },
+  "expenditure": {
+    "type": "Expend Type",
+    "time": "Expend At",
+    "cost": "Cost",
+    "select-type": "Select a type",
+    "delete-title": "Delete Record",
+    "delete-confirm": "Are you sure delete this expenditure record?",
+    "toll": "Toll",
+    "fuel": "Fuel",
+    "maintenance": "Maintenance",
+    "weighbridge-fee": "Weighbridge Fee",
+    "water-refilling-fee": "Water Refilling Fee",
+    "other-fees": "Other Fees"
+  }
+}

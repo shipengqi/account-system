@@ -1,0 +1,97 @@
+// @import ~"ng-zorro-antd/ng-zorro-antd.less";
+@import '_colors';
+
+@layout-default-prefix: ~'.layout-default';
+@ant-prefix: ~'ant';
+
+@layout-default-bg: @grey-bg;
+@layout-default-content-padding: 16px;
+@layout-default-content-no-padding: (0px - @layout-default-content-padding);
+@layout-header-height: 56px;
+@layout-header-nav-bottom-height: 0.3rem;
+@layout-header-bg: @primary-7;
+@layout-header-logo-bg: @primary-5;
+@layout-header-logo-width: 200px;
+@layout-header-logo-text-fs: 24px;
+@layout-header-logo-text-fw: 700;
+@layout-header-logo-text-color: @white;
+@layout-header-nav-hover-color: @primary-8;
+@layout-second-header-nav-hover-color: @grey-4;
+@layout-sider-expanded-width: 200px;
+@layout-sider-collapsed-width: 80px;
+@layout-sider-bg: @white;
+@layout-white-bg: @white;
+@layout-toolbar-height: 48px;
+@layout-toolbar-bc: @layout-white-bg;
+// The following variables copied from ng-zorro-antd/ng-zorro-antd.less,
+// since if we import the ng-zorro-antd/ng-zorro-antd.less here, it will
+// overwrite the custom theme variables we defined in src/style.less.
+@screen-xs: 480px;
+@screen-xs-min: @screen-xs;
+@screen-sm: 576px;
+@screen-sm-min: @screen-sm;
+@screen-md: 768px;
+@screen-md-min: @screen-md;
+@screen-lg: 992px;
+@screen-lg-min: @screen-lg;
+@screen-xl: 1200px;
+@screen-xl-min: @screen-xl;
+@screen-xxl: 1600px;
+@screen-xxl-min: @screen-xxl;
+@screen-xs-max: (@screen-sm-min - 1px);
+@screen-sm-max: (@screen-md-min - 1px);
+@screen-md-max: (@screen-lg-min - 1px);
+@screen-lg-max: (@screen-xl-min - 1px);
+@screen-xl-max: (@screen-xxl-min - 1px);
+@outline-fade: 20%;
+@mobile-min: @screen-md-min;
+@mobile-max: @screen-md-min - 1px;
+
+@font-size-base: 14px;
+@font-size-md: @font-size-base + 2px;
+@font-size-lg: @font-size-md + 2px;
+@font-size-sm: 12px;
+
+@text-xs: @font-size-base - 2;
+@text-sm: @font-size-base + 0;
+@text-md: @font-size-base + 2;
+@text-lg: @font-size-base + 4;
+@text-xl: @font-size-base + 8;
+@text-xxl: @font-size-base + 14;
+@icon-sm: @font-size-base * 2;
+@icon-md: @font-size-base * 4;
+@icon-lg: @font-size-base * 6;
+@icon-xl: @font-size-base * 8;
+@icon-xxl: @font-size-base * 10;
+
+@margin-lg: 24px;
+@margin-md: 16px;
+@margin-sm: 12px;
+@margin-xs: 8px;
+@margin-xss: 4px;
+@height-base: 32px;
+@height-lg: 40px;
+@height-sm: 24px;
+@padding-lg: 24px;
+@padding-md: 16px;
+@padding-sm: 12px;
+@padding-xs: 8px;
+@padding-xss: 4px;
+
+@line-height-base: 1.5715;
+@btn-height-base: @height-base;
+@btn-height-lg: @height-lg;
+@btn-height-sm: @height-sm;
+
+@border-color-base: hsv(0, 0, 85%);
+@border-color-split: hsv(0, 0, 94%);
+@border-color-inverse: @white;
+@background-color-light: hsv(0, 0, 98%);
+@border-width-base: 1px;
+@border-style-base: solid;
+
+// down-file
+// --
+// - `hidden` 隐藏状态（默认）
+// - `disabled` 禁用状态
+@down-file-not-support-behavior: 'hidden';

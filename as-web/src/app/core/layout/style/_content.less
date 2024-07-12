@@ -1,0 +1,29 @@
+@import './theme-default';
+
+.layout-content {
+  height: calc(100% - @layout-header-height);
+  background-color: @layout-default-bg;
+  overflow: auto;
+  padding: @layout-default-content-padding;
+  transition: all .3s;
+
+  &::-webkit-scrollbar{
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track{
+    background: @layout-default-bg;
+    border-radius:2px;
+  }
+  &::-webkit-scrollbar-thumb{
+    background: #bfbfbf;
+    border-radius:10px;
+  }
+  &::-webkit-scrollbar-thumb:hover{
+    background: #888888;
+  }
+
+  &::-webkit-scrollbar-corner{
+    background: @layout-default-bg;
+  }
+}
