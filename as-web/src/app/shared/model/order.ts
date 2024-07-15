@@ -12,7 +12,7 @@ export interface IOrder {
   mileage: number;
   freight: number;
   payroll: number;
-  comment: string;
+  comment?: string;
   created_at: string;
   updated_at: string;
 }

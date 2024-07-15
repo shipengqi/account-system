@@ -13,7 +13,7 @@ import (
 func (c *Controller) Delete(ctx *gin.Context) {
 	log.Info("delete driver function called.")
 
-	idstr := ctx.Param("id")
+	idstr := ctx.Query("id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
 		response.Fail(ctx, err)

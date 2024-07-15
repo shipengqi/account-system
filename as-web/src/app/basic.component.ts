@@ -9,7 +9,7 @@ import {LayoutOptions} from './core/layout';
     <app-layout [options]="options"
                 [content]="contentTmpl">
       <app-layout-header-item direction="right">
-        <app-header-user></app-header-user>
+        <app-header-user [showCenter]="false" [showLogout]="false" [showSettings]="false"></app-header-user>
       </app-layout-header-item>
       <ng-template #contentTmpl>
         <router-outlet></router-outlet>
@@ -19,7 +19,7 @@ import {LayoutOptions} from './core/layout';
 })
 export class BasicComponent implements OnInit {
   options: LayoutOptions = {
-    logoText: 'ZHAS',
+    logoText: '中辉运输',
     logoHidden: 'mobile',
     siderCollapsible: true,
     hideSider: true,

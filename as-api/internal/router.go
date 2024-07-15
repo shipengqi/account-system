@@ -36,7 +36,7 @@ func installControllers(g *gin.Engine) {
 			projectc := project.New(storeIns)
 
 			projectv1.POST("", projectc.Create)
-			projectv1.DELETE(":id", projectc.Delete)
+			projectv1.DELETE("", projectc.Delete)
 			projectv1.PUT("", projectc.Update)
 			projectv1.GET("", projectc.List)
 			projectv1.GET(":name", projectc.Get)
@@ -46,7 +46,7 @@ func installControllers(g *gin.Engine) {
 			driverc := driver.New(storeIns)
 
 			driverv1.POST("", driverc.Create)
-			driverv1.DELETE(":id", driverc.Delete)
+			driverv1.DELETE("", driverc.Delete)
 			driverv1.PUT("", driverc.Update)
 			driverv1.GET("", driverc.List)
 			driverv1.GET(":id", driverc.Get)
@@ -56,7 +56,7 @@ func installControllers(g *gin.Engine) {
 			vehiclec := vehicle.New(storeIns)
 
 			vehiclev1.POST("", vehiclec.Create)
-			vehiclev1.DELETE(":id", vehiclec.Delete)
+			vehiclev1.DELETE("", vehiclec.Delete)
 			vehiclev1.PUT("", vehiclec.Update)
 			vehiclev1.GET("", vehiclec.List)
 			vehiclev1.GET(":number", vehiclec.Get)
@@ -66,7 +66,7 @@ func installControllers(g *gin.Engine) {
 			orderc := order.New(storeIns)
 
 			orderv1.POST("", orderc.Create)
-			orderv1.DELETE(":id", orderc.Delete)
+			orderv1.DELETE("", orderc.Delete)
 			orderv1.PUT("", orderc.Update)
 			orderv1.GET("", orderc.List)
 			orderv1.GET(":id", orderc.Get)
@@ -76,7 +76,7 @@ func installControllers(g *gin.Engine) {
 			expenditurec := expenditure.New(storeIns)
 
 			expenditurev1.POST("", expenditurec.Create)
-			expenditurev1.DELETE(":id", expenditurec.Delete)
+			expenditurev1.DELETE("", expenditurec.Delete)
 			expenditurev1.PUT("", expenditurec.Update)
 			expenditurev1.GET("", expenditurec.List)
 			expenditurev1.GET(":id", expenditurec.Get)

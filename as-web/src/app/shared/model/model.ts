@@ -4,6 +4,7 @@ export interface IDriver {
   phone: string;
   address: string;
   status: number;
+  comment?: string;
   created_at: string;
   updated_at: string;
 }
@@ -13,6 +14,7 @@ export interface IVehicle {
   number: string;
   brand: string;
   status: number;
+  comment?: string;
   created_at: string;
   updated_at: string;
 }
@@ -23,6 +25,7 @@ export interface IProject {
   start_at: string;
   end_at: string;
   status: number;
+  comment?: string;
   created_at: string;
   updated_at: string;
 }
@@ -32,7 +35,15 @@ export interface IExpenditure {
   type: number;
   cost: number;
   expend_at: string;
+  vehicle_number: string;
+  vehicle_id: number;
   comment?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface ExpenditureSearchData {
+  type: number;
+  expend_range: string[];
+  vehicle_id: number;
 }

@@ -81,16 +81,23 @@
     "updated_at": "更新时间",
     "created_at": "创建时间",
     "action": "操作",
+    "phone": "联系方式",
+    "address": "地址",
     "edit": "编辑",
     "delete": "删除",
     "search": "查询",
     "reset": "重置",
+    "status": "状态",
+    "brand": "品牌",
+    "available": "正常",
     "save-success": "保存成功",
     "update-success": "更新成功",
     "delete-success": "删除成功",
     "unknown": "未知",
     "total": "共",
-    "item": "条"
+    "item": "条",
+    "vehicle-number": "车牌号",
+    "select-vehicle-number": "选择车牌号"
   },
   "expenditure": {
     "type": "支出类型",
@@ -105,5 +112,19 @@
     "weighbridge-fee": "过磅费",
     "water-refilling-fee": "加水",
     "other-fees": "其他费用"
+  },
+  "vehicle": {
+    "delete-title": "删除记录",
+    "delete-confirm": "确定要删除该车辆信息？"
+  },
+  "driver": {
+    "name": "姓名",
+    "delete-title": "删除记录",
+    "delete-confirm": "确定要删除该司机信息？"
+  },
+  "project": {
+    "name": "项目名称",
+    "delete-title": "删除记录",
+    "delete-confirm": "确定要删除该项目信息？"
   }
 }

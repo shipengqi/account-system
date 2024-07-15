@@ -19,6 +19,20 @@ func (c *Controller) List(ctx *gin.Context) {
 		return
 	}
 
+	r.Extend = make(map[string]string)
+	if ty, ok := ctx.GetQuery("type"); ok && ty != "" {
+		r.Extend["type"] = ty
+	}
+	if vid, ok := ctx.GetQuery("vehicle_id"); ok && vid != "" {
+		r.Extend["vehicle_id"] = vid
+	}
+	if start, ok := ctx.GetQuery("expend_start"); ok && start != "" {
+		r.Extend["expend_start"] = start
+	}
+	if end, ok := ctx.GetQuery("expend_end"); ok && end != "" {
+		r.Extend["expend_end"] = end
+	}
+
 	users, err := c.svc.Expenditures().List(ctx, r)
 	if err != nil {
 		response.Fail(ctx, err)

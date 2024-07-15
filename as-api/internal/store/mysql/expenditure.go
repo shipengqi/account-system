@@ -1,15 +1,17 @@
 package mysql
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 
+	"github.com/shipengqi/asapi/pkg/util/gormutil"
 	"github.com/shipengqi/errors"
 	"gorm.io/gorm"
 
 	v1 "github.com/shipengqi/asapi/pkg/api/apiserver/v1"
 	metav1 "github.com/shipengqi/asapi/pkg/api/meta/v1"
 	"github.com/shipengqi/asapi/pkg/code"
-	"github.com/shipengqi/asapi/pkg/util/gormutil"
 )
 
 type expenditures struct {
@@ -66,18 +68,85 @@ func (v *expenditures) Get(ctx context.Context, id int, opts metav1.GetOptions) 
 
 // List return all expenditures.
 func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.ExpenditureList, error) {
-	ret := &v1.ExpenditureList{}
+	ret := &v1.ExpenditureList{Items: make([]*v1.Expenditure, 0)}
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
-	d := v.db.
-		Offset(ol.Offset).
-		Limit(ol.Limit).
-		Order("id desc").
-		Find(&ret.Items).
-		Offset(-1).
-		Limit(-1).
-		Count(&ret.Total)
+	sqlstr := ExpenditureListSql(ol.Offset, ol.Limit, opts.Extend)
+	err := v.db.Raw(sqlstr).Scan(&ret.Items).Error
+	if err != nil {
+		return nil, err
+	}
 
-	return ret, d.Error
+	var total int64
+	// err = v.db.Model(&v1.Expenditure{}).Count(&total).Error
+	totalsql := ExpenditureTotalSql(opts.Extend)
+	err = v.db.Raw(totalsql).Scan(&total).Error
+	if err != nil {
+		return nil, err
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret.Total = total
+	return ret, nil
+}
+
+// ExpenditureListSql returns expenditure list.
+func ExpenditureListSql(offset, limit int, filters map[string]string) string {
+	var buf bytes.Buffer
+	buf.WriteString("select as_expenditure.id, as_expenditure.type, as_expenditure.cost")
+	buf.WriteString(", as_expenditure.vehicle_id, as_expenditure.expend_at, as_expenditure.comment")
+	buf.WriteString(", as_expenditure.created_at, as_expenditure.updated_at, as_vehicle.number as vehicle_number ")
+	buf.WriteString("from as_expenditure ")
+	buf.WriteString("left join as_vehicle on as_vehicle.id = as_expenditure.vehicle_id ")
+	appendFilersSql(&buf, filters)
+	buf.WriteString("order by id desc")
+	buf.WriteString(fmt.Sprintf(" limit %d,%d", offset, limit))
+	return buf.String()
+}
+
+// ExpenditureTotalSql returns expenditure total.
+func ExpenditureTotalSql(filters map[string]string) string {
+	var buf bytes.Buffer
+	buf.WriteString("select count(*)")
+	buf.WriteString("from as_expenditure ")
+	appendFilersSql(&buf, filters)
+	return buf.String()
+}
+
+func appendFilersSql(buf *bytes.Buffer, filters map[string]string) {
+	var condition int
+	if len(filters) > 0 {
+		buf.WriteString("where ")
+	}
+	if ty, ok := filters["type"]; ok {
+		condition++
+		buf.WriteString(" type = ")
+		buf.WriteString(ty)
+		buf.WriteString(" ")
+	}
+	if vid, ok := filters["vehicle_id"]; ok {
+		if condition > 0 {
+			buf.WriteString("and ")
+		}
+		condition++
+		buf.WriteString(" vehicle_id = ")
+		buf.WriteString(vid)
+		buf.WriteString(" ")
+	}
+	if start, ok := filters["expend_start"]; ok {
+		if condition > 0 {
+			buf.WriteString("and ")
+		}
+		buf.WriteString("(expend_at >= '")
+		buf.WriteString(start)
+		buf.WriteString("' and ")
+		end := filters["expend_end"]
+		buf.WriteString("expend_at <= '")
+		buf.WriteString(end)
+		buf.WriteString("') ")
+	}
 }

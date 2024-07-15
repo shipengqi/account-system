@@ -81,16 +81,23 @@
     "updated_at": "Updated At",
     "created_at": "Created At",
     "action": "Action",
+    "phone": "Phone",
+    "address": "Address",
     "edit": "Edit",
     "delete": "Delete",
     "search": "Search",
     "reset": "Reset",
+    "status": "Status",
+    "brand": "Brand",
+    "available": "Available",
     "save-success": "Save successfully",
     "update-success": "Update successfully",
     "delete-success": "Delete successfully",
     "unknown": "Unknown",
     "total": "Total",
-    "item": "items"
+    "item": "items",
+    "vehicle-number": "Vehicle Number",
+    "select-vehicle-number": "Select a vehicle number"
   },
   "expenditure": {
     "type": "Expend Type",
@@ -105,5 +112,19 @@
     "weighbridge-fee": "Weighbridge Fee",
     "water-refilling-fee": "Water Refilling Fee",
     "other-fees": "Other Fees"
+  },
+  "vehicle": {
+    "delete-title": "Delete Record",
+    "delete-confirm": "Are you sure delete this vehicle record?"
+  },
+  "driver": {
+    "name": "Name",
+    "delete-title": "Delete Record",
+    "delete-confirm": "Are you sure delete this driver record?"
+  },
+  "project": {
+    "name": "Name",
+    "delete-title": "Delete Record",
+    "delete-confirm": "Are you sure delete this project record?"
   }
 }

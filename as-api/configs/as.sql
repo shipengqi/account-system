@@ -9,8 +9,9 @@ DROP TABLE IF EXISTS `as_expenditure`;
 CREATE TABLE `as_expenditure`
 (
     `id`         bigint unsigned  NOT NULL AUTO_INCREMENT,
+    `vehicle_id` bigint unsigned NOT NULL COMMENT '车辆 ID',
     `type`       tinyint unsigned NOT NULL COMMENT '支出类型',
-    `cost`       int unsigned NOT NULL COMMENT '费用';
+    `cost`       int unsigned NOT NULL COMMENT '费用',
     `expend_at`  date NOT NULL DEFAULT (current_date()) COMMENT '支出时间',
     `comment`    varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
     `created_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',

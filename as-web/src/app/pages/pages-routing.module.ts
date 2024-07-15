@@ -6,7 +6,7 @@ import {OrdersComponent} from "./orders/orders.component";
 import {ExpenditureComponent} from "./expenditure/expenditure.component";
 import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {DriversComponent} from "./drivers/drivers.component";
-import {ProjetsComponent} from "./projets/projets.component";
+import {ProjectsComponent} from "./projects/projects.component";
 import {PagesComponent} from "./pages.component";
 
 const routes: Routes = [
@@ -36,7 +36,7 @@ const routes: Routes = [
       },
       {
         path: 'projects',
-        component: ProjetsComponent,
+        component: ProjectsComponent,
       },
       // All embedded exceptions pages.
       {

@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 
+import moment from "moment";
 import {map, Observable} from "rxjs";
 
 import {BasicService} from "./basic.service";
-import {IExpenditure} from "../model/model";
+import {ExpenditureSearchData, IExpenditure} from "../model/model";
 import {IResponse, ListResponse} from "../model/res";
-import moment from "moment";
-import {resolve} from "@angular/compiler-cli";
 
 const expendituresUrl = './api/v1/expenditures';
 
@@ -24,12 +23,25 @@ export class ExpenditureService extends BasicService {
 
   list(
     pageIndex: number,
-    pageSize: number
+    pageSize: number,
+    searchData?: ExpenditureSearchData
   ): Observable<ListResponse> {
-    const params = {
-      offset: pageIndex,
+    const params: any = {
+      offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
     };
+    if (searchData) {
+      if (searchData.type > -1) {
+        params['type'] = searchData.type;
+      }
+      if (searchData.vehicle_id > -1) {
+        params['vehicle_id'] = searchData.vehicle_id;
+      }
+      if (searchData.expend_range?.length > 1) {
+        params['expend_start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
+        params['expend_end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
+      }
+    }
 
     return this._http.get<ListResponse>(expendituresUrl, {params: params}).pipe(
       map((res) => {
@@ -46,9 +58,7 @@ export class ExpenditureService extends BasicService {
   }
 
   get(): Observable<IExpenditure> {
-    return this._http.get<IResponse>(expendituresUrl).pipe(
-      map((response) => response.data),
-    )
+    return this._http.get<IExpenditure>(expendituresUrl);
   }
 
   create(data: any): Observable<IResponse> {
@@ -60,6 +70,6 @@ export class ExpenditureService extends BasicService {
   }
 
   delete(id: number): Observable<IResponse> {
-    return this._http.delete<IResponse>(expendituresUrl, {})
+    return this._http.delete<IResponse>(expendituresUrl, {params: {id: id}})
   }
 }

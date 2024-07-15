@@ -22,6 +22,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import {NzSpinModule} from 'ng-zorro-antd/spin'
 
 import {LayoutModule} from '../core/layout';
 import {ExceptionModule} from '../core/exception';
@@ -33,9 +34,9 @@ import {OrdersComponent} from "./orders/orders.component";
 import {ExpenditureComponent} from "./expenditure/expenditure.component";
 import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {DriversComponent} from "./drivers/drivers.component";
-import {ProjetsComponent} from "./projets/projets.component";
+import {ProjectsComponent} from "./projects/projects.component";
 import {PagesComponent} from "./pages.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -46,38 +47,40 @@ import {ReactiveFormsModule} from "@angular/forms";
     ExpenditureComponent,
     VehiclesComponent,
     DriversComponent,
-    ProjetsComponent
+    ProjectsComponent
   ],
-  imports: [
-    CommonModule,
-    PagesRoutingModule,
-    TranslateModule,
-    CommonModule,
-    NzLayoutModule,
-    NzMenuModule,
-    NzInputModule,
-    NzIconModule,
-    NzCardModule,
-    NzListModule,
-    NzAvatarModule,
-    NzTableModule,
-    NzPageHeaderModule,
-    NzBreadCrumbModule,
-    NzTypographyModule,
-    NzFormModule,
-    NzToolTipModule,
-    NzModalModule,
-    NzUploadModule,
-    NzButtonModule,
-    LayoutModule,
-    SharedModule,
-    ExceptionModule,
-    DownFileModule,
-    NzSelectModule,
-    NzDividerModule,
-    NzDatePickerModule,
-    ReactiveFormsModule,
-    NzInputNumberModule
-  ]
+    imports: [
+        CommonModule,
+        PagesRoutingModule,
+        TranslateModule,
+        CommonModule,
+        NzLayoutModule,
+        NzMenuModule,
+        NzInputModule,
+        NzIconModule,
+        NzCardModule,
+        NzListModule,
+        NzAvatarModule,
+        NzTableModule,
+        NzPageHeaderModule,
+        NzBreadCrumbModule,
+        NzTypographyModule,
+        NzFormModule,
+        NzToolTipModule,
+        NzModalModule,
+        NzUploadModule,
+        NzButtonModule,
+        LayoutModule,
+        SharedModule,
+        ExceptionModule,
+        DownFileModule,
+        NzSelectModule,
+        NzDividerModule,
+        NzDatePickerModule,
+        ReactiveFormsModule,
+        NzInputNumberModule,
+        NzSpinModule,
+        FormsModule
+    ]
 })
 export class PagesModule {}

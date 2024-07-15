@@ -1,26 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 
-import moment from "moment/moment";
+import moment from "moment";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {NzMessageService} from "ng-zorro-antd/message";
 import {NzTableQueryParams} from "ng-zorro-antd/table";
 import {TranslateService} from "@ngx-translate/core";
 
-import {IVehicle} from "../../shared/model/model";
-import {VehiclesService} from "../../shared/services/vehicles.service";
-import {NzMessageService} from "ng-zorro-antd/message";
+import {ProjectsService} from "../../shared/services/projects.service";
+import {IProject} from "../../shared/model/model";
 
 @Component({
-  selector: 'app-vehicles',
-  templateUrl: './vehicles.component.html',
-  styleUrl: './vehicles.component.less'
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrl: './projects.component.less'
 })
-export class VehiclesComponent implements OnInit {
+export class ProjectsComponent implements OnInit {
   tableLoading = true;
   pageSize = 10;
   pageIndex = 1;
   total = 0;
-  items: IVehicle[] = [];
+  items: IProject[] = [];
 
   editorVisible = false;
   editorSaving = false;
@@ -28,24 +28,19 @@ export class VehiclesComponent implements OnInit {
   editId = 0;
 
   selfFormGroup = new FormGroup({});
-  vehicleNumberCtrl: AbstractControl = new UntypedFormControl();
-  brandCtrl: AbstractControl = new UntypedFormControl();
+  nameCtrl: AbstractControl = new UntypedFormControl();
   commentCtrl: AbstractControl = new UntypedFormControl();
 
   constructor(
     private _modal: NzModalService,
     private _message: NzMessageService,
     private _translate: TranslateService,
-    private _vehicleSvc: VehiclesService
+    private _projectsSvc: ProjectsService
   ) {}
 
   ngOnInit() {
     this.selfFormGroup.addControl(
-      'vehicle-number',
-      new FormControl('', [Validators.required])
-    );
-    this.selfFormGroup.addControl(
-      'brand',
+      'name',
       new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
@@ -53,8 +48,7 @@ export class VehiclesComponent implements OnInit {
       new FormControl('', [Validators.maxLength(256)])
     );
 
-    this.vehicleNumberCtrl = this.selfFormGroup.get('vehicle-number') as AbstractControl;
-    this.brandCtrl = this.selfFormGroup.get('brand') as AbstractControl;
+    this.nameCtrl = this.selfFormGroup.get('name') as AbstractControl;
     this.commentCtrl = this.selfFormGroup.get('comment') as AbstractControl;
   }
 
@@ -65,13 +59,12 @@ export class VehiclesComponent implements OnInit {
     this.list();
   }
 
-  openEditor(item?: IVehicle) {
+  openEditor(item?: IProject) {
     this.editorVisible = true;
     this.isEditMode = false;
     this.editId = 0;
     if (item) {
-      this.vehicleNumberCtrl.setValue(item.number);
-      this.brandCtrl.setValue(item.brand);
+      this.nameCtrl.setValue(item.name);
       this.commentCtrl.setValue(item.comment);
       this.isEditMode = true;
       this.editId = item.id;
@@ -80,7 +73,7 @@ export class VehiclesComponent implements OnInit {
 
   list() {
     this.tableLoading = true;
-    this._vehicleSvc.list(this.pageIndex, this.pageSize).subscribe({
+    this._projectsSvc.list(this.pageIndex, this.pageSize).subscribe({
       next: (res) => {
         this.items = res.items;
         this.total = res.total;
@@ -99,17 +92,18 @@ export class VehiclesComponent implements OnInit {
 
   handleSave() {
     const data = {
-      brand: this.brandCtrl.value,
-      number: this.vehicleNumberCtrl.value,
+      name: this.nameCtrl.value,
       comment: this.commentCtrl.value,
+      start_at: moment().format('YYYY-MM-DD'),   // Todo real date
+      end_at: moment().format('YYYY-MM-DD'),
       id: 0
     };
-    let submit = this._vehicleSvc.create;
+    let submit = this._projectsSvc.create;
     if (this.isEditMode) {
-      submit = this._vehicleSvc.update;
+      submit = this._projectsSvc.update;
       data.id = this.editId;
     }
-    submit.bind(this._vehicleSvc)(data).subscribe({
+    submit.bind(this._projectsSvc)(data).subscribe({
       next: (res) => {
         this._message.success(this._translate.instant('global.save-success'));
         this.editorSaving = false;
@@ -126,13 +120,13 @@ export class VehiclesComponent implements OnInit {
 
   openDeleteConfirm(id: number): void {
     this._modal.confirm({
-      nzTitle: this._translate.instant('vehicle.delete-title'),
-      nzContent: this._translate.instant('vehicle.delete-confirm'),
+      nzTitle: this._translate.instant('project.delete-title'),
+      nzContent: this._translate.instant('project.delete-confirm'),
       nzOkText: this._translate.instant('global.yes'),
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        this._vehicleSvc.delete(id).subscribe({
+        this._projectsSvc.delete(id).subscribe({
           next: () => {
             this._message.success(this._translate.instant('global.delete-success'));
             this.list();
@@ -143,7 +137,7 @@ export class VehiclesComponent implements OnInit {
         });
       },
       nzCancelText: this._translate.instant('global.cancel'),
-      nzOnCancel: () => console.log('vehicle delete cancel')
+      nzOnCancel: () => console.log('project delete cancel')
     });
   }
 

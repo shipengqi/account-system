@@ -1,14 +1,15 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
 
+import moment from 'moment';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from "ng-zorro-antd/message";
+import {NzTableQueryParams} from 'ng-zorro-antd/table';
 import {TranslateService} from "@ngx-translate/core";
-import moment from 'moment';
 
-import {IExpenditure} from "../../shared/model/model";
+import {IExpenditure, IVehicle} from "../../shared/model/model";
 import {ExpenditureService} from "../../shared/services/expenditure.service";
-import {AbstractControl, FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
-import {Subscription} from "rxjs";
+import {VehiclesService} from "../../shared/services/vehicles.service";
 
 @Component({
   selector: 'app-expenditure',
@@ -16,19 +17,28 @@ import {Subscription} from "rxjs";
   styleUrl: './expenditure.component.less'
 })
 export class ExpenditureComponent implements OnInit {
+  searchType: number = -1;
+  searchTime: string[] = [];
+  searchVehicleID: number = -1;
+
   selfFormGroup = new FormGroup({});
   typeCtrl: AbstractControl = new UntypedFormControl();
   timeCtrl: AbstractControl = new UntypedFormControl();
   costCtrl: AbstractControl = new UntypedFormControl();
+  vehicleCtrl: AbstractControl = new UntypedFormControl();
   commentCtrl: AbstractControl = new UntypedFormControl();
   editorVisible = false;
   editorSaving = false;
   isEditMode = false;
+  isVehicleLoading = false;
+  editId = 0;
+  vehicleList: IVehicle[] = [];
 
   constructor(
     private _modal: NzModalService,
     private _translate: TranslateService,
     private _expenditureSvc: ExpenditureService,
+    private _vehicleSvc: VehiclesService,
     private _message: NzMessageService
   ) {}
 
@@ -43,6 +53,13 @@ export class ExpenditureComponent implements OnInit {
     );
     this.selfFormGroup.addControl(
       'cost',
+      new FormControl('', [
+        Validators.required,
+        Validators.min(0)
+      ])
+    );
+    this.selfFormGroup.addControl(
+      'vehicle-number',
       new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
@@ -53,9 +70,11 @@ export class ExpenditureComponent implements OnInit {
     this.typeCtrl = this.selfFormGroup.get('type') as AbstractControl;
     this.timeCtrl = this.selfFormGroup.get('time') as AbstractControl;
     this.costCtrl = this.selfFormGroup.get('cost') as AbstractControl;
+    this.vehicleCtrl = this.selfFormGroup.get('vehicle-number') as AbstractControl;
     this.commentCtrl = this.selfFormGroup.get('comment') as AbstractControl;
 
     this.list();
+    this.loadVehicles();
   }
 
   types = [
@@ -67,14 +86,52 @@ export class ExpenditureComponent implements OnInit {
     {text: this._translate.instant('expenditure.other-fees'), value: 6},
   ];
   tableLoading = true;
+  sortOrder = 'ascend';
   pageSize = 10;
   pageIndex = 1;
   total = 0;
   items: IExpenditure[] = [];
 
+  search() {
+    this.list();
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    const { pageSize, pageIndex, sort } = params;
+    const currentSort = sort.find(item => item.value !== null);
+    // const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || 'ascend';
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
+    this.sortOrder = sortOrder;
+    this.list();
+  }
+
+  loadVehicles(): void {
+    this.isVehicleLoading = true;
+    this._vehicleSvc.listAll().subscribe({
+      next: (res) => {
+        this.isVehicleLoading = false;
+        this.vehicleList = res.items;
+      },
+      error: (err) => {
+        this.isVehicleLoading = false;
+        this.vehicleList = [];
+        this._message.error(err);
+      }
+    });
+  }
+
   list() {
     this.tableLoading = true;
-    this._expenditureSvc.list(this.pageIndex, this.pageSize).subscribe({
+
+    const searchData = {
+      type: this.searchType || -1,
+      expend_range: this.searchTime || [],
+      vehicle_id: this.searchVehicleID || -1,
+    };
+
+    this._expenditureSvc.list(this.pageIndex, this.pageSize, searchData).subscribe({
       next: (res) => {
         this.items = res.items;
         this.total = res.total;
@@ -90,12 +147,15 @@ export class ExpenditureComponent implements OnInit {
   openEditor(item?: IExpenditure): void {
     this.editorVisible = true;
     this.isEditMode = false;
+    this.editId = 0;
     if (item) {
       this.typeCtrl.setValue(item.type);
       this.timeCtrl.setValue(item.expend_at);
       this.costCtrl.setValue(item.cost);
+      this.vehicleCtrl.setValue(item.vehicle_id);
       this.commentCtrl.setValue(item.comment);
       this.isEditMode = true;
+      this.editId = item.id;
     }
   }
 
@@ -108,11 +168,14 @@ export class ExpenditureComponent implements OnInit {
       type: this.typeCtrl.value,
       expend_at: moment(this.timeCtrl.value).format('YYYY-MM-DD'),
       cost: this.costCtrl.value,
-      comment: this.commentCtrl.value
+      vehicle_id: this.vehicleCtrl.value,
+      comment: this.commentCtrl.value,
+      id: 0
     };
     let submit = this._expenditureSvc.create;
     if (this.isEditMode) {
       submit = this._expenditureSvc.update;
+      data.id = this.editId;
     }
     submit.bind(this._expenditureSvc)(data).subscribe({
       next: (res) => {
@@ -120,6 +183,7 @@ export class ExpenditureComponent implements OnInit {
         this.editorSaving = false;
         this.editorVisible = false;
         this.selfFormGroup.reset();
+        this.list();
       },
       error: (err) => {
         this.editorVisible = false;
@@ -139,6 +203,7 @@ export class ExpenditureComponent implements OnInit {
         this._expenditureSvc.delete(id).subscribe({
           next: () => {
             this._message.success(this._translate.instant('global.delete-success'));
+            this.list();
           },
           error: (err) => {
             this._message.error(err.message);

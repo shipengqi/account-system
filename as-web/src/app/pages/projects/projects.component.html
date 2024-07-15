@@ -18,9 +18,7 @@
     <thead>
     <tr>
       <th nzWidth="80px">{{ 'global.id' | translate }}</th>
-      <th>{{ 'driver.name' | translate }}</th>
-      <th>{{ 'global.phone' | translate }}</th>
-      <th>{{ 'global.address' | translate }}</th>
+      <th>{{ 'project.name' | translate }}</th>
       <th>{{ 'global.comment' | translate }}</th>
       <th>{{ 'global.created_at' | translate }}</th>
       <th>{{ 'global.updated_at' | translate }}</th>
@@ -31,8 +29,6 @@
     <tr *ngFor="let data of sortTable.data">
       <td>{{ data.id }}</td>
       <td>{{ data.name }}</td>
-      <td>{{ data.phone }}</td>
-      <td>{{ data.address }}</td>
       <td nzEllipsis>{{ data.comment }}</td>
       <td>{{ formatDatetime(data.created_at) }}</td>
       <td>{{ formatDatetime(data.updated_at) }}</td>
@@ -51,21 +47,9 @@
   <div *nzModalContent>
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'driver.name' | translate }}</nz-form-label>
+        <nz-form-label [nzSpan]="4">{{ 'project.name' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="name"/>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.phone' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
-          <input nz-input formControlName="phone"/>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.address' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
-          <input nz-input formControlName="address"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>

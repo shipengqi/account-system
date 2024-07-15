@@ -79,6 +79,8 @@ type ListOptions struct {
 
 	// Limit specify the number of records to be retrieved.
 	Limit *int64 `json:"limit,omitempty" form:"limit"`
+
+	Extend map[string]string `json:"-"`
 }
 
 // GetOptions is the standard query options to the standard REST get call.
