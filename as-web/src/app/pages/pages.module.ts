@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import {TranslateModule} from '@ngx-translate/core';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
@@ -22,9 +23,13 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {NzDatePickerModule} from "ng-zorro-antd/date-picker";
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
-import {NzSpinModule} from 'ng-zorro-antd/spin'
+import {NzSpinModule} from 'ng-zorro-antd/spin';
+import {NzTabsModule} from "ng-zorro-antd/tabs";
+import {G2BarModule} from "@delon/chart/bar";
+import {G2TimelineModule} from "@delon/chart/timeline";
 
 import {LayoutModule} from '../core/layout';
+import {ChartModule} from "../core/chart";
 import {ExceptionModule} from '../core/exception';
 import {SharedModule} from '../shared/shared.module';
 import {DownFileModule} from '../core/down-file';
@@ -36,7 +41,7 @@ import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {DriversComponent} from "./drivers/drivers.component";
 import {ProjectsComponent} from "./projects/projects.component";
 import {PagesComponent} from "./pages.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+
 
 
 @NgModule({
@@ -49,38 +54,42 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     DriversComponent,
     ProjectsComponent
   ],
-    imports: [
-        CommonModule,
-        PagesRoutingModule,
-        TranslateModule,
-        CommonModule,
-        NzLayoutModule,
-        NzMenuModule,
-        NzInputModule,
-        NzIconModule,
-        NzCardModule,
-        NzListModule,
-        NzAvatarModule,
-        NzTableModule,
-        NzPageHeaderModule,
-        NzBreadCrumbModule,
-        NzTypographyModule,
-        NzFormModule,
-        NzToolTipModule,
-        NzModalModule,
-        NzUploadModule,
-        NzButtonModule,
-        LayoutModule,
-        SharedModule,
-        ExceptionModule,
-        DownFileModule,
-        NzSelectModule,
-        NzDividerModule,
-        NzDatePickerModule,
-        ReactiveFormsModule,
-        NzInputNumberModule,
-        NzSpinModule,
-        FormsModule
-    ]
+  imports: [
+    CommonModule,
+    PagesRoutingModule,
+    TranslateModule,
+    CommonModule,
+    NzLayoutModule,
+    NzMenuModule,
+    NzInputModule,
+    NzIconModule,
+    NzCardModule,
+    NzListModule,
+    NzAvatarModule,
+    NzTableModule,
+    NzPageHeaderModule,
+    NzBreadCrumbModule,
+    NzTypographyModule,
+    NzFormModule,
+    NzToolTipModule,
+    NzModalModule,
+    NzUploadModule,
+    NzButtonModule,
+    LayoutModule,
+    ChartModule,
+    SharedModule,
+    ExceptionModule,
+    DownFileModule,
+    NzSelectModule,
+    NzDividerModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzInputNumberModule,
+    NzSpinModule,
+    FormsModule,
+    NzTabsModule,
+    G2BarModule,
+    G2TimelineModule
+  ]
 })
 export class PagesModule {}

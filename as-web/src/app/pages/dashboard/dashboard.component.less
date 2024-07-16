@@ -1,0 +1,133 @@
+@import '../../core/layout/style/index.less';
+
+:host ::ng-deep {
+  .ant-card__body-nopadding .ant-card-body {
+    padding-top: 8px !important;
+  }
+
+  .icon-group {
+    i {
+      cursor: pointer;
+      margin-left: 16px;
+      color: @text-color-secondary;
+      transition: color 0.32s;
+
+      &:hover {
+        color: @text-color;
+      }
+    }
+  }
+
+  .rank-list {
+    margin: 25px 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+
+      span {
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .number {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-top: 1.5px;
+        margin-right: 16px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 20px;
+        text-align: center;
+        background-color: @background-color-base;
+        border-radius: 20px;
+
+        &.active {
+          color: #fff;
+          background-color: #314659;
+        }
+      }
+
+      .title {
+        overflow: hidden;
+        flex: 1;
+        margin-right: 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .overall-chart-card {
+    margin-top: 16px;
+
+    .bar {
+      padding: 0 0 32px 32px;
+    }
+
+    .rank {
+      padding: 0 32px 32px 72px;
+    }
+
+    .ant-tabs-bar {
+      padding-left: 16px;
+
+      .ant-tabs-nav .ant-tabs-tab {
+        padding-top: 16px;
+        padding-bottom: 14px;
+        line-height: 24px;
+      }
+    }
+
+    .ant-tabs-tab {
+      margin-left: 24px;
+
+    }
+
+    .ant-tabs-extra-content {
+      padding-right: 24px;
+      line-height: 55px;
+    }
+
+    .ant-card-head {
+      position: relative;
+    }
+
+    .ant-card-head-title {
+      align-items: normal;
+    }
+  }
+  @media screen and (max-width: @screen-lg) {
+    .rank-list {
+      li {
+        span:first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: @screen-md) {
+    .rank-title {
+      margin-top: 16px;
+    }
+
+    .overall-chart-card .bar {
+      padding: 16px;
+    }
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    .overall-chart-card {
+      .ant-tabs-content {
+        padding-top: 30px;
+      }
+    }
+  }
+}
+
+

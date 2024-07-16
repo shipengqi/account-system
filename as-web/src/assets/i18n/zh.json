@@ -97,7 +97,11 @@
     "total": "共",
     "item": "条",
     "vehicle-number": "车牌号",
-    "select-vehicle-number": "选择车牌号"
+    "select-vehicle-number": "选择车牌号",
+    "project": "项目",
+    "select-project": "选择项目",
+    "driver": "司机",
+    "select-driver": "选择司机"
   },
   "expenditure": {
     "type": "支出类型",
@@ -126,5 +130,29 @@
     "name": "项目名称",
     "delete-title": "删除记录",
     "delete-confirm": "确定要删除该项目信息？"
+  },
+  "order": {
+    "load-time": "装车时间",
+    "unload-time": "完成时间",
+    "weight": "载重",
+    "freight": "运费",
+    "payroll": "司机费用"
+  },
+  "analysis": {
+    "mom": "月同比",
+    "m2m": "月环比",
+    "month-revenue": "月营收",
+    "overall-revenue": "总营收",
+    "revenue": "营收",
+    "revenue-trend": "营收趋势",
+    "revenue-details": "营收详情",
+    "month-expenditure": "月支出",
+    "overall-expenditure": "总支出",
+    "month-payroll": "月司机费用",
+    "overall-payroll": "司机总费用",
+    "month-profit": "月利润",
+    "overall-profit": "总利润",
+    "all-month": "本月",
+    "all-year": "全年"
   }
 }

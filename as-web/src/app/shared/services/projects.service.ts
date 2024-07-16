@@ -16,6 +16,10 @@ export class ProjectsService extends BasicService {
     super();
   }
 
+  listAll(): Observable<ListResponse> {
+    return this._http.get<ListResponse>(projectsUrl);
+  }
+
   list(
     pageIndex: number,
     pageSize: number

@@ -21,15 +21,15 @@ import {LayoutComponent} from './layout.component';
 import {LayoutHeaderComponent} from './layout-header/layout-header.component';
 import {LayoutHeaderItemComponent} from './layout-header/layout-header-item/layout-header-item.component';
 import {LayoutSiderComponent} from './layout-sider/layout-sider.component';
-import {HeaderUserComponent} from './widgets/header-user/header-user.component';
-import {HeaderNavComponent} from './widgets/header-nav/header-nav.component';
-import {HeaderNavItemComponent} from './widgets/header-nav/header-nav-item/header-nav-item.component';
-import {HeaderNotifyComponent} from './widgets/header-notify/header-notify.component';
-import {HeaderNotifyItemComponent} from './widgets/header-notify/header-notify-item.component';
-import {ToolbarButtonComponent} from './widgets/toolbar-btn/toolbar-btn.component';
-import {ToolbarSearchComponent} from './widgets/toolbar-search/toolbar-search.component';
-import {ToolbarComponent} from './widgets/toolbar/toolbar.component';
-import {ToolbarItemComponent} from './widgets/toolbar/toolbar-item/toolbar-item.component'
+import {HeaderUserComponent} from './widgets';
+import {HeaderNavComponent} from './widgets';
+import {HeaderNavItemComponent} from './widgets';
+import {HeaderNotifyComponent} from './widgets';
+import {HeaderNotifyItemComponent} from './widgets';
+import {ToolbarButtonComponent} from './widgets';
+import {ToolbarSearchComponent} from './widgets';
+import {ToolbarComponent} from './widgets';
+import {ToolbarItemComponent} from './widgets'
 
 @NgModule({
   declarations: [

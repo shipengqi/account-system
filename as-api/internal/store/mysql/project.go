@@ -66,7 +66,7 @@ func (v *projects) Get(ctx context.Context, name string, opts metav1.GetOptions)
 
 // List return all projects.
 func (v *projects) List(ctx context.Context, opts metav1.ListOptions) (*v1.ProjectList, error) {
-	ret := &v1.ProjectList{}
+	ret := &v1.ProjectList{Items: make([]*v1.Project, 0)}
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)

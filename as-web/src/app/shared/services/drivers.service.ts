@@ -18,6 +18,10 @@ export class DriversService extends BasicService {
     super();
   }
 
+  listAll(): Observable<ListResponse> {
+    return this._http.get<ListResponse>(driversUrl);
+  }
+
   list(
     pageIndex: number,
     pageSize: number

@@ -45,22 +45,22 @@ export class ExpenditureComponent implements OnInit {
   ngOnInit() {
     this.selfFormGroup.addControl(
       'type',
-      new FormControl('', [Validators.required])
+      new FormControl(0, [Validators.required])
     );
     this.selfFormGroup.addControl(
       'time',
-      new FormControl('', [Validators.required])
+      new FormControl(moment().format('YYYY-MM-DD'), [Validators.required])
     );
     this.selfFormGroup.addControl(
       'cost',
-      new FormControl('', [
+      new FormControl(0, [
         Validators.required,
         Validators.min(0)
       ])
     );
     this.selfFormGroup.addControl(
       'vehicle-number',
-      new FormControl('', [Validators.required])
+      new FormControl(0, [Validators.required])
     );
     this.selfFormGroup.addControl(
       'comment',

@@ -19,7 +19,7 @@ import {LayoutOptions} from './core/layout';
 })
 export class BasicComponent implements OnInit {
   options: LayoutOptions = {
-    logoText: '中辉运输',
+    logoText: '中辉',
     logoHidden: 'mobile',
     siderCollapsible: true,
     hideSider: true,

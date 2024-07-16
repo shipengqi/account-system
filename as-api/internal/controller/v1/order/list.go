@@ -19,6 +19,23 @@ func (c *Controller) List(ctx *gin.Context) {
 		return
 	}
 
+	r.Extend = make(map[string]string)
+	if pid, ok := ctx.GetQuery("project_id"); ok && pid != "" {
+		r.Extend["project_id"] = pid
+	}
+	if vid, ok := ctx.GetQuery("vehicle_id"); ok && vid != "" {
+		r.Extend["vehicle_id"] = vid
+	}
+	if did, ok := ctx.GetQuery("driver_id"); ok && did != "" {
+		r.Extend["driver_id"] = did
+	}
+	if start, ok := ctx.GetQuery("unload_start"); ok && start != "" {
+		r.Extend["unload_start"] = start
+	}
+	if end, ok := ctx.GetQuery("unload_end"); ok && end != "" {
+		r.Extend["unload_end"] = end
+	}
+
 	users, err := c.svc.Orders().List(ctx, r)
 	if err != nil {
 		response.Fail(ctx, err)

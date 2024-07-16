@@ -1,1 +1,218 @@
-<p>orders works!</p>
+<app-content-toolbar>
+  <form nz-form [nzLayout]="'inline'">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 24, xl: 48, xxl: 48 }">
+      <div nz-col nzMd="8" nzSm="24" class="search-form-item">
+        <nz-form-item>
+          <nz-form-label>{{ 'global.project' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-select nzPlaceHolder="{{ 'global.select-project' | translate }}"
+                       nzAllowClear
+                       [(ngModel)]="searchProjectID"
+                       [ngModelOptions]="{standalone: true}"
+                       [nzDropdownRender]="selectProjectTemplate">
+              <nz-option *ngFor="let o of projectList" [nzValue]="o.id" [nzLabel]="o.name"/>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24" class="search-form-item">
+        <nz-form-item>
+          <nz-form-label>{{ 'global.vehicle-number' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
+                       nzAllowClear
+                       [(ngModel)]="searchVehicleID"
+                       [ngModelOptions]="{standalone: true}"
+                       [nzDropdownRender]="selectVehicleTemplate">
+              <nz-option *ngFor="let o of vehicleList" [nzValue]="o.id" [nzLabel]="o.number"/>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24" class="search-form-item">
+        <nz-form-item>
+          <nz-form-label>{{ 'global.driver' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
+                       nzAllowClear
+                       [(ngModel)]="searchDriverID"
+                       [ngModelOptions]="{standalone: true}"
+                       [nzDropdownRender]="selectDriverTemplate">
+              <nz-option *ngFor="let o of driverList" [nzValue]="o.id" [nzLabel]="o.name"/>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24" class="search-form-item">
+        <nz-form-item>
+          <nz-form-label>{{ 'order.unload-time' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-range-picker
+              [(ngModel)]="searchUnLoadTime"
+              [ngModelOptions]="{standalone: true}"
+              [nzAllowClear]="true"></nz-range-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+        </nz-form-item>
+      </div>
+      <div nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+        </nz-form-item>
+      </div>
+
+    </div>
+  </form>
+  <div class="button-container">
+    <button nz-button (click)="search()" [disabled]="tableLoading" [nzType]="'primary'">
+      <i nz-icon nzType="search"></i>
+      <span>{{ 'global.search' | translate }}</span>
+    </button>
+    <button nz-button (click)="openEditor()" [nzType]="'primary'">
+      <i nz-icon nzType="plus"></i>
+      <span>{{ 'global.add' | translate }}</span>
+    </button>
+  </div>
+</app-content-toolbar>
+<app-content-body>
+  <nz-table #sortTable nzShowSizeChanger
+            [nzFrontPagination]="false"
+            [nzTotal]="total"
+            [nzPageSize]="pageSize"
+            [nzPageIndex]="pageIndex"
+            [nzData]="items"
+            [nzShowTotal]="totalTemplate"
+            nzTableLayout="fixed"
+            (nzQueryParams)="onQueryParamsChange($event)"
+            [nzLoading]="tableLoading">
+    <thead>
+    <tr>
+      <th nzWidth="80px">{{ 'global.id' | translate }}</th>
+      <th nzWidth="120px">{{ 'global.project' | translate }}</th>
+      <th nzWidth="120px">{{ 'global.vehicle-number' | translate }}</th>
+      <th nzWidth="120px">{{ 'global.driver' | translate }}</th>
+      <th>{{ 'order.weight' | translate }}</th>
+      <th>{{ 'order.freight' | translate }}</th>
+      <th>{{ 'order.payroll' | translate }}</th>
+      <th>{{ 'global.comment' | translate }}</th>
+      <th>{{ 'order.unload-time' | translate }}</th>
+      <th>{{ 'global.action' | translate }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of sortTable.data">
+      <td>{{ data.id }}</td>
+      <td>{{ data.project }}</td>
+      <td>{{ data.vehicle_number }}</td>
+      <td>{{ data.driver }}</td>
+      <td>{{ data.weight }}</td>
+      <td>{{ data.freight }}</td>
+      <td>{{ data.payroll }}</td>
+      <td nzEllipsis>{{ data.comment }}</td>
+      <td>{{ data.unload_at }}</td>
+      <td>
+        <a (click)="openEditor(data)">{{ 'global.edit' | translate }}</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)="openDeleteConfirm(data.id)">{{ 'global.delete' | translate }}</a>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+</app-content-body>
+<nz-modal [(nzVisible)]="editorVisible" nzTitle="{{ 'global.add' | translate }}" (nzOnCancel)="handleCancel()">
+  <div *nzModalContent>
+    <form nz-form [formGroup]="selfFormGroup">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.project' | translate }}</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-select nzPlaceHolder="{{ 'global.select-project' | translate }}"
+                     nzAllowClear
+                     formControlName="project"
+                     [nzDropdownRender]="selectProjectTemplate">
+            <nz-option *ngFor="let o of projectList" [nzValue]="o.id" [nzLabel]="o.name"/>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.vehicle-number' | translate }}</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-select
+            nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
+            formControlName="vehicle-number"
+            nzAllowClear
+            [nzDropdownRender]="selectVehicleTemplate">
+            <nz-option *ngFor="let o of vehicleList" [nzValue]="o.id" [nzLabel]="o.number"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.driver' | translate }}</nz-form-label>
+        <nz-form-control [nzSpan]="7">
+          <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
+                     formControlName="driver"
+                     nzAllowClear
+                     [nzDropdownRender]="selectDriverTemplate">
+            <nz-option *ngFor="let o of driverList" [nzValue]="o.id" [nzLabel]="o.name"/>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">{{ 'order.unload-time' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="unload-time"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">{{ 'order.weight' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number-group nzAddOnAfter="吨">
+            <nz-input-number formControlName="weight"></nz-input-number>
+          </nz-input-number-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">{{ 'order.freight' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number-group nzAddOnAfter="￥">
+            <nz-input-number formControlName="freight"></nz-input-number>
+          </nz-input-number-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">{{ 'order.payroll' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number-group nzAddOnAfter="￥">
+            <nz-input-number formControlName="payroll"></nz-input-number>
+          </nz-input-number-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="4">{{ 'global.comment' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea rows="4" nz-input formControlName="comment"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">{{ 'global.cancel' | translate }}</button>
+    <button nz-button nzType="primary"
+            [disabled]="selfFormGroup.invalid"
+            [nzLoading]="editorSaving"
+            (click)="handleSave()">{{ 'global.save' | translate }}
+    </button>
+  </div>
+</nz-modal>
+<ng-template #totalTemplate>{{ 'global.total' | translate }} {{ total }} {{ 'global.item' | translate }}</ng-template>
+<ng-template #selectProjectTemplate>
+  <nz-spin *ngIf="isProjectLoading"></nz-spin>
+</ng-template>
+<ng-template #selectVehicleTemplate>
+  <nz-spin *ngIf="isVehicleLoading"></nz-spin>
+</ng-template>
+<ng-template #selectDriverTemplate>
+  <nz-spin *ngIf="isDriverLoading"></nz-spin>
+</ng-template>
+

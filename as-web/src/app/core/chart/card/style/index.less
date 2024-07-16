@@ -1,0 +1,79 @@
+@import '../../../layout/style/index';
+
+@chart-card-prefix: ~'.chart-card';
+
+@{chart-card-prefix} {
+  position: relative;
+
+  &__top {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+
+    &-margin {
+      margin-bottom: 12px;
+    }
+
+    &-has-margin {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__meta {
+    height: 22px;
+    font-size: @font-size-base;
+    line-height: 22px;
+    color: @text-color-secondary;
+
+    &-wrap {
+      float: left;
+    }
+
+    &-action {
+      cursor: pointer;
+      position: absolute;
+      top: 4px;
+      right: 0;
+      line-height: 1;
+    }
+  }
+
+  &__avatar {
+    position: relative;
+    top: 4px;
+    float: left;
+    margin-right: 20px;
+
+    img {
+      border-radius: 100%;
+    }
+  }
+
+  &__total {
+    overflow: hidden;
+    height: 38px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    font-size: 30px;
+    line-height: 38px;
+    color: @heading-color;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+  }
+
+  &__desc {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  &__footer {
+    margin-top: 8px;
+    padding-top: 9px;
+    border-top: 1px solid @border-color-split;
+
+    & > * {
+      position: relative;
+    }
+  }
+}

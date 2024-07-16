@@ -30,7 +30,17 @@
             "inlineStyleLanguage": "less",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@antv/g2/dist",
+                "output": "/@antv/g2/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@antv/data-set/dist",
+                "output": "/@antv/data-set/"
+              }
             ],
             "styles": [
               "src/styles.less"

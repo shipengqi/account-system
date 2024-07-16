@@ -1,0 +1,36 @@
+<nz-card [nzBodyStyle]="{ padding: '20px 24px 8px 24px' }" [nzBordered]="bordered">
+  <nz-spin [nzSpinning]="loading">
+    <div class="chart-card__top">
+      <div class="chart-card__avatar">
+        <ng-container *nzStringTemplateOutlet="avatar">{{ avatar }}</ng-container>
+      </div>
+      <div class="chart-card__meta-wrap">
+        <div class="chart-card__meta">
+          @if (title) {
+            <span class="chart-card__meta-title">
+              <ng-container *nzStringTemplateOutlet="title">{{ title }}</ng-container>
+            </span>
+          }
+          @if (action) {
+            <span class="chart-card__meta-action">
+              <ng-container *nzStringTemplateOutlet="action">{{ action }}</ng-container>
+            </span>
+          }
+        </div>
+        @if (total) {
+          <p class="chart-card__total" [innerHTML]="total"></p>
+        }
+      </div>
+    </div>
+    <div class="chart-card__desc" [style.height]="_height">
+      <div [class.chart-card__fixed]="!!_orgHeight">
+        <ng-content />
+      </div>
+    </div>
+    @if (footer) {
+      <div class="chart-card__footer">
+        <ng-container *nzStringTemplateOutlet="footer">{{ footer }}</ng-container>
+      </div>
+    }
+  </nz-spin>
+</nz-card>

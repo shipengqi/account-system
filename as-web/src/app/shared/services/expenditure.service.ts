@@ -54,7 +54,7 @@ export class ExpenditureService extends BasicService {
         });
         return res;
       })
-    )
+    );
   }
 
   get(): Observable<IExpenditure> {

@@ -86,10 +86,6 @@ func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.E
 		return nil, err
 	}
 
-	if err != nil {
-		return nil, err
-	}
-
 	ret.Total = total
 	return ret, nil
 }
@@ -102,7 +98,7 @@ func ExpenditureListSql(offset, limit int, filters map[string]string) string {
 	buf.WriteString(", as_expenditure.created_at, as_expenditure.updated_at, as_vehicle.number as vehicle_number ")
 	buf.WriteString("from as_expenditure ")
 	buf.WriteString("left join as_vehicle on as_vehicle.id = as_expenditure.vehicle_id ")
-	appendFilersSql(&buf, filters)
+	appendExpendFilersSql(&buf, filters)
 	buf.WriteString("order by id desc")
 	buf.WriteString(fmt.Sprintf(" limit %d,%d", offset, limit))
 	return buf.String()
@@ -113,11 +109,11 @@ func ExpenditureTotalSql(filters map[string]string) string {
 	var buf bytes.Buffer
 	buf.WriteString("select count(*)")
 	buf.WriteString("from as_expenditure ")
-	appendFilersSql(&buf, filters)
+	appendExpendFilersSql(&buf, filters)
 	return buf.String()
 }
 
-func appendFilersSql(buf *bytes.Buffer, filters map[string]string) {
+func appendExpendFilersSql(buf *bytes.Buffer, filters map[string]string) {
 	var condition int
 	if len(filters) > 0 {
 		buf.WriteString("where ")

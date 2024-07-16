@@ -66,7 +66,7 @@ func (v *vehicles) Get(ctx context.Context, number string, opts metav1.GetOption
 
 // List return all vehicles.
 func (v *vehicles) List(ctx context.Context, opts metav1.ListOptions) (*v1.VehicleList, error) {
-	ret := &v1.VehicleList{}
+	ret := &v1.VehicleList{Items: make([]*v1.Vehicle, 0)}
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)

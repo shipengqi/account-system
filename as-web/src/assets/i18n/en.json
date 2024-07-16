@@ -97,7 +97,11 @@
     "total": "Total",
     "item": "items",
     "vehicle-number": "Vehicle Number",
-    "select-vehicle-number": "Select a vehicle number"
+    "select-vehicle-number": "Select a vehicle number",
+    "project": "Project",
+    "select-project": "Select a project",
+    "driver": "Driver",
+    "select-driver": "Select a driver"
   },
   "expenditure": {
     "type": "Expend Type",
@@ -126,5 +130,12 @@
     "name": "Name",
     "delete-title": "Delete Record",
     "delete-confirm": "Are you sure delete this project record?"
+  },
+  "order": {
+    "load-time": "Load Time",
+    "unload-time": "UnLoad Time",
+    "weight": "Weight",
+    "freight": "Freight",
+    "payroll": "Payroll"
   }
 }

@@ -66,7 +66,7 @@ func (v *drivers) Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.
 
 // List return all drivers.
 func (v *drivers) List(ctx context.Context, opts metav1.ListOptions) (*v1.DriverList, error) {
-	ret := &v1.DriverList{}
+	ret := &v1.DriverList{Items: make([]*v1.Driver, 0)}
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
