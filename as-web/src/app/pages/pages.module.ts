@@ -27,9 +27,10 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {NzTabsModule} from "ng-zorro-antd/tabs";
 import {G2BarModule} from "@delon/chart/bar";
 import {G2TimelineModule} from "@delon/chart/timeline";
+import {G2CardModule} from "@delon/chart/card";
+import {TrendModule} from "@delon/chart/trend";
 
 import {LayoutModule} from '../core/layout';
-import {ChartModule} from "../core/chart";
 import {ExceptionModule} from '../core/exception';
 import {SharedModule} from '../shared/shared.module';
 import {DownFileModule} from '../core/down-file';
@@ -76,7 +77,6 @@ import {PagesComponent} from "./pages.component";
     NzUploadModule,
     NzButtonModule,
     LayoutModule,
-    ChartModule,
     SharedModule,
     ExceptionModule,
     DownFileModule,
@@ -88,6 +88,8 @@ import {PagesComponent} from "./pages.component";
     NzSpinModule,
     FormsModule,
     NzTabsModule,
+    G2CardModule,
+    TrendModule,
     G2BarModule,
     G2TimelineModule
   ]

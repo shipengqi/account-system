@@ -1,6 +1,6 @@
 <div nz-row [nzGutter]="24">
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <chart-card title="{{ 'analysis.overall-revenue' | translate }}" total="¥ 126,560" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-revenue' | translate }}" total="¥ 126,560" contentHeight="44px"
                 [footer]="refooter">
       <trend flag="up" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -16,10 +16,10 @@
           <span class="ml-sm">￥12,423</span>
         </p>
       </ng-template>
-    </chart-card>
+    </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <chart-card title="{{ 'analysis.overall-expenditure' | translate }}" total="¥ 126,560" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-expenditure' | translate }}" total="¥ 126,560" contentHeight="44px"
                 [footer]="exfooter">
       <trend flag="up" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -35,10 +35,10 @@
           <span class="ml-sm">￥12,423</span>
         </p>
       </ng-template>
-    </chart-card>
+    </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <chart-card title="{{ 'analysis.overall-payroll' | translate }}" total="¥ 126,560" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-payroll' | translate }}" total="¥ 126,560" contentHeight="44px"
                 [footer]="pafooter">
       <trend flag="up" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -54,10 +54,10 @@
           <span class="ml-sm">￥12,423</span>
         </p>
       </ng-template>
-    </chart-card>
+    </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <chart-card title="{{ 'analysis.overall-profit' | translate }}" total="¥ 126,560" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-profit' | translate }}" total="¥ 126,560" contentHeight="44px"
                 [footer]="prfooter">
       <trend flag="up" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -73,7 +73,7 @@
           <span class="ml-sm">￥12,423</span>
         </p>
       </ng-template>
-    </chart-card>
+    </g2-card>
   </div>
 </div>
 <nz-card [nzLoading]="loading" [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
