@@ -5,13 +5,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/shipengqi/asapi/pkg/util/gormutil"
 	"github.com/shipengqi/errors"
 	"gorm.io/gorm"
 
 	v1 "github.com/shipengqi/asapi/pkg/api/apiserver/v1"
 	metav1 "github.com/shipengqi/asapi/pkg/api/meta/v1"
 	"github.com/shipengqi/asapi/pkg/code"
+	"github.com/shipengqi/asapi/pkg/util/gormutil"
+	"github.com/shipengqi/asapi/pkg/util/timeutil"
 )
 
 type expenditures struct {
@@ -88,6 +89,110 @@ func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.E
 
 	ret.Total = total
 	return ret, nil
+}
+
+func (v *expenditures) OverallExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
+	items := make([]*v1.Expenditure, 0)
+	err := v.db.Raw("select cost from as_expenditure order by id").Scan(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (v *expenditures) TimelineExpenditure(ctx context.Context, vehicles, timeline []string) ([]*v1.Expenditure, error) {
+	items := make([]*v1.Expenditure, 0)
+	sql := timelineExpenditureSql(vehicles, timeline)
+	err := v.db.Raw(sql).Scan(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+// CMExpenditure 本月数据
+func (v *expenditures) CMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
+	m := make([]*v1.Expenditure, 0)
+
+	err := v.db.Raw(expenditureWithDateSql(CurrentMonthCursor)).Scan(&m).Error
+	if err != nil {
+		return m, err
+	}
+	return m, nil
+}
+
+// LYMExpenditure 去年同月数据
+func (v *expenditures) LYMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
+	lastm := make([]*v1.Expenditure, 0)
+
+	err := v.db.Raw(expenditureWithDateSql(MOMMonthCursor)).Scan(&lastm).Error
+	if err != nil {
+		return lastm, err
+	}
+	return lastm, nil
+}
+
+// LMExpenditure 上月数据
+func (v *expenditures) LMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
+	lastm := make([]*v1.Expenditure, 0)
+
+	err := v.db.Raw(expenditureWithDateSql(M2MMonthCursor)).Scan(&lastm).Error
+	if err != nil {
+		return lastm, err
+	}
+	return lastm, nil
+}
+
+func timelineExpenditureSql(vehicles, timeline []string) string {
+	// default timeline start and end date
+	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
+	_, lend := timeutil.MonthIntervalTimeFromNow(0)
+	if len(timeline) > 0 {
+		lstart, _ = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+	}
+	if len(timeline) > 1 {
+		_, lend = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+	}
+	var buf bytes.Buffer
+	buf.WriteString("select type, cost, expend_at, vehicle_id ")
+	buf.WriteString("from as_expenditure where (expend_at >= '")
+	buf.WriteString(lstart)
+	buf.WriteString("' and ")
+	buf.WriteString("expend_at <= '")
+	buf.WriteString(lend)
+	buf.WriteString("') ")
+
+	if len(vehicles) > 0 {
+		// vehicles limit 5
+		if len(vehicles) > 5 {
+			vehicles = vehicles[:5]
+		}
+		buf.WriteString(" and vehicle_id in (")
+		for i, v := range vehicles {
+			buf.WriteString("'")
+			buf.WriteString(v)
+			buf.WriteString("'")
+			if i < len(vehicles)-1 {
+				buf.WriteString(",")
+			}
+		}
+		buf.WriteString(")")
+	}
+
+	return buf.String()
+}
+
+func expenditureWithDateSql(mon int) string {
+	lstart, lend := timeutil.MonthIntervalTimeFromNow(mon)
+	var buf bytes.Buffer
+	buf.WriteString("select cost ")
+	buf.WriteString("from as_expenditure where (expend_at >= '")
+	buf.WriteString(lstart)
+	buf.WriteString("' and ")
+	buf.WriteString("expend_at <= '")
+	buf.WriteString(lend)
+	buf.WriteString("') ")
+	return buf.String()
 }
 
 // ExpenditureListSql returns expenditure list.

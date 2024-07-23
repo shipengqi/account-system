@@ -16,7 +16,8 @@ CREATE TABLE `as_expenditure`
     `comment`    varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
     `created_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
     `updated_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_vehicle_type_time` (`vehicle_id`,`type`,`expend_at`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -81,6 +82,7 @@ CREATE TABLE `as_order`
     `comment`    varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
     `created_at` timestamp    NOT NULL DEFAULT current_timestamp() COMMENT '创建时间',
     `updated_at` timestamp    NOT NULL DEFAULT current_timestamp() COMMENT '修改时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    KEY `idx_vehicle_time` (`vehicle_id`,`unload_at`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

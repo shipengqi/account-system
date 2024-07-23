@@ -4,12 +4,12 @@ const CONN_PORT = 8090;
 
 
 const PROXY_CONFIG = {
-  '/api/v1/*': {
+  '/api/v1/**': {
     target: `${CONN_PROTOCOL}://${CONN_HOSTNAME}:${CONN_PORT}`,
     secure: false,
     logLevel: 'debug',
     changeOrigin: true,
-    headers: {},
+    headers: {}
   },
 };
 

@@ -115,7 +115,7 @@ func (s *GenericAPIServer) InstallAPIs() {
 // InstallMiddlewares install generic middlewares.
 func (s *GenericAPIServer) InstallMiddlewares() {
 	// necessary middlewares
-	s.Use(middlewares.RequestID())
+	// s.Use(middlewares.RequestID())
 	s.Use(middlewares.Context())
 
 	// install custom middlewares

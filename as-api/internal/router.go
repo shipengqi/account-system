@@ -2,6 +2,7 @@ package internal
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/shipengqi/asapi/internal/controller/v1/dashboard"
 	"github.com/shipengqi/errors"
 
 	"github.com/shipengqi/asapi/internal/controller/v1/driver"
@@ -80,6 +81,17 @@ func installControllers(g *gin.Engine) {
 			expenditurev1.PUT("", expenditurec.Update)
 			expenditurev1.GET("", expenditurec.List)
 			expenditurev1.GET(":id", expenditurec.Get)
+		}
+
+		analysisv1 := v1.Group("/analysis")
+		{
+			analysisc := dashboard.New(storeIns)
+
+			analysisv1.GET("/overall/revpay", analysisc.OverallRevenueAndPayroll)
+			analysisv1.GET("/overall/exp", analysisc.OverallExpenditure)
+			analysisv1.GET("/timeline/revpay", analysisc.TimelineRevenueAndPayroll)
+			analysisv1.GET("/timeline/exp", analysisc.TimelineExpenditure)
+			analysisv1.GET("/timeline/profit", analysisc.TimelineProfit)
 		}
 	}
 }

@@ -139,13 +139,17 @@
     "payroll": "司机费用"
   },
   "analysis": {
+    "ten-thousand": "万",
+    "million": "百万",
     "mom": "月同比",
     "m2m": "月环比",
     "month-revenue": "月营收",
     "overall-revenue": "总营收",
     "revenue": "营收",
     "revenue-trend": "营收趋势",
+    "revenue-vehicle-trend": "车辆营收趋势",
     "revenue-details": "营收详情",
+    "revenue-rank": "车辆营收排行",
     "month-expenditure": "月支出",
     "overall-expenditure": "总支出",
     "month-payroll": "月司机费用",
@@ -153,6 +157,21 @@
     "month-profit": "月利润",
     "overall-profit": "总利润",
     "all-month": "本月",
-    "all-year": "全年"
+    "all-year": "全年",
+    "expenditure": "支出",
+    "expenditure-details": "支出详情",
+    "expenditure-trend": "支出趋势",
+    "expenditure-type-trend": "分类支出趋势",
+    "expenditure-rank": "车辆支出排行",
+    "payroll": "司机费用",
+    "payroll-details": "司机费用详情",
+    "payroll-trend": "司机费用趋势",
+    "payroll-rank": "车辆费用排行",
+    "profit": "利润",
+    "profit-details": "利润详情",
+    "profit-trend": "利润趋势",
+    "profit-vehicle-trend": "车辆利润趋势",
+    "profit-rank": "车辆利润排行",
+    "timeline-mask": "YYYY年MM月"
   }
 }

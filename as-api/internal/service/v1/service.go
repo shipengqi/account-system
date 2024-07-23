@@ -9,6 +9,7 @@ type Interface interface {
 	Projects() ProjectService
 	Vehicles() VehicleService
 	Expenditures() ExpenditureService
+	Dashboard() DashboardService
 }
 
 type service struct {
@@ -40,4 +41,8 @@ func (s *service) Expenditures() ExpenditureService {
 
 func (s *service) Projects() ProjectService {
 	return newProjects(s)
+}
+
+func (s *service) Dashboard() DashboardService {
+	return newDashboard(s)
 }

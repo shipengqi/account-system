@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/shipengqi/errors"
 	"gorm.io/gorm"
@@ -12,6 +13,13 @@ import (
 	metav1 "github.com/shipengqi/asapi/pkg/api/meta/v1"
 	"github.com/shipengqi/asapi/pkg/code"
 	"github.com/shipengqi/asapi/pkg/util/gormutil"
+	"github.com/shipengqi/asapi/pkg/util/timeutil"
+)
+
+const (
+	MOMMonthCursor     = -12
+	M2MMonthCursor     = -1
+	CurrentMonthCursor = 0
 )
 
 type orders struct {
@@ -88,6 +96,126 @@ func (v *orders) List(ctx context.Context, opts metav1.ListOptions) (*v1.OrderLi
 
 	ret.Total = total
 	return ret, nil
+}
+
+func (v *orders) OverallRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
+	items := make([]*v1.Order, 0)
+	err := v.db.Raw("select as_order.freight, as_order.payroll from as_order order by id").Scan(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (v *orders) TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) ([]*v1.Order, error) {
+	items := make([]*v1.Order, 0)
+	sql := timelineRevenueAndPayrollSql(vehicles, timeline)
+	err := v.db.Raw(sql).Scan(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+// CMRevenueAndPayroll 本月数据
+func (v *orders) CMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
+	m := make([]*v1.Order, 0)
+
+	err := v.db.Raw(revenueAndPayrollWithDateSql(CurrentMonthCursor)).Scan(&m).Error
+	if err != nil {
+		return m, err
+	}
+	return m, nil
+}
+
+// LYMRevenueAndPayroll 去年同月数据
+func (v *orders) LYMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
+	lastm := make([]*v1.Order, 0)
+
+	err := v.db.Raw(revenueAndPayrollWithDateSql(MOMMonthCursor)).Scan(&lastm).Error
+	if err != nil {
+		return lastm, err
+	}
+	return lastm, nil
+}
+
+// LMRevenueAndPayroll 上月数据
+func (v *orders) LMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
+	lastm := make([]*v1.Order, 0)
+
+	err := v.db.Raw(revenueAndPayrollWithDateSql(M2MMonthCursor)).Scan(&lastm).Error
+	if err != nil {
+		return lastm, err
+	}
+	return lastm, nil
+}
+
+func timelineRevenueAndPayrollSql(vehicles, timeline []string) string {
+	// default timeline start and end date
+	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
+	_, lend := timeutil.MonthIntervalTimeFromNow(0)
+	if len(timeline) > 0 {
+		lstart, _ = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+	}
+	if len(timeline) > 1 {
+		_, lend = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+	}
+	var buf bytes.Buffer
+	buf.WriteString("select freight, payroll, unload_at, vehicle_id, driver_id ")
+	buf.WriteString("from as_order where (unload_at >= '")
+	buf.WriteString(lstart)
+	buf.WriteString("' and ")
+	buf.WriteString("unload_at <= '")
+	buf.WriteString(lend)
+	buf.WriteString("') ")
+
+	if len(vehicles) > 0 {
+		// vehicles limit 5
+		if len(vehicles) > 5 {
+			vehicles = vehicles[:5]
+		}
+		buf.WriteString(" and vehicle_id in (")
+		for i, v := range vehicles {
+			buf.WriteString("'")
+			buf.WriteString(v)
+			buf.WriteString("'")
+			if i < len(vehicles)-1 {
+				buf.WriteString(",")
+			}
+		}
+		buf.WriteString(")")
+	}
+
+	return buf.String()
+}
+
+func revenueAndPayrollWithDateSql(mon int) string {
+	lstart, lend := timeutil.MonthIntervalTimeFromNow(mon)
+	var buf bytes.Buffer
+	buf.WriteString("select as_order.freight, as_order.payroll ")
+	buf.WriteString("from as_order where (unload_at >= '")
+	buf.WriteString(lstart)
+	buf.WriteString("' and ")
+	buf.WriteString("unload_at <= '")
+	buf.WriteString(lend)
+	buf.WriteString("') ")
+	return buf.String()
+}
+
+func revenueAndPayrollRangeSql(startMonth, endMonth string, vehicle_id int) string {
+	lstart, _ := timeutil.MonthIntervalTimeWithGivenDate(startMonth)
+	_, lend := timeutil.MonthIntervalTimeWithGivenDate(endMonth)
+	var buf bytes.Buffer
+	buf.WriteString("select as_order.freight, as_order.payroll ")
+	buf.WriteString("from as_order where vehicle_id = ")
+	buf.WriteString(strconv.Itoa(vehicle_id))
+	buf.WriteString(" and (unload_at >= '")
+	buf.WriteString(lstart)
+	buf.WriteString("' and ")
+	buf.WriteString("unload_at <= '")
+	buf.WriteString(lend)
+	buf.WriteString("') ")
+	return buf.String()
 }
 
 // OrderListSql returns order list.
