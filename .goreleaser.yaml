@@ -11,7 +11,6 @@ builds:
     goos:
       - linux
       - windows
-      - darwin
     goarch:
       - amd64
       - arm
@@ -19,10 +18,6 @@ builds:
       - ppc64
     ignore:
       # don't build arm/ppc64 for darwin and arm/arm64/ppc64 for windows
-      - goos: darwin
-        goarch: arm
-      - goos: darwin
-        goarch: ppc64
       - goos: windows
         goarch: arm
       - goos: windows
@@ -38,7 +33,7 @@ builds:
     # Notice: when used with `gomod.proxy`, this must be a package.
     #
     # Default is `.`.
-    main: ./cmd/apiserver
+    main: ./as-api/cmd/apiserver
 
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
@@ -47,6 +42,7 @@ archives:
       - LICENSE
       - README.md
       - CHANGELOG/**
+      - as-api/configs/**
     # Can be used to change the archive formats for specific GOOSs.
     # Most common use case is to archive as zip on Windows.
     # Default is empty.
@@ -78,7 +74,7 @@ changelog:
       order: 9999
 release:
   footer: |
-    **Full Changelog**: https://github.com/shipengqi/asapi/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/shipengqi/account-system/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 
 # modelines, feel free to remove those if you don't want/use them:
