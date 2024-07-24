@@ -36,7 +36,8 @@ builds:
     # Notice: when used with `gomod.proxy`, this must be a package.
     #
     # Default is `.`.
-    main: ./as-api/cmd/apiserver
+    main: ./cmd/apiserver
+    dir: as-api
 
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
