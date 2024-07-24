@@ -1,12 +1,26 @@
-name: dependency-review
-on: [pull_request]
-permissions:
-  contents: read
+name: "grype"
+on:
+  push:
+    branches: ['main']
+    tags: ['v*']
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
 jobs:
-  dependency-review:
+  scan-source:
+    name: scan-source
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
+      - uses: anchore/scan-action@v4
         with:
-          allow-licenses: BSD-2-Clause, BSD-3-Clause, MIT, Apache-2.0, MPL-1.0, MPL-1.1, MPL-2.0
+          path: "."
+          fail-build: true
