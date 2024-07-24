@@ -190,7 +190,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.revenueBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -207,7 +207,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.revenue_line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.revenue_line_data[ld]) {
@@ -232,7 +232,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.payrollBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -249,7 +249,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.payroll_line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.payroll_line_data[ld]) {
@@ -274,7 +274,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.expenditureBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -291,7 +291,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {
@@ -317,7 +317,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.profitBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -334,7 +334,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {
