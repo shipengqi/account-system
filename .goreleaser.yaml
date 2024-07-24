@@ -4,6 +4,9 @@
 dist: _output
 snapshot:
   name_template: '{{ incpatch .Version }}-next'
+before:
+  hooks:
+    - make ui.build
 builds:
   - env:
       - CGO_ENABLED=0

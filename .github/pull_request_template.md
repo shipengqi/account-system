@@ -1,4 +1,4 @@
-Thank you for contributing to as-api!
+Thank you for contributing to account-system!
 
 # Please add a summary of your change
 

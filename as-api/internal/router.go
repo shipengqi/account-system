@@ -1,10 +1,12 @@
 package internal
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-	"github.com/shipengqi/asapi/internal/controller/v1/dashboard"
 	"github.com/shipengqi/errors"
 
+	"github.com/shipengqi/asapi/internal/controller/v1/dashboard"
 	"github.com/shipengqi/asapi/internal/controller/v1/driver"
 	"github.com/shipengqi/asapi/internal/controller/v1/expenditure"
 	"github.com/shipengqi/asapi/internal/controller/v1/order"
@@ -27,6 +29,11 @@ func installControllers(g *gin.Engine) {
 	g.NoRoute(func(c *gin.Context) {
 		response.Fail(c, errors.Codef(code.ErrPageNotFound, "Page not found."))
 	})
+
+	html := NewHtmlHandler()
+	g.GET("/", html.Index)
+	g.StaticFS("/static", http.FS(NewResource("dist/as-web/browser")))
+	g.StaticFS("/assets", http.FS(NewResource("dist/as-web/browser/assets")))
 
 	// v1 handlers, requiring authentication
 	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
