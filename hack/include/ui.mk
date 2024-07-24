@@ -5,4 +5,4 @@ ui.build:
 	npm install --force && \
 	npm run build && \
 	rm -rf $(REPO_ROOT)/as-api/resources/dist && \
-	mv $(REPO_ROOT)/as-web/dist $(REPO_ROOT)/stat-api/resources
+	mv $(REPO_ROOT)/as-web/dist $(REPO_ROOT)/as-api/resources
