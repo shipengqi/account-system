@@ -6,8 +6,8 @@ all: modules lint test build
 
 include hack/include/common.mk # make sure include common.mk at the first include line
 include hack/include/tools.mk
+include hack/include/ui.mk
 include hack/include/go.mk
-include hack/include/test.mk
 include hack/include/release.mk
 
 # ==============================================================================
@@ -32,7 +32,7 @@ export USAGE_OPTIONS
 
 ## build: build binary file.
 .PHONY: build
-build: modules
+build: ui.build modules
 	@$(MAKE) go.build
 
 ## tag: generate release tag.
@@ -59,16 +59,6 @@ clean:
 .PHONY: lint
 lint:
 	@$(MAKE) go.lint
-
-## test: run unit test and get test coverage.
-.PHONY: test
-test:
-	@$(MAKE) test.cover
-
-## e2e: run e2e test.
-.PHONY: e2e
-test-e2e:
-	@$(MAKE) test.e2e
 
 ## help: show help information.
 .PHONY: help
