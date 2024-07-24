@@ -54,6 +54,15 @@ export class DashboardComponent implements OnInit {
   profitLineData: G2TimelineData[] = this.genLineData();
   profitRankListData: Array<{ title: string; total: number }> = [];
 
+  expendTypes = [
+    {text: this._translate.instant('expenditure.toll'), value: 1},
+    {text: this._translate.instant('expenditure.fuel'), value: 2},
+    {text: this._translate.instant('expenditure.maintenance'), value: 3},
+    {text: this._translate.instant('expenditure.weighbridge-fee'), value: 4},
+    {text: this._translate.instant('expenditure.water-refilling-fee'), value: 5},
+    {text: this._translate.instant('expenditure.other-fees'), value: 6},
+  ];
+
   overall: Overall = {
     revpay: {
       total_revenue: 0,
@@ -162,6 +171,59 @@ export class DashboardComponent implements OnInit {
 
   profitTabChange(idx: number): void {
     this.onTabChange(this.profitTabs, idx);
+  }
+
+  onRevenueDateChange(range: (Date | null)[]): void {
+    if (range.length < 2) {
+      return;
+    }
+    this._dashboardSvc.timelineRevPay().subscribe({
+      next: (res) => {
+        this.calculateVehiclesRevenueChartsData(res);
+      },
+      error: (err) => {
+        this._message.error(err.message);
+      }
+    })
+  }
+  onExpenditureDateChange(range: (Date | null)[]): void {
+    if (range.length < 2) {
+      return;
+    }
+    this._dashboardSvc.timelineExp().subscribe({
+      next: (res) => {
+        this.calculateExpenditureChartsData(res);
+      },
+      error: (err) => {
+        this._message.error(err.message);
+      }
+    })
+  }
+  onPayrollDateChange(range: (Date | null)[]): void {
+    if (range.length < 2) {
+      return;
+    }
+    this._dashboardSvc.timelineRevPay().subscribe({
+      next: (res) => {
+        this.calculateDriversPayrollChartsData(res);
+      },
+      error: (err) => {
+        this._message.error(err.message);
+      }
+    })
+  }
+  onProfitDateChange(range: (Date | null)[]): void {
+    if (range.length < 2) {
+      return;
+    }
+    this._dashboardSvc.timelineProfit().subscribe({
+      next: (res) => {
+        this.calculateProfitChartsData(res);
+      },
+      error: (err) => {
+        this._message.error(err.message);
+      }
+    })
   }
 
   formatPercent(n: number = 0): string {

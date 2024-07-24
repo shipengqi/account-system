@@ -10,6 +10,7 @@ import {
   TimelineExpenditure, TimelineProfit,
   TimelineRevenueAndPayroll
 } from "../model/dashboard";
+import moment from "moment/moment";
 
 const analysisUrl = './api/v1/analysis';
 
@@ -31,14 +32,26 @@ export class DashboardService extends BasicService {
   }
 
   timelineRevPay(): Observable<TimelineRevenueAndPayroll> {
+    // if (searchData.expend_range?.length > 1) {
+    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
+    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
+    // }
     return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay");
   }
 
   timelineExp(): Observable<TimelineExpenditure> {
+    // if (searchData.expend_range?.length > 1) {
+    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
+    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
+    // }
     return this._http.get<TimelineExpenditure>(analysisUrl+"/timeline/exp");
   }
 
   timelineProfit(): Observable<TimelineProfit> {
+    // if (searchData.expend_range?.length > 1) {
+    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
+    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
+    // }
     return this._http.get<TimelineProfit>(analysisUrl+"/timeline/profit");
   }
 }
