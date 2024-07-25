@@ -142,7 +142,10 @@
                      nzAllowClear>
             <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
           </nz-select>
-          <nz-range-picker nzMode="month" (nzOnCalendarChange)="onRevenueDateChange($event)"/>
+          <nz-range-picker nzMode="month" [(ngModel)]="revenueRangeDate"/>
+          <button nz-button [nzType]="'primary'" (click)="onRevenueChartSearch()" [nzLoading]="revenueChartLoading">
+            <i nz-icon nzType="search"></i>
+          </button>
         </div>
       </ng-template>
     </nz-tabset>
@@ -219,7 +222,10 @@
                    nzAllowClear>
           <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
         </nz-select>
-        <nz-range-picker nzMode="month" (nzOnCalendarChange)="onExpenditureDateChange($event)"/>
+        <nz-range-picker nzMode="month" [(ngModel)]="expenditureRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onExpenditureChartSearch()" [nzLoading]="expenditureChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>
@@ -291,7 +297,10 @@
                    nzAllowClear>
           <nz-option *ngFor="let o of drivers" [nzValue]="o.id" [nzLabel]="o.name"/>
         </nz-select>
-        <nz-range-picker nzMode="month" (nzOnCalendarChange)="onPayrollDateChange($event)"/>
+        <nz-range-picker nzMode="month" [(ngModel)]="payrollRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onPayrollChartSearch()" [nzLoading]="payrollChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>
@@ -364,7 +373,10 @@
                    nzAllowClear>
           <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
         </nz-select>
-        <nz-range-picker nzMode="month" (nzOnCalendarChange)="onProfitDateChange($event)"/>
+        <nz-range-picker nzMode="month" [(ngModel)]="profitRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onProfitChartSearch()" [nzLoading]="profitChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>

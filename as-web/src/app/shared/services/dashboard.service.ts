@@ -31,27 +31,29 @@ export class DashboardService extends BasicService {
     return this._http.get<OverallGeneral>(analysisUrl+"/overall/exp");
   }
 
-  timelineRevPay(): Observable<TimelineRevenueAndPayroll> {
-    // if (searchData.expend_range?.length > 1) {
-    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
-    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
-    // }
-    return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay");
+  timelineRevPay(range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
+    const params = getDateRangeParam(range);
+    return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay", {params: params});
   }
 
-  timelineExp(): Observable<TimelineExpenditure> {
-    // if (searchData.expend_range?.length > 1) {
-    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
-    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
-    // }
-    return this._http.get<TimelineExpenditure>(analysisUrl+"/timeline/exp");
+  timelineExp(range?: (Date | null)[]): Observable<TimelineExpenditure> {
+    const params = getDateRangeParam(range);
+    return this._http.get<TimelineExpenditure>(analysisUrl+"/timeline/exp", {params: params});
   }
 
-  timelineProfit(): Observable<TimelineProfit> {
-    // if (searchData.expend_range?.length > 1) {
-    //   params['start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
-    //   params['end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
-    // }
-    return this._http.get<TimelineProfit>(analysisUrl+"/timeline/profit");
+  timelineProfit(range?: (Date | null)[]): Observable<TimelineProfit> {
+    const params = getDateRangeParam(range);
+    return this._http.get<TimelineProfit>(analysisUrl+"/timeline/profit", {params: params});
   }
+}
+
+function getDateRangeParam(range?: (Date | null)[]): any {
+  const params: any = {}
+  if (range && range.length > 1) {
+    params['timeline'] = [
+      moment(range[0]).format('YYYY-MM-DD'),
+      moment(range[1]).format('YYYY-MM-DD')
+    ]
+  }
+  return params;
 }

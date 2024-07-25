@@ -27,7 +27,6 @@ import {IOrder} from "../../shared/model/order";
 })
 export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
-  dateRange: Date[] = [];
   loading = false;
 
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
@@ -35,24 +34,32 @@ export class DashboardComponent implements OnInit {
   expenditureBarData: G2BarData[] = this.genData();
   expenditureLineData: G2TimelineData[] = this.genLineData();
   expenditureRankListData: Array<{ title: string; total: number }> = [];
+  expenditureRangeDate: Date[] = [];
+  expenditureChartLoading = false;
 
   revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
   revenueLineTitleMap: G2TimelineMap = {y1: ''};
   revenueBarData: G2BarData[] = [];
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
+  revenueRangeDate: Date[] = [];
+  revenueChartLoading = false;
 
   payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
   payrollLineTitleMap: G2TimelineMap = {y1: ''};
   payrollBarData: G2BarData[] = [];
   payrollLineData: G2TimelineData[] = this.genLineData();
   payrollRankListData: Array<{ title: string; total: number }> = [];
+  payrollRangeDate: Date[] = [];
+  payrollChartLoading = false;
 
   profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
   profitLineTitleMap: G2TimelineMap = {y1: ''};
   profitBarData: G2BarData[] = this.genData();
   profitLineData: G2TimelineData[] = this.genLineData();
   profitRankListData: Array<{ title: string; total: number }> = [];
+  profitRangeDate: Date[] = [];
+  profitChartLoading = false;
 
   expendTypes = [
     {text: this._translate.instant('expenditure.toll'), value: 1},
@@ -127,6 +134,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    this.loading = true;
     forkJoin([
       this._vehiclesSvc.listAll(),
       this._driversSve.listAll(),
@@ -150,8 +158,10 @@ export class DashboardComponent implements OnInit {
         this.calculateDriversPayrollChartsData(res[2]);
         this.calculateExpenditureChartsData(res[3]);
         this.calculateProfitChartsData(res[4]);
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         this._message.error(err.message);
       }
     })
@@ -173,54 +183,58 @@ export class DashboardComponent implements OnInit {
     this.onTabChange(this.profitTabs, idx);
   }
 
-  onRevenueDateChange(range: (Date | null)[]): void {
-    if (range.length < 2) {
-      return;
-    }
-    this._dashboardSvc.timelineRevPay().subscribe({
+  onRevenueChartSearch(): void {
+    this.revenueChartLoading = true;
+    this._dashboardSvc.timelineRevPay(this.revenueRangeDate).subscribe({
       next: (res) => {
         this.calculateVehiclesRevenueChartsData(res);
+        this.revenueChartLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.revenueChartLoading = false;
         this._message.error(err.message);
       }
     })
   }
-  onExpenditureDateChange(range: (Date | null)[]): void {
-    if (range.length < 2) {
-      return;
-    }
-    this._dashboardSvc.timelineExp().subscribe({
+  onExpenditureChartSearch(): void {
+    this.expenditureChartLoading = true;
+    this._dashboardSvc.timelineExp(this.expenditureRangeDate).subscribe({
       next: (res) => {
         this.calculateExpenditureChartsData(res);
+        this.expenditureChartLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.expenditureChartLoading = false;
         this._message.error(err.message);
       }
     })
   }
-  onPayrollDateChange(range: (Date | null)[]): void {
-    if (range.length < 2) {
-      return;
-    }
-    this._dashboardSvc.timelineRevPay().subscribe({
+  onPayrollChartSearch(): void {
+    this.payrollChartLoading = true;
+    this._dashboardSvc.timelineRevPay(this.payrollRangeDate).subscribe({
       next: (res) => {
         this.calculateDriversPayrollChartsData(res);
+        this.payrollChartLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.payrollChartLoading = false;
         this._message.error(err.message);
       }
     })
   }
-  onProfitDateChange(range: (Date | null)[]): void {
-    if (range.length < 2) {
-      return;
-    }
-    this._dashboardSvc.timelineProfit().subscribe({
+  onProfitChartSearch(): void {
+    this.profitChartLoading = true;
+    this._dashboardSvc.timelineProfit(this.profitRangeDate).subscribe({
       next: (res) => {
         this.calculateProfitChartsData(res);
+        this.profitChartLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        this.profitChartLoading = false;
         this._message.error(err.message);
       }
     })
