@@ -137,10 +137,15 @@
         <div>
           <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
                      *ngIf="revenueTabs[1].show"
+                     nzMode="multiple"
+                     [nzMaxMultipleCount]="5"
                      nzAllowClear>
-<!--            <nz-option *ngFor="let o of vehicleList" [nzValue]="o.id" [nzLabel]="o.number"/>-->
+            <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
           </nz-select>
-          <nz-range-picker nzMode="month" [(ngModel)]="dateRange"/>
+          <nz-range-picker nzMode="month" [(ngModel)]="revenueRangeDate"/>
+          <button nz-button [nzType]="'primary'" (click)="onRevenueChartSearch()" [nzLoading]="revenueChartLoading">
+            <i nz-icon nzType="search"></i>
+          </button>
         </div>
       </ng-template>
     </nz-tabset>
@@ -182,6 +187,7 @@
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
                            [slider]="false"
                            [data]="expenditureLineData"
+                           mask="YYYY/MM"
                            [titleMap]="expenditureLineTitleMap"/>
             }
           </div>
@@ -206,13 +212,20 @@
       <div>
         <nz-select nzPlaceHolder="{{ 'expenditure.select-type' | translate }}" style="margin-right: 8px"
                    *ngIf="expenditureTabs[1].show"
-                   nzAllowClear></nz-select>
+                   nzAllowClear>
+          <nz-option *ngFor="let o of expendTypes" [nzValue]="o.value" [nzLabel]="o.text"/>
+        </nz-select>
         <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
                    *ngIf="expenditureTabs[1].show"
+                   nzMode="multiple"
+                   [nzMaxMultipleCount]="5"
                    nzAllowClear>
-          <!--            <nz-option *ngFor="let o of vehicleList" [nzValue]="o.id" [nzLabel]="o.number"/>-->
+          <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
         </nz-select>
-        <nz-range-picker nzMode="month" [(ngModel)]="dateRange"/>
+        <nz-range-picker nzMode="month" [(ngModel)]="expenditureRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onExpenditureChartSearch()" [nzLoading]="expenditureChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>
@@ -279,10 +292,15 @@
       <div>
         <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}" style="margin-right: 8px"
                    *ngIf="payrollTabs[1].show"
+                   nzMode="multiple"
+                   [nzMaxMultipleCount]="5"
                    nzAllowClear>
-          <!--            <nz-option *ngFor="let o of vehicleList" [nzValue]="o.id" [nzLabel]="o.number"/>-->
+          <nz-option *ngFor="let o of drivers" [nzValue]="o.id" [nzLabel]="o.name"/>
         </nz-select>
-        <nz-range-picker nzMode="month" [(ngModel)]="dateRange"/>
+        <nz-range-picker nzMode="month" [(ngModel)]="payrollRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onPayrollChartSearch()" [nzLoading]="payrollChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>
@@ -347,7 +365,18 @@
     </nz-tab>
     <ng-template #profitExtraTemplate>
       <div>
-        <nz-range-picker nzMode="month" [(ngModel)]="dateRange"/>
+        <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
+                   *ngIf="profitTabs[1].show"
+                   nzMode="multiple"
+                   [nzDropdownMatchSelectWidth]="false"
+                   [nzMaxMultipleCount]="5"
+                   nzAllowClear>
+          <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
+        </nz-select>
+        <nz-range-picker nzMode="month" [(ngModel)]="profitRangeDate"/>
+        <button nz-button [nzType]="'primary'" (click)="onProfitChartSearch()" [nzLoading]="profitChartLoading">
+          <i nz-icon nzType="search"></i>
+        </button>
       </div>
     </ng-template>
   </nz-tabset>

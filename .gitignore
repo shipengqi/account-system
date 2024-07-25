@@ -25,3 +25,5 @@ go.work.sum
 as-web/node_modules
 as-web/.angular
 as-web/.vscode
+as-web/dist
+as-api/resources/dist

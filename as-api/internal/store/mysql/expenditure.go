@@ -148,10 +148,10 @@ func timelineExpenditureSql(vehicles, timeline []string) string {
 	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
 	_, lend := timeutil.MonthIntervalTimeFromNow(0)
 	if len(timeline) > 0 {
-		lstart, _ = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+		lstart, _ = timeutil.MonthIntervalTimeWithGivenMon(timeline[0])
 	}
 	if len(timeline) > 1 {
-		_, lend = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+		_, lend = timeutil.MonthIntervalTimeWithGivenMon(timeline[1])
 	}
 	var buf bytes.Buffer
 	buf.WriteString("select type, cost, expend_at, vehicle_id ")

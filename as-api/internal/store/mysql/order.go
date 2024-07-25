@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/shipengqi/errors"
 	"gorm.io/gorm"
@@ -155,10 +154,10 @@ func timelineRevenueAndPayrollSql(vehicles, timeline []string) string {
 	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
 	_, lend := timeutil.MonthIntervalTimeFromNow(0)
 	if len(timeline) > 0 {
-		lstart, _ = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+		lstart, _ = timeutil.MonthIntervalTimeWithGivenMon(timeline[0])
 	}
 	if len(timeline) > 1 {
-		_, lend = timeutil.MonthIntervalTimeWithGivenDate(timeline[0])
+		_, lend = timeutil.MonthIntervalTimeWithGivenMon(timeline[1])
 	}
 	var buf bytes.Buffer
 	buf.WriteString("select freight, payroll, unload_at, vehicle_id, driver_id ")
@@ -194,22 +193,6 @@ func revenueAndPayrollWithDateSql(mon int) string {
 	var buf bytes.Buffer
 	buf.WriteString("select as_order.freight, as_order.payroll ")
 	buf.WriteString("from as_order where (unload_at >= '")
-	buf.WriteString(lstart)
-	buf.WriteString("' and ")
-	buf.WriteString("unload_at <= '")
-	buf.WriteString(lend)
-	buf.WriteString("') ")
-	return buf.String()
-}
-
-func revenueAndPayrollRangeSql(startMonth, endMonth string, vehicle_id int) string {
-	lstart, _ := timeutil.MonthIntervalTimeWithGivenDate(startMonth)
-	_, lend := timeutil.MonthIntervalTimeWithGivenDate(endMonth)
-	var buf bytes.Buffer
-	buf.WriteString("select as_order.freight, as_order.payroll ")
-	buf.WriteString("from as_order where vehicle_id = ")
-	buf.WriteString(strconv.Itoa(vehicle_id))
-	buf.WriteString(" and (unload_at >= '")
 	buf.WriteString(lstart)
 	buf.WriteString("' and ")
 	buf.WriteString("unload_at <= '")

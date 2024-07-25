@@ -27,7 +27,6 @@ import {IOrder} from "../../shared/model/order";
 })
 export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
-  dateRange: Date[] = [];
   loading = false;
 
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
@@ -35,24 +34,41 @@ export class DashboardComponent implements OnInit {
   expenditureBarData: G2BarData[] = this.genData();
   expenditureLineData: G2TimelineData[] = this.genLineData();
   expenditureRankListData: Array<{ title: string; total: number }> = [];
+  expenditureRangeDate: Date[] = [];
+  expenditureChartLoading = false;
 
   revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
   revenueLineTitleMap: G2TimelineMap = {y1: ''};
   revenueBarData: G2BarData[] = [];
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
+  revenueRangeDate: Date[] = [];
+  revenueChartLoading = false;
 
   payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
   payrollLineTitleMap: G2TimelineMap = {y1: ''};
   payrollBarData: G2BarData[] = [];
   payrollLineData: G2TimelineData[] = this.genLineData();
   payrollRankListData: Array<{ title: string; total: number }> = [];
+  payrollRangeDate: Date[] = [];
+  payrollChartLoading = false;
 
   profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
   profitLineTitleMap: G2TimelineMap = {y1: ''};
   profitBarData: G2BarData[] = this.genData();
   profitLineData: G2TimelineData[] = this.genLineData();
   profitRankListData: Array<{ title: string; total: number }> = [];
+  profitRangeDate: Date[] = [];
+  profitChartLoading = false;
+
+  expendTypes = [
+    {text: this._translate.instant('expenditure.toll'), value: 1},
+    {text: this._translate.instant('expenditure.fuel'), value: 2},
+    {text: this._translate.instant('expenditure.maintenance'), value: 3},
+    {text: this._translate.instant('expenditure.weighbridge-fee'), value: 4},
+    {text: this._translate.instant('expenditure.water-refilling-fee'), value: 5},
+    {text: this._translate.instant('expenditure.other-fees'), value: 6},
+  ];
 
   overall: Overall = {
     revpay: {
@@ -118,6 +134,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
+    this.loading = true;
     forkJoin([
       this._vehiclesSvc.listAll(),
       this._driversSve.listAll(),
@@ -141,8 +158,10 @@ export class DashboardComponent implements OnInit {
         this.calculateDriversPayrollChartsData(res[2]);
         this.calculateExpenditureChartsData(res[3]);
         this.calculateProfitChartsData(res[4]);
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         this._message.error(err.message);
       }
     })
@@ -162,6 +181,63 @@ export class DashboardComponent implements OnInit {
 
   profitTabChange(idx: number): void {
     this.onTabChange(this.profitTabs, idx);
+  }
+
+  onRevenueChartSearch(): void {
+    this.revenueChartLoading = true;
+    this._dashboardSvc.timelineRevPay(this.revenueRangeDate).subscribe({
+      next: (res) => {
+        this.calculateVehiclesRevenueChartsData(res);
+        this.revenueChartLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.revenueChartLoading = false;
+        this._message.error(err.message);
+      }
+    })
+  }
+  onExpenditureChartSearch(): void {
+    this.expenditureChartLoading = true;
+    this._dashboardSvc.timelineExp(this.expenditureRangeDate).subscribe({
+      next: (res) => {
+        this.calculateExpenditureChartsData(res);
+        this.expenditureChartLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.expenditureChartLoading = false;
+        this._message.error(err.message);
+      }
+    })
+  }
+  onPayrollChartSearch(): void {
+    this.payrollChartLoading = true;
+    this._dashboardSvc.timelineRevPay(this.payrollRangeDate).subscribe({
+      next: (res) => {
+        this.calculateDriversPayrollChartsData(res);
+        this.payrollChartLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.payrollChartLoading = false;
+        this._message.error(err.message);
+      }
+    })
+  }
+  onProfitChartSearch(): void {
+    this.profitChartLoading = true;
+    this._dashboardSvc.timelineProfit(this.profitRangeDate).subscribe({
+      next: (res) => {
+        this.calculateProfitChartsData(res);
+        this.profitChartLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.profitChartLoading = false;
+        this._message.error(err.message);
+      }
+    })
   }
 
   formatPercent(n: number = 0): string {
@@ -190,7 +266,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.revenueBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -207,7 +283,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.revenue_line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.revenue_line_data[ld]) {
@@ -232,7 +308,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.payrollBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -249,7 +325,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.payroll_line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.payroll_line_data[ld]) {
@@ -274,7 +350,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.expenditureBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -291,7 +367,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {
@@ -317,7 +393,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     this.profitBarData = barData.sort((d1, d2) => {
-      return moment(d1.x).unix() - moment(d2.x).unix();
+      return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
     let titleNum = 1;
@@ -334,7 +410,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: moment(ld).valueOf(),
+        time: new Date(ld).getTime(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {
