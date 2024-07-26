@@ -1,0 +1,14 @@
+<service>
+  <id>AccountSystem</id>
+  <name>AccountSystem</name>
+  <description>This service runs ZhongHui account system.</description>
+  <executable>C:\Code\my-services\account-system\account-system.exe</executable>
+  <arguments>--config C:\Code\my-services\account-system\apiserver.yaml</arguments>
+  <depend>MySQL80</depend>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+	<keepFiles>6</keepFiles>
+  </log>
+  <logpath>%BASE%\logs</logpath>
+  <onfailure action="restart" />
+</service>
