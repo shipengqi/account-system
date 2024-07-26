@@ -14,3 +14,4 @@ Download `WinSW`: https://github.com/winsw/winsw/releases
 - Place those two files side by side, because that's how WinSW discovers its co-related configuration.
 - Run `myapp.exe install` to install the service.
 - Run `myapp.exe` start to start the service.
+- Follow the step `Computer` -> `Manage` -> `Service And Applications` -> `Services` to check service status.
