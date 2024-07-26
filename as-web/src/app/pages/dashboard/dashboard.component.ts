@@ -1,4 +1,12 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject, OnDestroy,
+  OnInit
+} from '@angular/core';
 
 import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
@@ -18,16 +26,15 @@ import {DriversService} from "../../shared/services/drivers.service";
 import {IDriver, IVehicle} from "../../shared/model/model";
 import {VehiclesService} from "../../shared/services/vehicles.service";
 import moment from "moment";
-import {IOrder} from "../../shared/model/order";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.less'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
-  loading = false;
+  loading = true;
 
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
   expenditureLineTitleMap: G2TimelineMap = {y1: ''};
@@ -143,8 +150,6 @@ export class DashboardComponent implements OnInit {
       this._dashboardSvc.timelineProfit()
     ]).subscribe({
       next: (res) => {
-        this.revenueLineData = [];
-        this.payrollLineData = [];
         this.vehicles = res[0].items;
         this.drivers = res[1].items;
 
@@ -165,6 +170,14 @@ export class DashboardComponent implements OnInit {
         this._message.error(err.message);
       }
     })
+  }
+
+  ngAfterViewInit() {
+
+  }
+
+  ngOnDestroy() {
+    this.revenueTabs[0].show = false;
   }
 
   expenditureTabChange(idx: number): void {
@@ -283,7 +296,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.revenue_line_data) {
       let vdata: any = {
-        time: new Date(ld).getTime(),
+        time: moment(new Date(ld)).endOf("month").valueOf(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.revenue_line_data[ld]) {
@@ -325,7 +338,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.payroll_line_data) {
       let vdata: any = {
-        time: new Date(ld).getTime(),
+        time: moment(new Date(ld)).endOf("month").valueOf(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.payroll_line_data[ld]) {
@@ -367,7 +380,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: new Date(ld).getTime(),
+        time: moment(new Date(ld)).endOf("month").valueOf(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {
@@ -410,7 +423,7 @@ export class DashboardComponent implements OnInit {
 
     for (const ld in charsData.line_data) {
       let vdata: any = {
-        time: new Date(ld).getTime(),
+        time: moment(new Date(ld)).endOf("month").valueOf(),
         y1: 0 // default 0, y1 is required
       }
       for (const tv in charsData.line_data[ld]) {

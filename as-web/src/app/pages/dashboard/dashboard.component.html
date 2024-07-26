@@ -77,7 +77,7 @@
   </div>
 </div>
 <!-- revenue chart -->
-<nz-card [nzLoading]="loading" [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
+<nz-card [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
     <nz-tabset [nzAnimated]="false"  [nzTabBarExtraContent]="revenueExtraTemplate" (nzSelectedIndexChange)="revenueTabChange($event)">
       <nz-tab nzTitle="{{ 'analysis.revenue' | translate }}">
         <div nz-row>
@@ -152,7 +152,7 @@
 </nz-card>
 
 <!-- expenditure chart -->
-<nz-card [nzLoading]="loading" [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
+<nz-card [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
   <nz-tabset [nzAnimated]="false"  [nzTabBarExtraContent]="expendExtraTemplate" (nzSelectedIndexChange)="expenditureTabChange($event)">
     <nz-tab nzTitle="{{ 'analysis.expenditure' | translate }}">
       <div nz-row>
@@ -232,7 +232,7 @@
 </nz-card>
 
 <!-- payroll chart -->
-<nz-card [nzLoading]="loading" [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
+<nz-card [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
   <nz-tabset [nzAnimated]="false"  [nzTabBarExtraContent]="payrollExtraTemplate" (nzSelectedIndexChange)="payrollTabChange($event)">
     <nz-tab nzTitle="{{ 'analysis.payroll' | translate }}">
       <div nz-row>
@@ -307,7 +307,7 @@
 </nz-card>
 
 <!-- profit chart -->
-<nz-card [nzLoading]="loading" [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
+<nz-card [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
   <nz-tabset [nzAnimated]="false"  [nzTabBarExtraContent]="profitExtraTemplate" (nzSelectedIndexChange)="profitTabChange($event)">
     <nz-tab nzTitle="{{ 'analysis.profit' | translate }}">
       <div nz-row>
