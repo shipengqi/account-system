@@ -1,0 +1,40 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+version: 2
+dist: _output
+snapshot:
+  name_template: 'as-dev'
+before:
+  hooks:
+    - make ui.build
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GIT_TREE_STATE=clean
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - ppc64
+    ignore:
+      # don't build arm/ppc64 for darwin and arm/arm64/ppc64 for windows
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+      - goos: windows
+        goarch: ppc64
+    ldflags:
+      - -X "github.com/shipengqi/component-base/version.Version=Dev"
+      - -X "github.com/shipengqi/component-base/version.GitCommit={{ .ShortCommit }}"
+      - -X "github.com/shipengqi/component-base/version.BuildTime={{ .Date }}"
+      - -X "github.com/shipengqi/component-base/version.GitTreeState={{ .Env.GIT_TREE_STATE }}"
+    # Path to main.go file or main package.
+    # Notice: when used with `gomod.proxy`, this must be a package.
+    #
+    # Default is `.`.
+    main: ./cmd/apiserver
+    dir: as-api
