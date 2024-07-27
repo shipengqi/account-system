@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/shipengqi/errors"
 	"gorm.io/gorm"
@@ -100,9 +101,9 @@ func (v *expenditures) OverallExpenditure(ctx context.Context) ([]*v1.Expenditur
 	return items, nil
 }
 
-func (v *expenditures) TimelineExpenditure(ctx context.Context, vehicles, timeline []string) ([]*v1.Expenditure, error) {
+func (v *expenditures) TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) ([]*v1.Expenditure, error) {
 	items := make([]*v1.Expenditure, 0)
-	sql := timelineExpenditureSql(vehicles, timeline)
+	sql := timelineExpenditureSql(vehicles, timeline, etype)
 	err := v.db.Raw(sql).Scan(&items).Error
 	if err != nil {
 		return nil, err
@@ -143,7 +144,7 @@ func (v *expenditures) LMExpenditure(ctx context.Context) ([]*v1.Expenditure, er
 	return lastm, nil
 }
 
-func timelineExpenditureSql(vehicles, timeline []string) string {
+func timelineExpenditureSql(vehicles, timeline []string, etype int) string {
 	// default timeline start and end date
 	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
 	_, lend := timeutil.MonthIntervalTimeFromNow(0)
@@ -162,6 +163,10 @@ func timelineExpenditureSql(vehicles, timeline []string) string {
 	buf.WriteString(lend)
 	buf.WriteString("') ")
 
+	if etype > -1 {
+		buf.WriteString(" and type = ")
+		buf.WriteString(strconv.Itoa(etype))
+	}
 	if len(vehicles) > 0 {
 		// vehicles limit 5
 		if len(vehicles) > 5 {

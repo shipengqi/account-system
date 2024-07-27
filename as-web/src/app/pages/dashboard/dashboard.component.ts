@@ -1,18 +1,19 @@
 import {
-  AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
-  inject, OnDestroy,
-  OnInit
+  inject,
+  OnInit,
+  ChangeDetectorRef
 } from '@angular/core';
 
+import {forkJoin} from "rxjs";
+import moment from "moment";
+import {TranslateService} from "@ngx-translate/core";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
 
 import {DashboardService} from "../../shared/services/dashboard.service";
+
 import {
   Overall,
   OverallGeneral,
@@ -20,19 +21,16 @@ import {
   TimelineExpenditure, TimelineProfit,
   TimelineRevenueAndPayroll
 } from "../../shared/model/dashboard";
-import {TranslateService} from "@ngx-translate/core";
-import {forkJoin} from "rxjs";
-import {DriversService} from "../../shared/services/drivers.service";
 import {IDriver, IVehicle} from "../../shared/model/model";
+import {DriversService} from "../../shared/services/drivers.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
-import moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.less'
 })
-export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   loading = true;
 
@@ -50,6 +48,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
   revenueRangeDate: Date[] = [];
+  searchExpenditureType = -1;
   revenueChartLoading = false;
 
   payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
@@ -172,14 +171,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  ngAfterViewInit() {
-
-  }
-
-  ngOnDestroy() {
-    this.revenueTabs[0].show = false;
-  }
-
   expenditureTabChange(idx: number): void {
     this.onTabChange(this.expenditureTabs, idx);
   }
@@ -212,7 +203,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   onExpenditureChartSearch(): void {
     this.expenditureChartLoading = true;
-    this._dashboardSvc.timelineExp(this.expenditureRangeDate).subscribe({
+    this._dashboardSvc.timelineExp(this.searchExpenditureType, this.expenditureRangeDate).subscribe({
       next: (res) => {
         this.calculateExpenditureChartsData(res);
         this.expenditureChartLoading = false;

@@ -19,7 +19,7 @@ type DashboardService interface {
 	OverallRevenueAndPayroll(ctx context.Context) (*v1.OverallRevenueAndPayroll, error)
 	OverallExpenditure(ctx context.Context) (*v1.OverallExpenditure, error)
 	TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) (*v1.TimelineRevenueAndPayroll, error)
-	TimelineExpenditure(ctx context.Context, vehicles, timeline []string) (*v1.TimelineExpenditure, error)
+	TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) (*v1.TimelineExpenditure, error)
 	TimelineProfit(ctx context.Context, vehicles, timeline []string) (*v1.TimelineProfit, error)
 }
 
@@ -174,9 +174,9 @@ func (u *dashboardsvc) TimelineRevenueAndPayroll(ctx context.Context, vehicles, 
 	return tr, nil
 }
 
-func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeline []string) (*v1.TimelineExpenditure, error) {
+func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) (*v1.TimelineExpenditure, error) {
 	te := &v1.TimelineExpenditure{}
-	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline)
+	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline, etype)
 	if err != nil {
 		log.Errorf("get timeline expenditure from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
@@ -219,7 +219,7 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 		log.Errorf("get timeline profit.revenue and profit.payroll from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
-	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline)
+	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline, -1)
 	if err != nil {
 		log.Errorf("get timeline profit.expenditure from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)

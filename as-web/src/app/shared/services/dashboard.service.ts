@@ -36,8 +36,11 @@ export class DashboardService extends BasicService {
     return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay", {params: params});
   }
 
-  timelineExp(range?: (Date | null)[]): Observable<TimelineExpenditure> {
+  timelineExp(searchType: number = -1, range?: (Date | null)[]): Observable<TimelineExpenditure> {
     const params = getDateRangeParam(range);
+    if (searchType > -1) {
+      params.type = searchType;
+    }
     return this._http.get<TimelineExpenditure>(analysisUrl+"/timeline/exp", {params: params});
   }
 

@@ -78,7 +78,7 @@ type ExpenditureStore interface {
 	Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Expenditure, error)
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.ExpenditureList, error)
 	OverallExpenditure(ctx context.Context) ([]*v1.Expenditure, error)
-	TimelineExpenditure(ctx context.Context, vehicles, timeline []string) ([]*v1.Expenditure, error)
+	TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) ([]*v1.Expenditure, error)
 	CMExpenditure(ctx context.Context) ([]*v1.Expenditure, error)
 	LYMExpenditure(ctx context.Context) ([]*v1.Expenditure, error)
 	LMExpenditure(ctx context.Context) ([]*v1.Expenditure, error)

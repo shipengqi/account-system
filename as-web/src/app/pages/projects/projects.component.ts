@@ -1,5 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, UntypedFormControl, Validators} from "@angular/forms";
+import {
+  FormGroup,
+  Validators,
+  FormControl,
+  AbstractControl,
+  UntypedFormControl
+} from "@angular/forms";
 
 import moment from "moment";
 import {NzModalService} from "ng-zorro-antd/modal";
@@ -7,8 +13,8 @@ import {NzMessageService} from "ng-zorro-antd/message";
 import {NzTableQueryParams} from "ng-zorro-antd/table";
 import {TranslateService} from "@ngx-translate/core";
 
-import {ProjectsService} from "../../shared/services/projects.service";
 import {IProject} from "../../shared/model/model";
+import {ProjectsService} from "../../shared/services/projects.service";
 
 @Component({
   selector: 'app-projects',
