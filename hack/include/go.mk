@@ -13,7 +13,7 @@ go.build.dirs:
 .PHONY: go.build
 go.build: go.build.verify go.build.dirs
 	@echo "===========> Building: $(OUTPUT_DIR)/$(BIN)"
-	@GOOS=$(GOOS) \
+	@cd $(REPO_ROOT)/as-api && GOOS=$(GOOS) \
 		PKG=$(PKG) BIN=$(BIN) \
 		OUTPUT_DIR=$(OUTPUT_DIR) \
 		GO_LDFLAGS="$(GO_LDFLAGS)" \
