@@ -1,18 +1,19 @@
 import {
-  AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
-  inject, OnDestroy,
-  OnInit
+  inject,
+  OnInit,
+  ChangeDetectorRef
 } from '@angular/core';
 
+import {forkJoin} from "rxjs";
+import moment from "moment";
+import {TranslateService} from "@ngx-translate/core";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
 
 import {DashboardService} from "../../shared/services/dashboard.service";
+
 import {
   Overall,
   OverallGeneral,
@@ -20,24 +21,27 @@ import {
   TimelineExpenditure, TimelineProfit,
   TimelineRevenueAndPayroll
 } from "../../shared/model/dashboard";
-import {TranslateService} from "@ngx-translate/core";
-import {forkJoin} from "rxjs";
-import {DriversService} from "../../shared/services/drivers.service";
 import {IDriver, IVehicle} from "../../shared/model/model";
+import {DriversService} from "../../shared/services/drivers.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
-import moment from "moment";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.less'
 })
-export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   loading = true;
 
+  globalVehiclesLineTitleMap: G2TimelineMap = {y1: ''};
+  globalDriversLineTitleMap: G2TimelineMap = {y1: ''};
+  globalVehiclesIdToLineTitleMap: any = {};
+  globalDriversIdToLineTitleMap: any = {};
+  globalVehiclesLineMaxAxis = 2;
+  globalDriversLineMaxAxis = 2;
+
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
-  expenditureLineTitleMap: G2TimelineMap = {y1: ''};
   expenditureBarData: G2BarData[] = [];
   expenditureLineData: G2TimelineData[] = [];
   expenditureRankListData: Array<{ title: string; total: number }> = [];
@@ -45,25 +49,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   expenditureChartLoading = false;
 
   revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
-  revenueLineTitleMap: G2TimelineMap = {y1: ''};
   revenueBarData: G2BarData[] = [];
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
   revenueRangeDate: Date[] = [];
+  searchExpenditureType = -1;
   revenueChartLoading = false;
 
   payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
-  payrollLineTitleMap: G2TimelineMap = {y1: ''};
   payrollBarData: G2BarData[] = [];
-  payrollLineData: G2TimelineData[] = this.genLineData();
+  payrollLineData: G2TimelineData[] = [];
   payrollRankListData: Array<{ title: string; total: number }> = [];
   payrollRangeDate: Date[] = [];
   payrollChartLoading = false;
 
   profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
-  profitLineTitleMap: G2TimelineMap = {y1: ''};
-  profitBarData: G2BarData[] = this.genData();
-  profitLineData: G2TimelineData[] = this.genLineData();
+  profitBarData: G2BarData[] = [];
+  profitLineData: G2TimelineData[] = [];
   profitRankListData: Array<{ title: string; total: number }> = [];
   profitRangeDate: Date[] = [];
   profitChartLoading = false;
@@ -153,11 +155,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.vehicles = res[0].items;
         this.drivers = res[1].items;
 
+        let vehiclesTitleNum = 1;
+        this.globalVehiclesLineMaxAxis = this.vehicles.length;
         for (const v of this.vehicles) {
           this.vehiclesMap[`${v.id}`] = v.number;
+          // set titleMap of g2-timeline component
+          // since the titleMap cannot rerender, so init titleMap with full data
+          this.globalVehiclesLineTitleMap[`y${vehiclesTitleNum}`] = v.number;
+          this.globalVehiclesIdToLineTitleMap[v.id] = `y${vehiclesTitleNum}`;
+          vehiclesTitleNum ++;
         }
+        let driversTitleNum = 1;
+        this.globalDriversLineMaxAxis = this.drivers.length;
         for (const v of this.drivers) {
           this.driversMap[`${v.id}`] = v.name;
+          this.globalDriversLineTitleMap[`y${driversTitleNum}`] = v.name;
+          this.globalDriversIdToLineTitleMap[v.id] = `y${driversTitleNum}`;
+          driversTitleNum ++;
         }
         this.calculateVehiclesRevenueChartsData(res[2]);
         this.calculateDriversPayrollChartsData(res[2]);
@@ -170,14 +184,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this._message.error(err.message);
       }
     })
-  }
-
-  ngAfterViewInit() {
-
-  }
-
-  ngOnDestroy() {
-    this.revenueTabs[0].show = false;
   }
 
   expenditureTabChange(idx: number): void {
@@ -212,7 +218,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   onExpenditureChartSearch(): void {
     this.expenditureChartLoading = true;
-    this._dashboardSvc.timelineExp(this.expenditureRangeDate).subscribe({
+    this._dashboardSvc.timelineExp(this.searchExpenditureType, this.expenditureRangeDate).subscribe({
       next: (res) => {
         this.calculateExpenditureChartsData(res);
         this.expenditureChartLoading = false;
@@ -270,23 +276,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let barData: G2BarData[] = [];
     let lineData: G2TimelineData[] = [];
 
-    let vehiclesLineTitleMap: any = {};
-
     for (const bd in charsData.revenue_bar_data) {
       barData.push({
-        x: bd,
-        y: charsData.revenue_bar_data[bd]
+        x: bd, // time
+        y: charsData.revenue_bar_data[bd] // value
       })
     }
     this.revenueBarData = barData.sort((d1, d2) => {
       return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
-    let titleNum = 1;
     for (const bd in charsData.vehicle_data) {
-      vehiclesLineTitleMap[bd] = `y${titleNum}`;
-      this.revenueLineTitleMap[`y${titleNum}`] = this.vehiclesMap[bd];
-      titleNum ++;
       rank.push({
         title: this.vehiclesMap[bd],
         total: charsData.vehicle_data[bd]
@@ -295,12 +295,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.revenueRankListData = rank;
 
     for (const ld in charsData.revenue_line_data) {
-      let vdata: any = {
-        time: moment(new Date(ld)).endOf("month").valueOf(),
-        y1: 0 // default 0, y1 is required
-      }
+      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
       for (const tv in charsData.revenue_line_data[ld]) {
-        vdata[vehiclesLineTitleMap[tv]] = charsData.revenue_line_data[ld][tv];
+        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.revenue_line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -312,8 +309,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let barData: G2BarData[] = [];
     let lineData: G2TimelineData[] = [];
 
-    let driversLineTitleMap: any = {};
-
     for (const bd in charsData.payroll_bar_data) {
       barData.push({
         x: bd,
@@ -324,11 +319,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
-    let titleNum = 1;
     for (const bd in charsData.driver_data) {
-      driversLineTitleMap[bd] = `y${titleNum}`;
-      this.payrollLineTitleMap[`y${titleNum}`] = this.driversMap[bd];
-      titleNum ++;
       rank.push({
         title: this.driversMap[bd],
         total: charsData.driver_data[bd]
@@ -337,12 +328,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.payrollRankListData = rank;
 
     for (const ld in charsData.payroll_line_data) {
-      let vdata: any = {
-        time: moment(new Date(ld)).endOf("month").valueOf(),
-        y1: 0 // default 0, y1 is required
-      }
+      let vdata = this.genLineInitData(ld, Object.keys(this.globalDriversLineTitleMap).length);
       for (const tv in charsData.payroll_line_data[ld]) {
-        vdata[driversLineTitleMap[tv]] = charsData.payroll_line_data[ld][tv];
+        vdata[this.globalDriversIdToLineTitleMap[tv]] = charsData.payroll_line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -354,8 +342,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let barData: G2BarData[] = [];
     let lineData: G2TimelineData[] = [];
 
-    let vehiclesLineTitleMap: any = {};
-
     for (const bd in charsData.bar_data) {
       barData.push({
         x: bd,
@@ -366,11 +352,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
-    let titleNum = 1;
     for (const bd in charsData.vehicle_data) {
-      vehiclesLineTitleMap[bd] = `y${titleNum}`;
-      this.expenditureLineTitleMap[`y${titleNum}`] = this.vehiclesMap[bd];
-      titleNum ++;
       rank.push({
         title: this.vehiclesMap[bd],
         total: charsData.vehicle_data[bd]
@@ -379,12 +361,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.expenditureRankListData = rank;
 
     for (const ld in charsData.line_data) {
-      let vdata: any = {
-        time: moment(new Date(ld)).endOf("month").valueOf(),
-        y1: 0 // default 0, y1 is required
-      }
+      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
       for (const tv in charsData.line_data[ld]) {
-        vdata[vehiclesLineTitleMap[tv]] = charsData.line_data[ld][tv];
+        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -395,8 +374,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     let rank: Array<{ title: string; total: number }> = [];
     let barData: G2BarData[] = [];
     let lineData: G2TimelineData[] = [];
-
-    let vehiclesLineTitleMap: any = {};
 
     for (const bd in charsData.bar_data) {
       barData.push({
@@ -409,11 +386,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
 
-    let titleNum = 1;
     for (const bd in charsData.vehicle_data) {
-      vehiclesLineTitleMap[bd] = `y${titleNum}`;
-      this.profitLineTitleMap[`y${titleNum}`] = this.vehiclesMap[bd];
-      titleNum ++;
       rank.push({
         title: this.vehiclesMap[bd],
         total: charsData.vehicle_data[bd]
@@ -422,12 +395,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.profitRankListData = rank;
 
     for (const ld in charsData.line_data) {
-      let vdata: any = {
-        time: moment(new Date(ld)).endOf("month").valueOf(),
-        y1: 0 // default 0, y1 is required
-      }
+      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
       for (const tv in charsData.line_data[ld]) {
-        vdata[vehiclesLineTitleMap[tv]] = charsData.line_data[ld][tv];
+        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -474,23 +444,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private genData(): G2BarData[] {
-    return new Array(12).fill({}).map((_i, idx) => ({
-      x: `${idx + 1}月`,
-      y: Math.floor(Math.random() * 1000) + 200,
-      color: idx > 5 ? '#f50' : undefined
-    }));
-  }
-
-  private genLineData(): G2TimelineData[] {
-    let data = []
-    for (let i = 0; i < 20; i += 1) {
-      data.push({
-        time: new Date().getTime() + 1000 * 60 * 30 * i,
-        y1: Math.floor(Math.random() * 100) + 1000,
-        y2: Math.floor(Math.random() * 100) + 10
-      });
+  private genLineInitData(timestr: string, ylength: number): any {
+    let ldata: any = {
+      time: moment(new Date(timestr)).endOf("month").valueOf(),
+      y1: 0 // default 0, y1 is required
     }
-    return data;
+    // y length should equal to the titleMap length of g2-timeline component
+    for (let i = 2; i <= ylength; i += 1) {
+      ldata[`y${i}`] = 0
+    }
+    return ldata;
   }
 }

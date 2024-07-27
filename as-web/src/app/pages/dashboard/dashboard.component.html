@@ -112,8 +112,9 @@
                 <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.revenue-vehicle-trend' | translate }}"
                              [slider]="false"
                              [data]="revenueLineData"
+                             [maxAxis]="globalVehiclesLineMaxAxis"
                              mask="YYYY/MM"
-                             [titleMap]="revenueLineTitleMap"/>
+                             [titleMap]="globalVehiclesLineTitleMap"/>
               }
             </div>
           </div>
@@ -135,8 +136,8 @@
       </nz-tab>
       <ng-template #revenueExtraTemplate>
         <div>
-          <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
-                     *ngIf="revenueTabs[1].show"
+          <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
+                     class="select-disabled mr-sm"
                      nzMode="multiple"
                      [nzMaxMultipleCount]="5"
                      nzAllowClear>
@@ -187,8 +188,9 @@
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
                            [slider]="false"
                            [data]="expenditureLineData"
+                           [maxAxis]="globalVehiclesLineMaxAxis"
                            mask="YYYY/MM"
-                           [titleMap]="expenditureLineTitleMap"/>
+                           [titleMap]="globalVehiclesLineTitleMap"/>
             }
           </div>
         </div>
@@ -210,13 +212,14 @@
     </nz-tab>
     <ng-template #expendExtraTemplate>
       <div>
-        <nz-select nzPlaceHolder="{{ 'expenditure.select-type' | translate }}" style="margin-right: 8px"
-                   *ngIf="expenditureTabs[1].show"
+        <nz-select nzPlaceHolder="{{ 'expenditure.select-type' | translate }}"
+                   class="mr-sm"
+                   [(ngModel)]="searchExpenditureType"
                    nzAllowClear>
           <nz-option *ngFor="let o of expendTypes" [nzValue]="o.value" [nzLabel]="o.text"/>
         </nz-select>
-        <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
-                   *ngIf="expenditureTabs[1].show"
+        <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
+                   class="select-disabled mr-sm"
                    nzMode="multiple"
                    [nzMaxMultipleCount]="5"
                    nzAllowClear>
@@ -267,8 +270,9 @@
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}"
                            [slider]="false"
                            [data]="payrollLineData"
+                           [maxAxis]="globalDriversLineMaxAxis"
                            mask="YYYY/MM"
-                           [titleMap]="payrollLineTitleMap"/>
+                           [titleMap]="globalDriversLineTitleMap"/>
             }
           </div>
         </div>
@@ -290,8 +294,8 @@
     </nz-tab>
     <ng-template #payrollExtraTemplate>
       <div>
-        <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}" style="margin-right: 8px"
-                   *ngIf="payrollTabs[1].show"
+        <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
+                   class="select-disabled mr-sm"
                    nzMode="multiple"
                    [nzMaxMultipleCount]="5"
                    nzAllowClear>
@@ -342,8 +346,9 @@
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.profit-vehicle-trend' | translate }}"
                            [slider]="false"
                            [data]="profitLineData"
+                           [maxAxis]="globalVehiclesLineMaxAxis"
                            mask="YYYY/MM"
-                           [titleMap]="profitLineTitleMap"/>
+                           [titleMap]="globalVehiclesLineTitleMap"/>
             }
           </div>
         </div>
@@ -365,8 +370,8 @@
     </nz-tab>
     <ng-template #profitExtraTemplate>
       <div>
-        <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}" style="margin-right: 8px"
-                   *ngIf="profitTabs[1].show"
+        <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
+                   class="select-disabled mr-sm"
                    nzMode="multiple"
                    [nzDropdownMatchSelectWidth]="false"
                    [nzMaxMultipleCount]="5"
