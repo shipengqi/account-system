@@ -19,7 +19,8 @@ import {LayoutOptions} from './core/layout';
 })
 export class BasicComponent implements OnInit {
   options: LayoutOptions = {
-    logoText: '中辉',
+    logoExpanded: './assets/full-logo-white-mid.png',
+    logoCollapsed: './assets/logo-white.png',
     logoHidden: 'mobile',
     siderCollapsible: true,
     hideSider: true,
