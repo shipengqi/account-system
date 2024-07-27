@@ -7,6 +7,7 @@ Download and install `MySQL`: https://dev.mysql.com/downloads/installer/
 ## Install Windows Service
 
 Download `account-system`: https://github.com/shipengqi/account-system/releases
+
 Download `WinSW`: https://github.com/winsw/winsw/releases
 
 - Take `WinSW.exe` or `WinSW.zip` from the distribution, and rename the `.exe` to your taste (such as `myapp.exe`).

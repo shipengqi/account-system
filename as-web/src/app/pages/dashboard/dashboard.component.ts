@@ -38,8 +38,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
   expenditureLineTitleMap: G2TimelineMap = {y1: ''};
-  expenditureBarData: G2BarData[] = this.genData();
-  expenditureLineData: G2TimelineData[] = this.genLineData();
+  expenditureBarData: G2BarData[] = [];
+  expenditureLineData: G2TimelineData[] = [];
   expenditureRankListData: Array<{ title: string; total: number }> = [];
   expenditureRangeDate: Date[] = [];
   expenditureChartLoading = false;
