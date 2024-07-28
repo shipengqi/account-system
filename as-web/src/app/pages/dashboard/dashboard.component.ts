@@ -217,7 +217,7 @@ export class DashboardComponent implements OnInit {
         })
       }
     }
-    let suffix = this._translate.instant('analysis.profit-details');
+    let suffix = this._translate.instant('global.detail');
     if (isExpPieChart) {
       suffix = this._translate.instant('analysis.expenditure-details');
     }
