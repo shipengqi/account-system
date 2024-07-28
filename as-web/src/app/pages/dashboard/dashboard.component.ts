@@ -5,9 +5,8 @@ import moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
+import {G2PieClickItem, G2PieData} from "@delon/chart/pie";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
-
-import {DashboardService} from "../../shared/services/dashboard.service";
 
 import {
   Overall,
@@ -20,7 +19,7 @@ import {
 import {IDriver, IVehicle} from "../../shared/model/model";
 import {DriversService} from "../../shared/services/drivers.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
-import {G2PieData} from "@delon/chart/pie";
+import {DashboardService} from "../../shared/services/dashboard.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -31,6 +30,9 @@ export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   loading = true;
 
+  pieChartDetailVisible = false;
+  pieChartDetailTitle = '';
+  pieChartDetailListData: any = [];
   overallPieTotal = 0;
   overallPieData: G2PieData[] = [];
   expenditurePieTotal = 0;
@@ -116,7 +118,7 @@ export class DashboardComponent implements OnInit {
     private _message: NzMessageService,
     private _translate: TranslateService,
     private _vehiclesSvc: VehiclesService,
-    private _driversSve: DriversService
+    private _driversSve: DriversService,
   ) {}
 
   ngOnInit() {
@@ -189,6 +191,26 @@ export class DashboardComponent implements OnInit {
         this._message.error(err.message);
       }
     })
+  }
+
+  handlePieChartClick(data: G2PieClickItem, isExpPieChart: boolean = false): void {
+    this.pieChartDetailVisible = true;
+    let listData = [];
+    if (data.item['extra']) {
+      for (const i in data.item['extra']) {
+        listData.push({
+          title: this.vehiclesMap[i],
+          percent: data.item['extra'][i]/data.item.y*100,
+          value: data.item['extra'][i]
+        })
+      }
+    }
+    let suffix = '';
+    if (isExpPieChart) {
+      suffix = this._translate.instant('analysis.expenditure-details')
+    }
+    this.pieChartDetailTitle = data.item.x + suffix;
+    this.pieChartDetailListData = listData;
   }
 
   handlePieValueFormat(val: number): string {
@@ -443,7 +465,8 @@ export class DashboardComponent implements OnInit {
     for (const t of this.expendTypes) {
       pieData.push({
         x: t.text,
-        y: cmtypes[t.value]?.total || 0
+        y: cmtypes[t.value]?.total || 0,
+        extra: cmtypes[t.value]?.vehicle_total_data || {}
       })
     }
     return pieData;

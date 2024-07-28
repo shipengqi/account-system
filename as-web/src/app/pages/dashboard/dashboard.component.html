@@ -115,6 +115,7 @@
           [lineWidth]="4"
           [total]="'¥ ' + formatTotal(expenditurePieTotal)"
           [valueFormat]="handlePieValueFormat"
+          (clickItem)="handlePieChartClick($event, true)"
         />
       }
     </nz-card>
@@ -430,3 +431,21 @@
     </ng-template>
   </nz-tabset>
 </nz-card>
+<nz-modal [(nzVisible)]="pieChartDetailVisible" [nzTitle]="pieChartDetailTitle" (nzOnCancel)="pieChartDetailVisible = false">
+  <ng-container *nzModalContent>
+    <ul class="dashboard-g2-pie__detail">
+      @for (i of pieChartDetailListData; track $index) {
+        <li class="dashboard-g2-pie__detail-item">
+          <span class="dashboard-g2-pie__detail-dot"></span>
+          <span class="dashboard-g2-pie__detail-title">{{i.title}}</span>
+          <nz-divider nzType="vertical"></nz-divider>
+          <span class="dashboard-g2-pie__detail-percent">{{formatPercent(i.percent)}}%</span>
+          <span class="dashboard-g2-pie__detail-value">¥ {{i.value}}</span>
+        </li>
+      }
+    </ul>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="pieChartDetailVisible = false">{{'global.ok' | translate}}</button>
+  </div>
+</nz-modal>
