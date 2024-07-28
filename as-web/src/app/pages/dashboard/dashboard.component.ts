@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 
 import {forkJoin} from "rxjs";
 import moment from "moment";
@@ -18,12 +13,14 @@ import {
   Overall,
   OverallGeneral,
   OverallRevenueAndPayroll,
-  TimelineExpenditure, TimelineProfit,
+  TimelineExpenditure,
+  TimelineProfit,
   TimelineRevenueAndPayroll
 } from "../../shared/model/dashboard";
 import {IDriver, IVehicle} from "../../shared/model/model";
 import {DriversService} from "../../shared/services/drivers.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
+import {G2PieData} from "@delon/chart/pie";
 
 @Component({
   selector: 'app-dashboard',
@@ -33,6 +30,32 @@ import {VehiclesService} from "../../shared/services/vehicles.service";
 export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   loading = true;
+
+  overallPieTotal = 0;
+  overallPieData: G2PieData[] = [
+    {
+      x: '家用电器',
+      y: rv()
+    },
+    {
+      x: '食用酒水',
+      y: rv()
+    },
+    {
+      x: '个护健康',
+      y: rv()
+    },
+    {
+      x: '服饰箱包',
+      y: rv()
+    },
+    {
+      x: '母婴产品',
+      y: rv()
+    }
+  ];
+  expenditurePieTotal = 0;
+  expenditurePieData: G2PieData[] =  [];
 
   globalVehiclesLineTitleMap: G2TimelineMap = {y1: ''};
   globalDriversLineTitleMap: G2TimelineMap = {y1: ''};
@@ -94,7 +117,7 @@ export class DashboardComponent implements OnInit {
       total: 0,
       cm: 0,
       lm: 100,
-      lym: 100
+      lym: 100,
     },
     profit: {
       total: 0,
@@ -137,6 +160,9 @@ export class DashboardComponent implements OnInit {
 
         this.overall.profit.m2m = this.calculateMM(this.overall.profit.lm, this.overall.profit.cm);
         this.overall.profit.mom = this.calculateMM(this.overall.profit.lym, this.overall.profit.cm);
+
+        this.overallPieData = this.calculateOverallPieChartData();
+        this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_types);
       },
       error: (err) => {
         this._message.error(err.message);
@@ -184,6 +210,10 @@ export class DashboardComponent implements OnInit {
         this._message.error(err.message);
       }
     })
+  }
+
+  handlePieValueFormat(val: number): string {
+    return `&yen ${val.toFixed(2)}`;
   }
 
   expenditureTabChange(idx: number): void {
@@ -404,6 +434,42 @@ export class DashboardComponent implements OnInit {
     this.profitLineData = lineData;
   }
 
+  private calculateOverallPieChartData(): G2PieData[] {
+    this.overallPieTotal = this.overall.revpay.cm_revenue;
+    return [{
+      x: this._translate.instant('analysis.profit'),
+      y: this.overall.profit.cm
+    }, {
+      x: this._translate.instant('analysis.expenditure'),
+      y: this.overall.exp.cm
+    }, {
+      x: this._translate.instant('analysis.payroll'),
+      y: this.overall.revpay.cm_payroll
+    }];
+  }
+
+  private calculateExpenditurePieChartData(cmtypes?: {
+    [key: number]: {
+      total: number;
+      vehicle_total_data: {
+        [key: number]: number
+      };
+    }
+  }): G2PieData[] {
+    if (!cmtypes) {
+      return [];
+    }
+    let pieData: G2PieData[] = [];
+    this.expenditurePieTotal =  this.overall.exp.cm;
+    for (const t of this.expendTypes) {
+      pieData.push({
+        x: t.text,
+        y: cmtypes[t.value]?.total || 0
+      })
+    }
+    return pieData;
+  }
+
   calculateMM(lm: number, cm: number): number {
     let percent = 100
     if (lm === 0 && cm < 0) {
@@ -455,4 +521,8 @@ export class DashboardComponent implements OnInit {
     }
     return ldata;
   }
+}
+
+function rv (min: number = 0, max: number = 5000): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }

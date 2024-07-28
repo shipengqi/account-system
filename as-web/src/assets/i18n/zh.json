@@ -172,6 +172,8 @@
     "profit-trend": "利润趋势",
     "profit-vehicle-trend": "车辆利润趋势",
     "profit-rank": "车辆利润排行",
-    "timeline-mask": "YYYY年MM月"
+    "timeline-mask": "YYYY年MM月",
+    "revenue-proportion": "月营收利润占比",
+    "expenditure-proportion": "月支出类别占比"
   }
 }

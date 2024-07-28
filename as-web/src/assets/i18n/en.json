@@ -172,6 +172,8 @@
     "profit-trend": "Profit Trends",
     "profit-vehicle-trend": "Vehicles Profit Trends",
     "profit-rank": "Vehicles Profit Rank",
-    "timeline-mask": "YYYY/MM"
+    "timeline-mask": "YYYY/MM",
+    "revenue-proportion": "Monthly Proportion Of Revenue",
+    "expenditure-proportion": "Monthly Proportion Of Expenditure"
   }
 }

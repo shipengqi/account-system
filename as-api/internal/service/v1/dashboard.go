@@ -54,15 +54,16 @@ func (u *dashboardsvc) OverallExpenditure(ctx context.Context) (*v1.OverallExpen
 		log.Errorf("get last year month expenditure from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
-	cmTotal := calculateExpenditureTotal(cm)
+	cmTotal, cmte := calculateCMExpenditureTotal(cm)
 	lmTotal := calculateExpenditureTotal(lm)
 	lymTotal := calculateExpenditureTotal(lym)
 
 	return &v1.OverallExpenditure{
-		Total: costTotal,
-		CM:    cmTotal,
-		LM:    lmTotal,
-		LYM:   lymTotal,
+		Total:   costTotal,
+		CM:      cmTotal,
+		LM:      lmTotal,
+		LYM:     lymTotal,
+		CMTypes: cmte,
 	}, nil
 }
 
@@ -305,7 +306,7 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 	}, nil
 }
 
-// calculateRevenueAndPayrollTotal 计算数据总值
+// calculateRevenueAndPayrollTotal 计算营收和司机费用数据总值
 func calculateRevenueAndPayrollTotal(mdata []*v1.Order) (freight, payroll int) {
 	for _, v := range mdata {
 		payroll = payroll + v.Payroll
@@ -314,10 +315,31 @@ func calculateRevenueAndPayrollTotal(mdata []*v1.Order) (freight, payroll int) {
 	return freight, payroll
 }
 
-// calculateExpenditureTotal 计算数据总值
+// calculateExpenditureTotal 计算支出数据总值
 func calculateExpenditureTotal(mdata []*v1.Expenditure) (cost int) {
 	for _, v := range mdata {
 		cost = cost + v.Cost
 	}
 	return cost
+}
+
+// calculateCMExpenditureTotal 计算当月支出数据总值
+func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (int, map[int]*v1.CMTypeData) {
+	costTotal := 0
+	cmte := make(map[int]*v1.CMTypeData)
+	for _, v := range mdata {
+		costTotal += v.Cost
+		if _, ok := cmte[v.Type]; !ok {
+			cmte[v.Type] = &v1.CMTypeData{
+				Total:            0,
+				VehicleTotalData: make(map[int]int),
+			}
+		}
+		if _, ok := cmte[v.Type].VehicleTotalData[int(v.VehicleID)]; !ok {
+			cmte[v.Type].VehicleTotalData[int(v.VehicleID)] = 0
+		}
+		cmte[v.Type].Total += v.Cost
+		cmte[v.Type].VehicleTotalData[int(v.VehicleID)] += v.Cost
+	}
+	return costTotal, cmte
 }

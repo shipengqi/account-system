@@ -28,6 +28,7 @@ import {NzTabsModule} from "ng-zorro-antd/tabs";
 import {G2BarModule} from "@delon/chart/bar";
 import {G2TimelineModule} from "@delon/chart/timeline";
 import {G2CardModule} from "@delon/chart/card";
+import {G2PieModule} from "@delon/chart/pie";
 import {TrendModule} from "@delon/chart/trend";
 
 import {LayoutModule} from '../core/layout';
@@ -91,7 +92,8 @@ import {PagesComponent} from "./pages.component";
     G2CardModule,
     TrendModule,
     G2BarModule,
-    G2TimelineModule
+    G2TimelineModule,
+    G2PieModule
   ]
 })
 export class PagesModule {}
