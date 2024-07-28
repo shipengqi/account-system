@@ -32,28 +32,7 @@ export class DashboardComponent implements OnInit {
   loading = true;
 
   overallPieTotal = 0;
-  overallPieData: G2PieData[] = [
-    {
-      x: '家用电器',
-      y: rv()
-    },
-    {
-      x: '食用酒水',
-      y: rv()
-    },
-    {
-      x: '个护健康',
-      y: rv()
-    },
-    {
-      x: '服饰箱包',
-      y: rv()
-    },
-    {
-      x: '母婴产品',
-      y: rv()
-    }
-  ];
+  overallPieData: G2PieData[] = [];
   expenditurePieTotal = 0;
   expenditurePieData: G2PieData[] =  [];
 
