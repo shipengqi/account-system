@@ -94,6 +94,7 @@
           [lineWidth]="4"
           [total]="overallPieTotal"
           [valueFormat]="handlePieValueFormat"
+          (clickItem)="handlePieChartClick($event)"
         />
       }
     </nz-card>

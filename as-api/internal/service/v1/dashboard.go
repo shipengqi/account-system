@@ -54,16 +54,17 @@ func (u *dashboardsvc) OverallExpenditure(ctx context.Context) (*v1.OverallExpen
 		log.Errorf("get last year month expenditure from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
-	cmTotal, cmte := calculateCMExpenditureTotal(cm)
+	cmTotal, cmte, cmve := calculateCMExpenditureTotal(cm)
 	lmTotal := calculateExpenditureTotal(lm)
 	lymTotal := calculateExpenditureTotal(lym)
 
 	return &v1.OverallExpenditure{
-		Total:   costTotal,
-		CM:      cmTotal,
-		LM:      lmTotal,
-		LYM:     lymTotal,
-		CMTypes: cmte,
+		Total:              costTotal,
+		CM:                 cmTotal,
+		LM:                 lmTotal,
+		LYM:                lymTotal,
+		CMCategorize:       cmte,
+		CMVehicleTotalData: cmve,
 	}, nil
 }
 
@@ -79,10 +80,10 @@ func (u *dashboardsvc) OverallRevenueAndPayroll(ctx context.Context) (*v1.Overal
 
 	cm, err := u.store.Orders().CMRevenueAndPayroll(ctx)
 	if err != nil {
-		log.Errorf("get current m revenue and payroll from storage failed: %s", err.Error())
+		log.Errorf("get current month revenue and payroll from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
-	cmFreightTotal, cmPayrollTotal := calculateRevenueAndPayrollTotal(cm)
+	cmFreightTotal, cmPayrollTotal, cmFreCate, cmPayCate, cmVPayCate := calculateCMRevenueAndPayrollTotal(cm)
 
 	lm, err := u.store.Orders().LMRevenueAndPayroll(ctx)
 	if err != nil {
@@ -99,14 +100,17 @@ func (u *dashboardsvc) OverallRevenueAndPayroll(ctx context.Context) (*v1.Overal
 	lymFreightTotal, lymPayrollTotal := calculateRevenueAndPayrollTotal(lym)
 
 	res := &v1.OverallRevenueAndPayroll{
-		TotalRevenue: freightTotal,
-		TotalPayroll: payrollTotal,
-		CMRevenue:    cmFreightTotal,
-		CMPayroll:    cmPayrollTotal,
-		LMRevenue:    lmFreightTotal,
-		LMPayroll:    lmPayrollTotal,
-		LYMRevenue:   lymFreightTotal,
-		LYMPayroll:   lymPayrollTotal,
+		TotalRevenue:         freightTotal,
+		TotalPayroll:         payrollTotal,
+		CMRevenue:            cmFreightTotal,
+		CMPayroll:            cmPayrollTotal,
+		LMRevenue:            lmFreightTotal,
+		LMPayroll:            lmPayrollTotal,
+		LYMRevenue:           lymFreightTotal,
+		LYMPayroll:           lymPayrollTotal,
+		CMRevenueCategorize:  cmFreCate,
+		CMPayrollCategorize:  cmPayCate,
+		CMVPayrollCategorize: cmVPayCate,
 	}
 	return res, nil
 }
@@ -323,14 +327,40 @@ func calculateExpenditureTotal(mdata []*v1.Expenditure) (cost int) {
 	return cost
 }
 
+// calculateCMRevenueAndPayrollTotal 计算当月营收和司机费用数据总值
+func calculateCMRevenueAndPayrollTotal(mdata []*v1.Order) (freight, payroll int,
+	cmfre, cmpay, cmvpay map[int]int) {
+	cmfre = make(map[int]int)
+	cmpay = make(map[int]int)
+	cmvpay = make(map[int]int)
+	for _, v := range mdata {
+		payroll = payroll + v.Payroll
+		freight = freight + v.Freight
+		if _, ok := cmvpay[int(v.VehicleID)]; !ok {
+			cmvpay[int(v.VehicleID)] = 0
+		}
+		if _, ok := cmfre[int(v.VehicleID)]; !ok {
+			cmfre[int(v.VehicleID)] = 0
+		}
+		if _, ok := cmpay[int(v.DriverID)]; !ok {
+			cmpay[int(v.DriverID)] = 0
+		}
+		cmfre[int(v.VehicleID)] += v.Freight
+		cmpay[int(v.DriverID)] += v.Payroll
+		cmvpay[int(v.VehicleID)] += v.Payroll
+	}
+	return freight, payroll, cmfre, cmpay, cmvpay
+}
+
 // calculateCMExpenditureTotal 计算当月支出数据总值
-func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (int, map[int]*v1.CMTypeData) {
+func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (int, map[int]*v1.CMCategorizeData, map[int]int) {
 	costTotal := 0
-	cmte := make(map[int]*v1.CMTypeData)
+	cmte := make(map[int]*v1.CMCategorizeData)
+	cmve := make(map[int]int)
 	for _, v := range mdata {
 		costTotal += v.Cost
 		if _, ok := cmte[v.Type]; !ok {
-			cmte[v.Type] = &v1.CMTypeData{
+			cmte[v.Type] = &v1.CMCategorizeData{
 				Total:            0,
 				VehicleTotalData: make(map[int]int),
 			}
@@ -338,8 +368,12 @@ func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (int, map[int]*v1.CMTy
 		if _, ok := cmte[v.Type].VehicleTotalData[int(v.VehicleID)]; !ok {
 			cmte[v.Type].VehicleTotalData[int(v.VehicleID)] = 0
 		}
+		if _, ok := cmve[int(v.VehicleID)]; !ok {
+			cmve[int(v.VehicleID)] = 0
+		}
 		cmte[v.Type].Total += v.Cost
 		cmte[v.Type].VehicleTotalData[int(v.VehicleID)] += v.Cost
+		cmve[int(v.VehicleID)] += v.Cost
 	}
-	return costTotal, cmte
+	return costTotal, cmte, cmve
 }

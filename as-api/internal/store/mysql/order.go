@@ -191,7 +191,7 @@ func timelineRevenueAndPayrollSql(vehicles, timeline []string) string {
 func revenueAndPayrollWithDateSql(mon int) string {
 	lstart, lend := timeutil.MonthIntervalTimeFromNow(mon)
 	var buf bytes.Buffer
-	buf.WriteString("select as_order.freight, as_order.payroll ")
+	buf.WriteString("select freight, payroll, vehicle_id, driver_id ")
 	buf.WriteString("from as_order where (unload_at >= '")
 	buf.WriteString(lstart)
 	buf.WriteString("' and ")

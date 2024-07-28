@@ -1,25 +1,29 @@
 package v1
 
 type OverallRevenueAndPayroll struct {
-	TotalRevenue int `json:"total_revenue"`
-	TotalPayroll int `json:"total_payroll"`
-	CMRevenue    int `json:"cm_revenue"`
-	CMPayroll    int `json:"cm_payroll"`
-	LMRevenue    int `json:"lm_revenue"`
-	LYMRevenue   int `json:"lym_revenue"`
-	LMPayroll    int `json:"lm_payroll"`
-	LYMPayroll   int `json:"lym_payroll"`
+	TotalRevenue         int         `json:"total_revenue"`
+	TotalPayroll         int         `json:"total_payroll"`
+	CMRevenue            int         `json:"cm_revenue"`
+	CMPayroll            int         `json:"cm_payroll"`
+	LMRevenue            int         `json:"lm_revenue"`
+	LYMRevenue           int         `json:"lym_revenue"`
+	LMPayroll            int         `json:"lm_payroll"`
+	LYMPayroll           int         `json:"lym_payroll"`
+	CMRevenueCategorize  map[int]int `json:"cm_revenue_categorize"`
+	CMPayrollCategorize  map[int]int `json:"cm_payroll_categorize"`
+	CMVPayrollCategorize map[int]int `json:"cm_vehicle_pay_categorize"`
 }
 
 type OverallExpenditure struct {
-	Total   int                 `json:"total"`
-	CM      int                 `json:"cm"`
-	LM      int                 `json:"lm"`
-	LYM     int                 `json:"lym"`
-	CMTypes map[int]*CMTypeData `json:"cm_types"`
+	Total              int                       `json:"total"`
+	CM                 int                       `json:"cm"`
+	LM                 int                       `json:"lm"`
+	LYM                int                       `json:"lym"`
+	CMVehicleTotalData map[int]int               `json:"cm_vehicle_total_data"`
+	CMCategorize       map[int]*CMCategorizeData `json:"cm_categorize"`
 }
 
-type CMTypeData struct {
+type CMCategorizeData struct {
 	Total            int         `json:"total"`
 	VehicleTotalData map[int]int `json:"vehicle_total_data"`
 }
