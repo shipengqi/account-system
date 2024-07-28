@@ -26,6 +26,14 @@ export interface OverallGeneral {
   lym: number;
   mom?: number;
   m2m?: number;
+  cm_types?: {
+    [key: number]: {
+      total: number;
+      vehicle_total_data: {
+        [key: number]: number
+      };
+    }
+  }
 }
 
 export interface TimelineExpenditure {

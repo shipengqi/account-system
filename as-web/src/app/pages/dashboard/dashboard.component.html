@@ -13,13 +13,13 @@
       <ng-template #refooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-revenue' | translate }}
-          <span class="ml-sm">￥{{formatTotal(overall.revpay.cm_revenue)}}</span>
+          <span class="ml-sm">¥ {{formatTotal(overall.revpay.cm_revenue)}}</span>
         </p>
       </ng-template>
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-expenditure' | translate }}" [total]="'¥'+formatTotal(overall.exp.total)" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-expenditure' | translate }}" [total]="'¥ '+formatTotal(overall.exp.total)" contentHeight="44px"
                 [footer]="exfooter">
       <trend [flag]="overall.exp.mom && overall.exp.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -32,13 +32,13 @@
       <ng-template #exfooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-expenditure' | translate }}
-          <span class="ml-sm">￥{{formatTotal(overall.exp.cm)}}</span>
+          <span class="ml-sm">¥ {{formatTotal(overall.exp.cm)}}</span>
         </p>
       </ng-template>
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-payroll' | translate }}" [total]="'¥'+formatTotal(overall.revpay.total_payroll)" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-payroll' | translate }}" [total]="'¥ '+formatTotal(overall.revpay.total_payroll)" contentHeight="44px"
                 [footer]="pafooter">
       <trend [flag]="overall.revpay.mom_payroll && overall.revpay.mom_payroll > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -51,13 +51,13 @@
       <ng-template #pafooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-payroll' | translate }}
-          <span class="ml-sm">￥{{formatTotal(overall.revpay.cm_payroll)}}</span>
+          <span class="ml-sm">¥ {{formatTotal(overall.revpay.cm_payroll)}}</span>
         </p>
       </ng-template>
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-profit' | translate }}" [total]="'¥'+formatTotal(overall.profit.total)" contentHeight="44px"
+    <g2-card title="{{ 'analysis.overall-profit' | translate }}" [total]="'¥ '+formatTotal(overall.profit.total)" contentHeight="44px"
                 [footer]="prfooter">
       <trend [flag]="overall.profit.mom && overall.profit.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
@@ -70,10 +70,54 @@
       <ng-template #prfooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-profit' | translate }}
-          <span class="ml-sm">￥{{formatTotal(overall.profit.cm)}}</span>
+          <span class="ml-sm">¥ {{formatTotal(overall.profit.cm)}}</span>
         </p>
       </ng-template>
     </g2-card>
+  </div>
+</div>
+<div nz-row [nzGutter]="24" class="overall-chart-card">
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card
+      [nzBordered]="false"
+      [nzTitle]="'analysis.revenue-proportion' | translate"
+      [nzBodyStyle]="{ 'padding.px': 24 }"
+      class="mb-0"
+    >
+      <h4 class="my-xl">{{ 'analysis.month-revenue' | translate }}</h4>
+      @if (overallPieData) {
+        <g2-pie
+          [data]="overallPieData"
+          [hasLegend]="true"
+          [subTitle]="'analysis.month-revenue' | translate"
+          [height]="248"
+          [lineWidth]="4"
+          [total]="overallPieTotal"
+          [valueFormat]="handlePieValueFormat"
+        />
+      }
+    </nz-card>
+  </div>
+  <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+    <nz-card
+      [nzBordered]="false"
+      [nzTitle]="'analysis.expenditure-proportion' | translate"
+      [nzBodyStyle]="{ 'padding.px': 24 }"
+      class="mb-0"
+    >
+      <h4 class="my-xl">{{ 'analysis.month-expenditure' | translate }}</h4>
+      @if (expenditurePieData) {
+        <g2-pie
+          [data]="expenditurePieData"
+          [hasLegend]="true"
+          [subTitle]="'analysis.month-expenditure' | translate"
+          [height]="248"
+          [lineWidth]="4"
+          [total]="'¥ ' + formatTotal(expenditurePieTotal)"
+          [valueFormat]="handlePieValueFormat"
+        />
+      }
+    </nz-card>
   </div>
 </div>
 <!-- revenue chart -->
@@ -96,7 +140,7 @@
                   <li>
                     <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                     <span class="title">{{ i.title }}</span>
-                    <span class="value">¥{{ i.total }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
                   </li>
                 }
               </ul>
@@ -126,7 +170,7 @@
                   <li>
                     <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                     <span class="title">{{ i.title }}</span>
-                    <span class="value">¥{{ i.total }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
                   </li>
                 }
               </ul>
@@ -172,7 +216,7 @@
                 <li>
                   <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                   <span class="title">{{ i.title }}</span>
-                  <span class="value">¥{{ i.total }}</span>
+                  <span class="value">¥ {{ i.total }}</span>
                 </li>
               }
             </ul>
@@ -202,7 +246,7 @@
                 <li>
                   <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                   <span class="title">{{ i.title }}</span>
-                  <span class="value">¥{{ i.total }}</span>
+                  <span class="value">¥ {{ i.total }}</span>
                 </li>
               }
             </ul>
@@ -254,7 +298,7 @@
                 <li>
                   <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                   <span class="title">{{ i.title }}</span>
-                  <span class="value">¥{{ i.total }}</span>
+                  <span class="value">¥ {{ i.total }}</span>
                 </li>
               }
             </ul>
@@ -284,7 +328,7 @@
                 <li>
                   <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                   <span class="title">{{ i.title }}</span>
-                  <span class="value">¥{{ i.total }}</span>
+                  <span class="value">¥ {{ i.total }}</span>
                 </li>
               }
             </ul>
@@ -360,7 +404,7 @@
                 <li>
                   <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
                   <span class="title">{{ i.title }}</span>
-                  <span class="value">¥{{ i.total }}</span>
+                  <span class="value">¥ {{ i.total }}</span>
                 </li>
               }
             </ul>

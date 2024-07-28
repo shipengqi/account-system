@@ -190,7 +190,7 @@ func timelineExpenditureSql(vehicles, timeline []string, etype int) string {
 func expenditureWithDateSql(mon int) string {
 	lstart, lend := timeutil.MonthIntervalTimeFromNow(mon)
 	var buf bytes.Buffer
-	buf.WriteString("select cost ")
+	buf.WriteString("select cost, type, vehicle_id ")
 	buf.WriteString("from as_expenditure where (expend_at >= '")
 	buf.WriteString(lstart)
 	buf.WriteString("' and ")

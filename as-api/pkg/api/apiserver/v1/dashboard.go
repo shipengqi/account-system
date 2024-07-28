@@ -12,10 +12,16 @@ type OverallRevenueAndPayroll struct {
 }
 
 type OverallExpenditure struct {
-	Total int `json:"total"`
-	CM    int `json:"cm"`
-	LM    int `json:"lm"`
-	LYM   int `json:"lym"`
+	Total   int                 `json:"total"`
+	CM      int                 `json:"cm"`
+	LM      int                 `json:"lm"`
+	LYM     int                 `json:"lym"`
+	CMTypes map[int]*CMTypeData `json:"cm_types"`
+}
+
+type CMTypeData struct {
+	Total            int         `json:"total"`
+	VehicleTotalData map[int]int `json:"vehicle_total_data"`
 }
 
 type TimelineRevenueAndPayroll struct {
