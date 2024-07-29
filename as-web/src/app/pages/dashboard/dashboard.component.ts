@@ -5,9 +5,8 @@ import moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
+import {G2PieClickItem, G2PieData} from "@delon/chart/pie";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
-
-import {DashboardService} from "../../shared/services/dashboard.service";
 
 import {
   Overall,
@@ -20,7 +19,7 @@ import {
 import {IDriver, IVehicle} from "../../shared/model/model";
 import {DriversService} from "../../shared/services/drivers.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
-import {G2PieData} from "@delon/chart/pie";
+import {DashboardService} from "../../shared/services/dashboard.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -31,29 +30,11 @@ export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   loading = true;
 
+  pieChartDetailVisible = false;
+  pieChartDetailTitle = '';
+  pieChartDetailListData: any = [];
   overallPieTotal = 0;
-  overallPieData: G2PieData[] = [
-    {
-      x: '家用电器',
-      y: rv()
-    },
-    {
-      x: '食用酒水',
-      y: rv()
-    },
-    {
-      x: '个护健康',
-      y: rv()
-    },
-    {
-      x: '服饰箱包',
-      y: rv()
-    },
-    {
-      x: '母婴产品',
-      y: rv()
-    }
-  ];
+  overallPieData: G2PieData[] = [];
   expenditurePieTotal = 0;
   expenditurePieData: G2PieData[] =  [];
 
@@ -137,79 +118,111 @@ export class DashboardComponent implements OnInit {
     private _message: NzMessageService,
     private _translate: TranslateService,
     private _vehiclesSvc: VehiclesService,
-    private _driversSve: DriversService
+    private _driversSve: DriversService,
   ) {}
 
   ngOnInit() {
-    forkJoin([
+    const overalls = forkJoin([
       this._dashboardSvc.overallRevPay(),
       this._dashboardSvc.overallExp()
-    ]).subscribe({
-      next: (res) => {
-        this.overall.revpay = res[0];
-        this.overall.exp = res[1];
-        this.overall.profit = this.calculateOverallProfit(res[0], res[1]);
-
-        this.overall.revpay.m2m_revenue = this.calculateMM(this.overall.revpay.lm_revenue, this.overall.revpay.cm_revenue);
-        this.overall.revpay.mom_revenue = this.calculateMM(this.overall.revpay.lym_revenue, this.overall.revpay.cm_revenue);
-        this.overall.revpay.m2m_payroll = this.calculateMM(this.overall.revpay.lm_payroll, this.overall.revpay.cm_payroll);
-        this.overall.revpay.mom_payroll = this.calculateMM(this.overall.revpay.lym_payroll, this.overall.revpay.cm_payroll);
-
-        this.overall.exp.m2m = this.calculateMM(this.overall.exp.lm, this.overall.exp.cm);
-        this.overall.exp.mom = this.calculateMM(this.overall.exp.lym, this.overall.exp.cm);
-
-        this.overall.profit.m2m = this.calculateMM(this.overall.profit.lm, this.overall.profit.cm);
-        this.overall.profit.mom = this.calculateMM(this.overall.profit.lym, this.overall.profit.cm);
-
-        this.overallPieData = this.calculateOverallPieChartData();
-        this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_types);
-      },
-      error: (err) => {
-        this._message.error(err.message);
-      }
-    });
+    ]);
+    const timelines = forkJoin([
+      this._dashboardSvc.timelineRevPay(),
+      this._dashboardSvc.timelineExp(),
+      this._dashboardSvc.timelineProfit()
+    ]);
 
     this.loading = true;
     forkJoin([
       this._vehiclesSvc.listAll(),
-      this._driversSve.listAll(),
-      this._dashboardSvc.timelineRevPay(),
-      this._dashboardSvc.timelineExp(),
-      this._dashboardSvc.timelineProfit()
+      this._driversSve.listAll()
     ]).subscribe({
       next: (res) => {
         this.vehicles = res[0].items;
         this.drivers = res[1].items;
 
-        let vehiclesTitleNum = 1;
-        this.globalVehiclesLineMaxAxis = this.vehicles.length;
-        for (const v of this.vehicles) {
-          this.vehiclesMap[`${v.id}`] = v.number;
-          // set titleMap of g2-timeline component
-          // since the titleMap cannot rerender, so init titleMap with full data
-          this.globalVehiclesLineTitleMap[`y${vehiclesTitleNum}`] = v.number;
-          this.globalVehiclesIdToLineTitleMap[v.id] = `y${vehiclesTitleNum}`;
-          vehiclesTitleNum ++;
-        }
-        let driversTitleNum = 1;
-        this.globalDriversLineMaxAxis = this.drivers.length;
-        for (const v of this.drivers) {
-          this.driversMap[`${v.id}`] = v.name;
-          this.globalDriversLineTitleMap[`y${driversTitleNum}`] = v.name;
-          this.globalDriversIdToLineTitleMap[v.id] = `y${driversTitleNum}`;
-          driversTitleNum ++;
-        }
-        this.calculateVehiclesRevenueChartsData(res[2]);
-        this.calculateDriversPayrollChartsData(res[2]);
-        this.calculateExpenditureChartsData(res[3]);
-        this.calculateProfitChartsData(res[4]);
-        this.loading = false;
+        overalls.subscribe({
+          next: (res) => {
+            this.overall.revpay = res[0];
+            this.overall.exp = res[1];
+            this.overall.profit = this.calculateOverallProfit(res[0], res[1]);
+
+            this.overall.revpay.m2m_revenue = this.calculateMM(this.overall.revpay.lm_revenue, this.overall.revpay.cm_revenue);
+            this.overall.revpay.mom_revenue = this.calculateMM(this.overall.revpay.lym_revenue, this.overall.revpay.cm_revenue);
+            this.overall.revpay.m2m_payroll = this.calculateMM(this.overall.revpay.lm_payroll, this.overall.revpay.cm_payroll);
+            this.overall.revpay.mom_payroll = this.calculateMM(this.overall.revpay.lym_payroll, this.overall.revpay.cm_payroll);
+
+            this.overall.exp.m2m = this.calculateMM(this.overall.exp.lm, this.overall.exp.cm);
+            this.overall.exp.mom = this.calculateMM(this.overall.exp.lym, this.overall.exp.cm);
+
+            this.overall.profit.m2m = this.calculateMM(this.overall.profit.lm, this.overall.profit.cm);
+            this.overall.profit.mom = this.calculateMM(this.overall.profit.lym, this.overall.profit.cm);
+
+            this.overallPieData = this.calculateOverallPieChartData();
+            this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_categorize);
+          },
+          error: (err) => {
+            this._message.error(err.message);
+          }
+        });
+
+        timelines.subscribe({
+          next: (res) => {
+            let vehiclesTitleNum = 1;
+            this.globalVehiclesLineMaxAxis = this.vehicles.length;
+            for (const v of this.vehicles) {
+              this.vehiclesMap[`${v.id}`] = v.number;
+              // set titleMap of g2-timeline component
+              // since the titleMap cannot rerender, so init titleMap with full data
+              this.globalVehiclesLineTitleMap[`y${vehiclesTitleNum}`] = v.number;
+              this.globalVehiclesIdToLineTitleMap[v.id] = `y${vehiclesTitleNum}`;
+              vehiclesTitleNum ++;
+            }
+            let driversTitleNum = 1;
+            this.globalDriversLineMaxAxis = this.drivers.length;
+            for (const v of this.drivers) {
+              this.driversMap[`${v.id}`] = v.name;
+              this.globalDriversLineTitleMap[`y${driversTitleNum}`] = v.name;
+              this.globalDriversIdToLineTitleMap[v.id] = `y${driversTitleNum}`;
+              driversTitleNum ++;
+            }
+            this.calculateVehiclesRevenueChartsData(res[0]);
+            this.calculateDriversPayrollChartsData(res[0]);
+            this.calculateExpenditureChartsData(res[1]);
+            this.calculateProfitChartsData(res[2]);
+            this.loading = false;
+          },
+          error: (err) => {
+            this.loading = false;
+            this._message.error(err.message);
+          }
+        })
       },
       error: (err) => {
         this.loading = false;
         this._message.error(err.message);
       }
-    })
+    });
+  }
+
+  handlePieChartClick(data: G2PieClickItem, isExpPieChart: boolean = false): void {
+    this.pieChartDetailVisible = true;
+    let listData = [];
+    if (data.item['extra']) {
+      for (const i in data.item['extra']) {
+        listData.push({
+          title: data.item['driverItem'] === true ? this.driversMap[i] : this.vehiclesMap[i],
+          percent: data.item['extra'][i]/data.item.y*100,
+          value: data.item['extra'][i]
+        })
+      }
+    }
+    let suffix = this._translate.instant('global.detail');
+    if (isExpPieChart) {
+      suffix = this._translate.instant('analysis.expenditure-details');
+    }
+    this.pieChartDetailTitle = data.item.x + suffix;
+    this.pieChartDetailListData = listData;
   }
 
   handlePieValueFormat(val: number): string {
@@ -436,15 +449,32 @@ export class DashboardComponent implements OnInit {
 
   private calculateOverallPieChartData(): G2PieData[] {
     this.overallPieTotal = this.overall.revpay.cm_revenue;
+    let profitExtra: any = {};
+    for (const v of this.vehicles) {
+      if (!profitExtra[v.id]) {
+        profitExtra[v.id] = 0;
+      }
+      // @ts-ignore
+      const rev = this.overall.revpay.cm_revenue_categorize[v.id] || 0;
+      // @ts-ignore
+      const pay = this.overall.revpay.cm_vehicle_pay_categorize[v.id] || 0;
+      // @ts-ignore
+      const exp = this.overall.exp.cm_vehicle_total_data[v.id] || 0;
+      profitExtra[v.id] = rev - pay - exp;
+    }
     return [{
       x: this._translate.instant('analysis.profit'),
-      y: this.overall.profit.cm
+      y: this.overall.profit.cm,
+      extra: profitExtra,
     }, {
       x: this._translate.instant('analysis.expenditure'),
-      y: this.overall.exp.cm
+      y: this.overall.exp.cm,
+      extra: this.overall.exp.cm_vehicle_total_data || {},
     }, {
       x: this._translate.instant('analysis.payroll'),
-      y: this.overall.revpay.cm_payroll
+      y: this.overall.revpay.cm_payroll,
+      extra: this.overall.revpay.cm_payroll_categorize || {},
+      driverItem: true
     }];
   }
 
@@ -464,7 +494,8 @@ export class DashboardComponent implements OnInit {
     for (const t of this.expendTypes) {
       pieData.push({
         x: t.text,
-        y: cmtypes[t.value]?.total || 0
+        y: cmtypes[t.value]?.total || 0,
+        extra: cmtypes[t.value]?.vehicle_total_data || {}
       })
     }
     return pieData;
@@ -521,8 +552,4 @@ export class DashboardComponent implements OnInit {
     }
     return ldata;
   }
-}
-
-function rv (min: number = 0, max: number = 5000): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }

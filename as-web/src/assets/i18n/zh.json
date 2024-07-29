@@ -101,7 +101,8 @@
     "project": "项目",
     "select-project": "选择项目",
     "driver": "司机",
-    "select-driver": "选择司机"
+    "select-driver": "选择司机",
+    "detail": "详情"
   },
   "expenditure": {
     "type": "支出类型",

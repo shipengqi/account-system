@@ -17,6 +17,15 @@ export interface OverallRevenueAndPayroll {
   m2m_revenue?: number;
   mom_payroll?: number;
   m2m_payroll?: number;
+  cm_revenue_categorize?: {
+    [key: number]: number;
+  };
+  cm_vehicle_pay_categorize?: {
+    [key: number]: number;
+  };
+  cm_payroll_categorize?: {
+    [key: number]: number;
+  }
 }
 
 export interface OverallGeneral {
@@ -26,13 +35,18 @@ export interface OverallGeneral {
   lym: number;
   mom?: number;
   m2m?: number;
-  cm_types?: {
-    [key: number]: {
-      total: number;
-      vehicle_total_data: {
-        [key: number]: number
-      };
-    }
+  cm_vehicle_total_data?: {
+    [key: number]: number;
+  };
+  cm_categorize?: VehicleCategorizeData
+}
+
+export interface VehicleCategorizeData {
+  [key: number]: { // type
+    total: number;
+    vehicle_total_data: {
+      [key: number]: number // key: vehicle_id, value: total
+    };
   }
 }
 

@@ -101,7 +101,8 @@
     "project": "Project",
     "select-project": "Select a project",
     "driver": "Driver",
-    "select-driver": "Select a driver"
+    "select-driver": "Select a driver",
+    "detail": "Detail"
   },
   "expenditure": {
     "type": "Expend Type",
