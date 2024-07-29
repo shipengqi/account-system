@@ -553,7 +553,3 @@ export class DashboardComponent implements OnInit {
     return ldata;
   }
 }
-
-function rv (min: number = 0, max: number = 5000): number {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
