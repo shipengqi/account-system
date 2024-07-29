@@ -1,18 +1,19 @@
 import {
-  ChangeDetectionStrategy,
   Component,
-  ViewEncapsulation,
   Input,
-  ElementRef,
-  ChangeDetectorRef,
   Inject,
-  AfterViewInit,
-  OnChanges,
   NgZone,
-  ViewChild
+  ViewChild,
+  OnChanges,
+  ElementRef,
+  AfterViewInit,
+  ViewEncapsulation,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy, SecurityContext, Renderer2
 } from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+
 import {take} from 'rxjs';
 import {NzSafeAny} from 'ng-zorro-antd/core/types';
 
@@ -45,7 +46,8 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     private _el: ElementRef,
     private _zone: NgZone,
     private _dom: DomSanitizer,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private _renderer: Renderer2
   ) {}
 
   private get win(): NzSafeAny {
@@ -66,7 +68,8 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     text: string,
     node: HTMLElement
   ): number {
-    node.innerHTML = text.substring(0, mid) + this.tail;
+    const cleaned = this._dom.sanitize(SecurityContext.HTML, text.substring(0, mid) + this.tail);
+    this._renderer.setProperty(node, 'innerHTML', cleaned);
     const oh = node.offsetHeight;
     if (oh > targetHeight) {
       // Math.floor(mid / 2) bisect the string will remove too many characters
