@@ -15,17 +15,17 @@ type OverallRevenueAndPayroll struct {
 }
 
 type OverallExpenditure struct {
-	Total              int                       `json:"total"`
-	CM                 int                       `json:"cm"`
-	LM                 int                       `json:"lm"`
-	LYM                int                       `json:"lym"`
-	CMVehicleTotalData map[int]int               `json:"cm_vehicle_total_data"`
+	Total              float32                   `json:"total"`
+	CM                 float32                   `json:"cm"`
+	LM                 float32                   `json:"lm"`
+	LYM                float32                   `json:"lym"`
+	CMVehicleTotalData map[int]float32           `json:"cm_vehicle_total_data"`
 	CMCategorize       map[int]*CMCategorizeData `json:"cm_categorize"`
 }
 
 type CMCategorizeData struct {
-	Total            int         `json:"total"`
-	VehicleTotalData map[int]int `json:"vehicle_total_data"`
+	Total            float32         `json:"total"`
+	VehicleTotalData map[int]float32 `json:"vehicle_total_data"`
 }
 
 type TimelineRevenueAndPayroll struct {
@@ -38,9 +38,9 @@ type TimelineRevenueAndPayroll struct {
 }
 
 type TimelineExpenditure struct {
-	VehicleData map[int]int            `json:"vehicle_data"`
-	BarData     map[string]int         `json:"bar_data"`
-	LineData    map[string]map[int]int `json:"line_data"`
+	VehicleData map[int]float32            `json:"vehicle_data"`
+	BarData     map[string]float32         `json:"bar_data"`
+	LineData    map[string]map[int]float32 `json:"line_data"`
 }
 
 type TimelineProfit TimelineExpenditure

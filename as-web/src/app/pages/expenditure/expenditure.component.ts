@@ -51,7 +51,7 @@ export class ExpenditureComponent implements OnInit {
   ngOnInit() {
     this.selfFormGroup.addControl(
       'type',
-      new FormControl(0, [Validators.required])
+      new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
       'time',
@@ -66,7 +66,7 @@ export class ExpenditureComponent implements OnInit {
     );
     this.selfFormGroup.addControl(
       'vehicle-number',
-      new FormControl(0, [Validators.required])
+      new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
       'comment',
@@ -173,7 +173,7 @@ export class ExpenditureComponent implements OnInit {
     const data = {
       type: this.typeCtrl.value,
       expend_at: moment(this.timeCtrl.value).format('YYYY-MM-DD'),
-      cost: this.costCtrl.value,
+      cost: this.costCtrl.value || 0,
       vehicle_id: this.vehicleCtrl.value,
       comment: this.commentCtrl.value,
       id: 0

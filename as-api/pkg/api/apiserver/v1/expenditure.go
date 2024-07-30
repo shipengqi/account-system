@@ -7,12 +7,12 @@ type Expenditure struct {
 	// Standard object's metadata.
 	metav1.ObjectMeta
 
-	Type          int    `json:"type" gorm:"column:type;" validate:"required"`
-	Cost          int    `json:"cost" gorm:"cost" validate:"required,min=0"`
-	VehicleID     uint64 `json:"vehicle_id" gorm:"column:vehicle_id;" validate:"required"`
-	ExpendAt      string `json:"expend_at" gorm:"column:expend_at;" validate:"required"`
-	Comment       string `json:"comment" gorm:"column:comment;" validate:"min=1,max=255"`
-	VehicleNumber string `json:"vehicle_number" gorm:"->"`
+	Type          int     `json:"type" gorm:"column:type;" validate:"required"`
+	Cost          float32 `json:"cost" gorm:"cost" validate:"required,min=0"`
+	VehicleID     uint64  `json:"vehicle_id" gorm:"column:vehicle_id;" validate:"required"`
+	ExpendAt      string  `json:"expend_at" gorm:"column:expend_at;" validate:"required"`
+	Comment       string  `json:"comment" gorm:"column:comment;" validate:"min=1,max=255"`
+	VehicleNumber string  `json:"vehicle_number" gorm:"->"`
 }
 
 // ExpenditureList is the whole list of all expenditures which have been stored in storage.
