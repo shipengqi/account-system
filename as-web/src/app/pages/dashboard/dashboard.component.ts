@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 
-import math from 'mathjs'
 import {forkJoin} from "rxjs";
 import moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
