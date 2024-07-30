@@ -11,12 +11,12 @@ gen.errcode: gen.errcode.code gen.errcode.doc
 .PHONY: gen.errcode.code
 gen.errcode.code: tools.verify.jaguar
 	@echo "===========> Generating apiserver error code go source files"
-	@jaguar tool codegen -type=int ${REPO_ROOT}/as-api/pkg/code
+	@jaguar tool codegen --types=int ${REPO_ROOT}/as-api/pkg/code
 
 .PHONY: gen.errcode.doc
 gen.errcode.doc: tools.verify.jaguar
 	@echo "===========> Generating error code markdown documentation"
-	@jaguar tool codegen -type=int -doc \
+	@jaguar tool codegen --types=int -doc \
 		-output ${REPO_ROOT}/docs/api/error_code_generated.md ${REPO_ROOT}/as-api/pkg/code
 
 .PHONY: gen.clean
