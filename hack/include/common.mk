@@ -31,8 +31,11 @@ OUTPUT_DIR := $(REPO_ROOT)/_output/$(GOOS)/$(GOARCH)/bin
 $(shell mkdir -p $(OUTPUT_DIR))
 endif
 
+# Linux command settings
+FIND := find . ! -path './third_party/*' ! -path './vendor/*'
+
 # Specify tools.
-BUILD_TOOLS ?= gsemver golangci-lint releaser ginkgo
+BUILD_TOOLS ?= gsemver golangci-lint releaser ginkgo jaguar
 
 # Makefile settings
 # The --no-print-directory option of 'make' tells 'make' not to print

@@ -1,6 +1,6 @@
 package code
 
-//go:generate jaguar codegen -type=int
+//go:generate jaguar tool codegen -type=int
 
 // asapi-apiserver: resource errors.
 const (
