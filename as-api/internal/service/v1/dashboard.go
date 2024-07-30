@@ -186,9 +186,9 @@ func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeli
 		log.Errorf("get timeline expenditure from storage failed: %s", err.Error())
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
-	vehicleIdsMap := make(map[int]int)
-	timeBarMap := make(map[string]int)
-	timelineMap := make(map[string]map[int]int)
+	vehicleIdsMap := make(map[int]float32)
+	timeBarMap := make(map[string]float32)
+	timelineMap := make(map[string]map[int]float32)
 	for _, e := range exps {
 		if _, ok := vehicleIdsMap[int(e.VehicleID)]; !ok {
 			vehicleIdsMap[int(e.VehicleID)] = 0
@@ -204,7 +204,7 @@ func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeli
 		timeBarMap[timestr] += e.Cost
 
 		if _, ok := timelineMap[timestr]; !ok {
-			timelineMap[timestr] = make(map[int]int)
+			timelineMap[timestr] = make(map[int]float32)
 		}
 		if _, ok := timelineMap[timestr][int(e.VehicleID)]; !ok {
 			timelineMap[timestr][int(e.VehicleID)] = 0
@@ -230,23 +230,23 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
 
-	vehicleRevenueMap := make(map[int]int)
-	vehicleExpenditureMap := make(map[int]int)
-	vehicleProfitMap := make(map[int]int)
+	vehicleRevenueMap := make(map[int]float32)
+	vehicleExpenditureMap := make(map[int]float32)
+	vehicleProfitMap := make(map[int]float32)
 
-	vehicleRevenueBarMap := make(map[string]int)
-	vehicleExpenditureBarMap := make(map[string]int)
-	vehicleProfitBarMap := make(map[string]int)
+	vehicleRevenueBarMap := make(map[string]float32)
+	vehicleExpenditureBarMap := make(map[string]float32)
+	vehicleProfitBarMap := make(map[string]float32)
 
-	vehicleRevenueLineMap := make(map[string]map[int]int)
-	vehicleExpenditureLineMap := make(map[string]map[int]int)
-	vehicleProfitLineMap := make(map[string]map[int]int)
+	vehicleRevenueLineMap := make(map[string]map[int]float32)
+	vehicleExpenditureLineMap := make(map[string]map[int]float32)
+	vehicleProfitLineMap := make(map[string]map[int]float32)
 
 	for _, e := range revpay {
 		if _, ok := vehicleRevenueMap[int(e.VehicleID)]; !ok {
 			vehicleRevenueMap[int(e.VehicleID)] = 0
 		}
-		vehicleRevenueMap[int(e.VehicleID)] += e.Freight - e.Payroll
+		vehicleRevenueMap[int(e.VehicleID)] += float32(e.Freight - e.Payroll)
 
 		conv, _ := time.ParseInLocation(time.RFC3339, e.UnLoadAt, time.Local)
 		year, month, _ := conv.Date()
@@ -255,15 +255,15 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 		if _, ok := vehicleRevenueBarMap[timestr]; !ok {
 			vehicleRevenueBarMap[timestr] = 0
 		}
-		vehicleRevenueBarMap[timestr] += e.Freight - e.Payroll
+		vehicleRevenueBarMap[timestr] += float32(e.Freight - e.Payroll)
 
 		if _, ok := vehicleRevenueLineMap[timestr]; !ok {
-			vehicleRevenueLineMap[timestr] = make(map[int]int)
+			vehicleRevenueLineMap[timestr] = make(map[int]float32)
 		}
 		if _, ok := vehicleRevenueLineMap[timestr][int(e.VehicleID)]; !ok {
 			vehicleRevenueLineMap[timestr][int(e.VehicleID)] = 0
 		}
-		vehicleRevenueLineMap[timestr][int(e.VehicleID)] += e.Freight - e.Payroll
+		vehicleRevenueLineMap[timestr][int(e.VehicleID)] += float32(e.Freight - e.Payroll)
 	}
 	for _, e := range exps {
 		if _, ok := vehicleExpenditureMap[int(e.VehicleID)]; !ok {
@@ -281,7 +281,7 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 		vehicleExpenditureBarMap[timestr] += e.Cost
 
 		if _, ok := vehicleExpenditureLineMap[timestr]; !ok {
-			vehicleExpenditureLineMap[timestr] = make(map[int]int)
+			vehicleExpenditureLineMap[timestr] = make(map[int]float32)
 		}
 		if _, ok := vehicleExpenditureLineMap[timestr][int(e.VehicleID)]; !ok {
 			vehicleExpenditureLineMap[timestr][int(e.VehicleID)] = 0
@@ -296,7 +296,7 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 	}
 	for timestr, vdata := range vehicleRevenueLineMap {
 		if _, ok := vehicleProfitLineMap[timestr]; !ok {
-			vehicleProfitLineMap[timestr] = make(map[int]int)
+			vehicleProfitLineMap[timestr] = make(map[int]float32)
 		}
 		for vid, revenue := range vdata {
 			vehicleProfitLineMap[timestr][vid] = revenue - vehicleExpenditureLineMap[timestr][vid]
@@ -320,7 +320,7 @@ func calculateRevenueAndPayrollTotal(mdata []*v1.Order) (freight, payroll int) {
 }
 
 // calculateExpenditureTotal 计算支出数据总值
-func calculateExpenditureTotal(mdata []*v1.Expenditure) (cost int) {
+func calculateExpenditureTotal(mdata []*v1.Expenditure) (cost float32) {
 	for _, v := range mdata {
 		cost = cost + v.Cost
 	}
@@ -353,16 +353,16 @@ func calculateCMRevenueAndPayrollTotal(mdata []*v1.Order) (freight, payroll int,
 }
 
 // calculateCMExpenditureTotal 计算当月支出数据总值
-func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (int, map[int]*v1.CMCategorizeData, map[int]int) {
-	costTotal := 0
+func calculateCMExpenditureTotal(mdata []*v1.Expenditure) (float32, map[int]*v1.CMCategorizeData, map[int]float32) {
+	var costTotal float32 = 0
 	cmte := make(map[int]*v1.CMCategorizeData)
-	cmve := make(map[int]int)
+	cmve := make(map[int]float32)
 	for _, v := range mdata {
 		costTotal += v.Cost
 		if _, ok := cmte[v.Type]; !ok {
 			cmte[v.Type] = &v1.CMCategorizeData{
 				Total:            0,
-				VehicleTotalData: make(map[int]int),
+				VehicleTotalData: make(map[int]float32),
 			}
 		}
 		if _, ok := cmte[v.Type].VehicleTotalData[int(v.VehicleID)]; !ok {

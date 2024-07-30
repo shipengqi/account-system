@@ -520,10 +520,11 @@ export class DashboardComponent implements OnInit {
       lm: 100,
       lym: 100
     }
-    profit.total = revpay.total_revenue - revpay.total_payroll - exp.total;
-    profit.cm = revpay.cm_revenue - revpay.cm_payroll - exp.cm;
-    profit.lm = revpay.lm_revenue - revpay.lm_payroll - exp.lm;
-    profit.lym = revpay.lym_revenue - revpay.lym_payroll - exp.lym;
+
+    profit.total = parseFloat((revpay.total_revenue - revpay.total_payroll - exp.total).toFixed(2));
+    profit.cm = parseFloat((revpay.cm_revenue - revpay.cm_payroll - exp.cm).toFixed(2));
+    profit.lm = parseFloat((revpay.lm_revenue - revpay.lm_payroll - exp.lm).toFixed(2));
+    profit.lym = parseFloat((revpay.lym_revenue - revpay.lym_payroll - exp.lym).toFixed(2));
 
     return profit;
   }

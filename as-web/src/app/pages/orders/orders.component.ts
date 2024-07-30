@@ -72,19 +72,19 @@ export class OrdersComponent implements OnInit {
   ngOnInit() {
     this.selfFormGroup.addControl(
       'project',
-      new FormControl(0, [Validators.required])
+      new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
       'driver',
-      new FormControl(0, [Validators.required])
+      new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
       'vehicle-number',
-      new FormControl(0, [Validators.required])
+      new FormControl('', [Validators.required])
     );
     this.selfFormGroup.addControl(
       'unload-time',
-      new FormControl(moment().format('YYYY-MM-DD'))
+      new FormControl(moment().format('YYYY-MM-DD'), [Validators.required])
     );
     this.selfFormGroup.addControl(
       'weight',
@@ -225,9 +225,9 @@ export class OrdersComponent implements OnInit {
       vehicle_id: this.vehicleCtrl.value,
       driver_id: this.driverCtrl.value,
       unload_at: moment(this.unloadTimeCtrl.value).format('YYYY-MM-DD'),
-      freight: this.freightCtrl.value,
-      payroll: this.payrollCtrl.value,
-      weight: this.weightCtrl.value,
+      freight: this.freightCtrl.value || 0,
+      payroll: this.payrollCtrl.value || 0,
+      weight: this.weightCtrl.value || 0,
       comment: this.commentCtrl.value,
       load_at: moment(this.unloadTimeCtrl.value).format('YYYY-MM-DD'), // Todo use real load time
       id: 0
