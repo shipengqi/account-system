@@ -16,8 +16,8 @@ gen.errcode.code: tools.verify.jaguar
 .PHONY: gen.errcode.doc
 gen.errcode.doc: tools.verify.jaguar
 	@echo "===========> Generating error code markdown documentation"
-	@jaguar tool codegen --types=int -doc \
-		-output ${REPO_ROOT}/docs/api/error_code_generated.md ${REPO_ROOT}/as-api/pkg/code
+	@jaguar tool codegen --types=int --doc \
+		--output ${REPO_ROOT}/docs/api/error_code_generated.md ${REPO_ROOT}/as-api/pkg/code
 
 .PHONY: gen.clean
 gen.clean:
