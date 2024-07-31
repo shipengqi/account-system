@@ -23,6 +23,9 @@ const (
 
 	// ErrPageNotFound - 404: Page not found.
 	ErrPageNotFound
+
+	// ErrInvalidType - 400: Invalid data type.
+	ErrInvalidType
 )
 
 // common: database errors.

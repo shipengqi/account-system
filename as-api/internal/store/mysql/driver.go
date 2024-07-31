@@ -22,21 +22,18 @@ func newDrivers(ds *datastore) *drivers {
 
 // Create creates a new driver.
 func (v *drivers) Create(ctx context.Context, driver *v1.Driver, opts metav1.CreateOptions) error {
-	// return u.db.Transaction(func(tx *gorm.DB) error {
-	// 	err := tx.Create(user).Error
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	// do more operations in transaction
-	// 	return nil
-	// })
-
-	return v.db.Create(driver).Error
+	if err := v.db.Create(driver).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Update updates a driver information.
 func (v *drivers) Update(ctx context.Context, driver *v1.Driver, opts metav1.UpdateOptions) (err error) {
-	return v.db.Where("id = ?", driver.ID).Updates(driver).Error
+	if err = v.db.Where("id = ?", driver.ID).Updates(driver).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return
 }
 
 // Delete deletes a driver.
@@ -46,19 +43,20 @@ func (v *drivers) Delete(ctx context.Context, id int, opts metav1.DeleteOptions)
 	}
 
 	driver := &v1.Driver{}
-	err := v.db.Where("id = ?", id).First(&driver).Error
-	if err != nil {
+	if err := v.db.Where("id = ?", id).First(&driver).Error; err != nil {
 		return errors.WithCode(err, code.ErrDatabase)
 	}
-	return v.db.Where("id = ?", id).Delete(driver).Error
+	if err := v.db.Where("id = ?", id).Delete(driver).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Get returns a driver.
 func (v *drivers) Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Driver, error) {
 	driver := &v1.Driver{}
-	err := v.db.Where("id = ?", id).First(&driver).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Where("id = ?", id).First(&driver).Error; err != nil {
+		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
 
 	return driver, nil
@@ -79,5 +77,8 @@ func (v *drivers) List(ctx context.Context, opts metav1.ListOptions) (*v1.Driver
 		Limit(-1).
 		Count(&ret.Total)
 
-	return ret, d.Error
+	if d.Error != nil {
+		return nil, errors.WithCode(d.Error, code.ErrDatabase)
+	}
+	return ret, nil
 }

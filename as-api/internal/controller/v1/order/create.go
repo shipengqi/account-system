@@ -17,7 +17,7 @@ func (c *Controller) Create(ctx *gin.Context) {
 	var u v1.Order
 
 	if err := ctx.ShouldBindJSON(&u); err != nil {
-		response.Fail(ctx, errors.WithCode(err, code.ErrBind))
+		response.Fail(ctx, errors.WrapCode(err, code.ErrBind))
 		return
 	}
 

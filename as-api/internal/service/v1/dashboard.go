@@ -10,7 +10,7 @@ import (
 
 	"github.com/shipengqi/asapi/internal/store"
 	v1 "github.com/shipengqi/asapi/pkg/api/apiserver/v1"
-	"github.com/shipengqi/asapi/pkg/code"
+	// "github.com/shipengqi/asapi/pkg/code"
 )
 
 var _ DashboardService = &dashboardsvc{}
@@ -34,25 +34,24 @@ func newDashboard(srv *service) *dashboardsvc {
 func (u *dashboardsvc) OverallExpenditure(ctx context.Context) (*v1.OverallExpenditure, error) {
 	exs, err := u.store.Expenditures().OverallExpenditure(ctx)
 	if err != nil {
-		log.Errorf("get overall expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, errors.WithMessage(err, "fetch overall expenditure")
 	}
 	costTotal := calculateExpenditureTotal(exs)
 
 	cm, err := u.store.Expenditures().CMExpenditure(ctx)
 	if err != nil {
 		log.Errorf("get current month expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	lm, err := u.store.Expenditures().LMExpenditure(ctx)
 	if err != nil {
 		log.Errorf("get last month expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	lym, err := u.store.Expenditures().LYMExpenditure(ctx)
 	if err != nil {
 		log.Errorf("get last year month expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	cmTotal, cmte, cmve := calculateCMExpenditureTotal(cm)
 	lmTotal := calculateExpenditureTotal(lm)
@@ -74,28 +73,28 @@ func (u *dashboardsvc) OverallRevenueAndPayroll(ctx context.Context) (*v1.Overal
 	orders, err := u.store.Orders().OverallRevenueAndPayroll(ctx)
 	if err != nil {
 		log.Errorf("get overall revenue and payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	freightTotal, payrollTotal := calculateRevenueAndPayrollTotal(orders)
 
 	cm, err := u.store.Orders().CMRevenueAndPayroll(ctx)
 	if err != nil {
 		log.Errorf("get current month revenue and payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	cmFreightTotal, cmPayrollTotal, cmFreCate, cmPayCate, cmVPayCate := calculateCMRevenueAndPayrollTotal(cm)
 
 	lm, err := u.store.Orders().LMRevenueAndPayroll(ctx)
 	if err != nil {
 		log.Errorf("get last month revenue and payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	lmFreightTotal, lmPayrollTotal := calculateRevenueAndPayrollTotal(lm)
 
 	lym, err := u.store.Orders().LYMRevenueAndPayroll(ctx)
 	if err != nil {
 		log.Errorf("get mom revenue and payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	lymFreightTotal, lymPayrollTotal := calculateRevenueAndPayrollTotal(lym)
 
@@ -119,7 +118,7 @@ func (u *dashboardsvc) TimelineRevenueAndPayroll(ctx context.Context, vehicles, 
 	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, timeline)
 	if err != nil {
 		log.Errorf("get timeline revenue and payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 
 	vehicleIdsMap := make(map[int]int)
@@ -184,7 +183,7 @@ func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeli
 	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline, etype)
 	if err != nil {
 		log.Errorf("get timeline expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	vehicleIdsMap := make(map[int]float32)
 	timeBarMap := make(map[string]float32)
@@ -222,12 +221,12 @@ func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []
 	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, timeline)
 	if err != nil {
 		log.Errorf("get timeline profit.revenue and profit.payroll from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 	exps, err := u.store.Expenditures().TimelineExpenditure(ctx, vehicles, timeline, -1)
 	if err != nil {
 		log.Errorf("get timeline profit.expenditure from storage failed: %s", err.Error())
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, err
 	}
 
 	vehicleRevenueMap := make(map[int]float32)

@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,7 @@ func installMiddlewares(g *gin.Engine) {}
 func installControllers(g *gin.Engine) {
 
 	g.NoRoute(func(c *gin.Context) {
-		response.Fail(c, errors.Codef(code.ErrPageNotFound, "Page not found."))
+		response.Fail(c, errors.WrapCode(fmt.Errorf("not found"), code.ErrPageNotFound))
 	})
 
 	html := NewHtmlHandler()

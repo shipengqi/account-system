@@ -22,21 +22,18 @@ func newVehicles(ds *datastore) *vehicles {
 
 // Create creates a new vehicle.
 func (v *vehicles) Create(ctx context.Context, vehicle *v1.Vehicle, opts metav1.CreateOptions) error {
-	// return u.db.Transaction(func(tx *gorm.DB) error {
-	// 	err := tx.Create(user).Error
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	// do more operations in transaction
-	// 	return nil
-	// })
-
-	return v.db.Create(vehicle).Error
+	if err := v.db.Create(vehicle).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Update updates a vehicle information.
 func (v *vehicles) Update(ctx context.Context, vehicle *v1.Vehicle, opts metav1.UpdateOptions) (err error) {
-	return v.db.Where("id = ?", vehicle.ID).Updates(vehicle).Error
+	if err = v.db.Where("id = ?", vehicle.ID).Updates(vehicle).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return
 }
 
 // Delete deletes a vehicle.
@@ -46,19 +43,20 @@ func (v *vehicles) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 	}
 
 	vehicle := &v1.Vehicle{}
-	err := v.db.Where("id = ?", id).First(&vehicle).Error
-	if err != nil {
+	if err := v.db.Where("id = ?", id).First(&vehicle).Error; err != nil {
 		return errors.WithCode(err, code.ErrDatabase)
 	}
-	return v.db.Where("id = ?", id).Delete(vehicle).Error
+	if err := v.db.Where("id = ?", id).Delete(vehicle).Error; err != nil {
+		return errors.WithCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Get returns a vehicle with number.
 func (v *vehicles) Get(ctx context.Context, number string, opts metav1.GetOptions) (*v1.Vehicle, error) {
 	vehicle := &v1.Vehicle{}
-	err := v.db.Where("number = ?", number).First(&vehicle).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Where("number = ?", number).First(&vehicle).Error; err != nil {
+		return nil, errors.WithCode(err, code.ErrDatabase)
 	}
 
 	return vehicle, nil
@@ -78,6 +76,8 @@ func (v *vehicles) List(ctx context.Context, opts metav1.ListOptions) (*v1.Vehic
 		Offset(-1).
 		Limit(-1).
 		Count(&ret.Total)
-
-	return ret, d.Error
+	if d.Error != nil {
+		return nil, errors.WithCode(d.Error, code.ErrDatabase)
+	}
+	return ret, nil
 }
