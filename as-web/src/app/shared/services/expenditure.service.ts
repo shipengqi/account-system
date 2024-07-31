@@ -4,22 +4,17 @@ import {HttpClient} from "@angular/common/http";
 import moment from "moment";
 import {map, Observable} from "rxjs";
 
-import {BasicService} from "./basic.service";
-import {ExpenditureSearchData, IExpenditure} from "../model/model";
 import {IResponse, ListResponse} from "../model/res";
+import {ExpenditureSearchData, IExpenditure} from "../model/model";
 
 const expendituresUrl = './api/v1/expenditures';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ExpenditureService extends BasicService {
+export class ExpenditureService {
 
-  constructor(
-    private _http: HttpClient
-  ) {
-    super();
-  }
+  constructor(private _http: HttpClient) {}
 
   list(
     pageIndex: number,

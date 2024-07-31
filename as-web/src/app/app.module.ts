@@ -1,7 +1,13 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {provideHttpClient, withFetch, HttpBackend} from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+  HttpBackend,
+  withInterceptorsFromDi, HTTP_INTERCEPTORS
+} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 
 import {IconDefinition} from '@ant-design/icons-angular';
@@ -21,6 +27,7 @@ import {LayoutModule} from './core/layout';
 import {SharedModule} from './shared/shared.module';
 import {BasicComponent} from './basic.component';
 import {ACLModule} from './core/acl';
+import {ResponseInterceptor} from "./shared/interceptors/response-interceptors";
 
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
@@ -35,6 +42,7 @@ registerLocaleData(zh);
 
 // Import all. NOT RECOMMENDED.
 import * as AllIcons from '@ant-design/icons-angular/icons';
+
 
 
 const antDesignIcons = AllIcons as {
@@ -80,8 +88,10 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
   providers: [
     NzMessageService,
     provideHttpClient(
-      withFetch()
-    )
+      withFetch(),
+      withInterceptorsFromDi(), // DI-based interceptors must be explicitly enabled.
+    ),
+    {provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

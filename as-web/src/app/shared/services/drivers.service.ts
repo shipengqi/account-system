@@ -1,22 +1,19 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+
 import {Observable} from "rxjs";
+
 import {IResponse, ListResponse} from "../model/res";
 import {IVehicle} from "../model/model";
-import {HttpClient} from "@angular/common/http";
-import {BasicService} from "./basic.service";
 
 const driversUrl = './api/v1/drivers';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DriversService extends BasicService {
+export class DriversService {
 
-  constructor(
-    private _http: HttpClient
-  ) {
-    super();
-  }
+  constructor(private _http: HttpClient) {}
 
   listAll(): Observable<ListResponse> {
     return this._http.get<ListResponse>(driversUrl);

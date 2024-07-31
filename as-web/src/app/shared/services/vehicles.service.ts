@@ -1,20 +1,19 @@
 import {Injectable} from '@angular/core';
-import {BasicService} from "./basic.service";
 import {HttpClient} from "@angular/common/http";
+
 import {Observable} from "rxjs";
-import {IResponse, ListResponse} from "../model/res";
+
 import {IVehicle} from "../model/model";
+import {IResponse, ListResponse} from "../model/res";
 
 const vehiclesUrl = './api/v1/vehicles';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VehiclesService extends BasicService {
+export class VehiclesService {
 
-  constructor(private _http: HttpClient) {
-    super();
-  }
+  constructor(private _http: HttpClient) {}
 
   listAll(): Observable<ListResponse> {
     return this._http.get<ListResponse>(vehiclesUrl);

@@ -1,24 +1,21 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+
 import {map, Observable} from "rxjs";
+import moment from "moment/moment";
 
 import {IResponse, ListResponse} from "../model/res";
-import {BasicService} from "./basic.service";
 import {IOrder, OrderSearchData} from "../model/order";
 import {IExpenditure} from "../model/model";
-import moment from "moment/moment";
 
 const ordersUrl = './api/v1/orders';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrdersService extends BasicService {
+export class OrdersService {
 
-  constructor(private _http: HttpClient) {
-    super();
-  }
-
+  constructor(private _http: HttpClient) {}
   list(
     pageIndex: number,
     pageSize: number,

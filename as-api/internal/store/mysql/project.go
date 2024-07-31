@@ -23,7 +23,7 @@ func newProjects(ds *datastore) *projects {
 // Create creates a new project.
 func (v *projects) Create(ctx context.Context, project *v1.Project, opts metav1.CreateOptions) error {
 	if err := v.db.Create(project).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -31,7 +31,7 @@ func (v *projects) Create(ctx context.Context, project *v1.Project, opts metav1.
 // Update updates a project information.
 func (v *projects) Update(ctx context.Context, project *v1.Project, opts metav1.UpdateOptions) (err error) {
 	if err = v.db.Where("id = ?", project.ID).Updates(project).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return
 }
@@ -44,10 +44,10 @@ func (v *projects) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 
 	project := &v1.Project{}
 	if err := v.db.Where("id = ?", id).First(&project).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	if err := v.db.Where("id = ?", id).Delete(project).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -56,7 +56,7 @@ func (v *projects) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 func (v *projects) Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.Project, error) {
 	project := &v1.Project{}
 	if err := v.db.Where("name = ?", name).First(&project).Error; err != nil {
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return project, nil
@@ -77,7 +77,7 @@ func (v *projects) List(ctx context.Context, opts metav1.ListOptions) (*v1.Proje
 		Limit(-1).
 		Count(&ret.Total)
 	if d.Error != nil {
-		return nil, errors.WithCode(d.Error, code.ErrDatabase)
+		return nil, errors.WrapCode(d.Error, code.ErrDatabase)
 	}
 	return ret, nil
 }

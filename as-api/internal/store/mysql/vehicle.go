@@ -23,7 +23,7 @@ func newVehicles(ds *datastore) *vehicles {
 // Create creates a new vehicle.
 func (v *vehicles) Create(ctx context.Context, vehicle *v1.Vehicle, opts metav1.CreateOptions) error {
 	if err := v.db.Create(vehicle).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -31,7 +31,7 @@ func (v *vehicles) Create(ctx context.Context, vehicle *v1.Vehicle, opts metav1.
 // Update updates a vehicle information.
 func (v *vehicles) Update(ctx context.Context, vehicle *v1.Vehicle, opts metav1.UpdateOptions) (err error) {
 	if err = v.db.Where("id = ?", vehicle.ID).Updates(vehicle).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return
 }
@@ -44,10 +44,10 @@ func (v *vehicles) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 
 	vehicle := &v1.Vehicle{}
 	if err := v.db.Where("id = ?", id).First(&vehicle).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	if err := v.db.Where("id = ?", id).Delete(vehicle).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -56,7 +56,7 @@ func (v *vehicles) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 func (v *vehicles) Get(ctx context.Context, number string, opts metav1.GetOptions) (*v1.Vehicle, error) {
 	vehicle := &v1.Vehicle{}
 	if err := v.db.Where("number = ?", number).First(&vehicle).Error; err != nil {
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return vehicle, nil
@@ -77,7 +77,7 @@ func (v *vehicles) List(ctx context.Context, opts metav1.ListOptions) (*v1.Vehic
 		Limit(-1).
 		Count(&ret.Total)
 	if d.Error != nil {
-		return nil, errors.WithCode(d.Error, code.ErrDatabase)
+		return nil, errors.WrapCode(d.Error, code.ErrDatabase)
 	}
 	return ret, nil
 }

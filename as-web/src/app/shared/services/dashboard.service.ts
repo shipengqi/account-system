@@ -1,27 +1,24 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 
+import moment from "moment/moment";
 import {Observable} from "rxjs";
 
-import {BasicService} from "./basic.service";
 import {
   OverallGeneral,
   OverallRevenueAndPayroll,
   TimelineExpenditure, TimelineProfit,
   TimelineRevenueAndPayroll
 } from "../model/dashboard";
-import moment from "moment/moment";
 
 const analysisUrl = './api/v1/analysis';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService extends BasicService {
+export class DashboardService {
 
-  constructor(private _http: HttpClient) {
-    super();
-  }
+  constructor(private _http: HttpClient) {}
 
   overallRevPay(): Observable<OverallRevenueAndPayroll> {
     return this._http.get<OverallRevenueAndPayroll>(analysisUrl+"/overall/revpay");

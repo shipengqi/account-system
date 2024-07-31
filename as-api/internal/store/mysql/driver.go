@@ -23,7 +23,7 @@ func newDrivers(ds *datastore) *drivers {
 // Create creates a new driver.
 func (v *drivers) Create(ctx context.Context, driver *v1.Driver, opts metav1.CreateOptions) error {
 	if err := v.db.Create(driver).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -31,7 +31,7 @@ func (v *drivers) Create(ctx context.Context, driver *v1.Driver, opts metav1.Cre
 // Update updates a driver information.
 func (v *drivers) Update(ctx context.Context, driver *v1.Driver, opts metav1.UpdateOptions) (err error) {
 	if err = v.db.Where("id = ?", driver.ID).Updates(driver).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return
 }
@@ -44,10 +44,10 @@ func (v *drivers) Delete(ctx context.Context, id int, opts metav1.DeleteOptions)
 
 	driver := &v1.Driver{}
 	if err := v.db.Where("id = ?", id).First(&driver).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	if err := v.db.Where("id = ?", id).Delete(driver).Error; err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
 	return nil
 }
@@ -56,7 +56,7 @@ func (v *drivers) Delete(ctx context.Context, id int, opts metav1.DeleteOptions)
 func (v *drivers) Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Driver, error) {
 	driver := &v1.Driver{}
 	if err := v.db.Where("id = ?", id).First(&driver).Error; err != nil {
-		return nil, errors.WithCode(err, code.ErrDatabase)
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return driver, nil
@@ -78,7 +78,7 @@ func (v *drivers) List(ctx context.Context, opts metav1.ListOptions) (*v1.Driver
 		Count(&ret.Total)
 
 	if d.Error != nil {
-		return nil, errors.WithCode(d.Error, code.ErrDatabase)
+		return nil, errors.WrapCode(d.Error, code.ErrDatabase)
 	}
 	return ret, nil
 }

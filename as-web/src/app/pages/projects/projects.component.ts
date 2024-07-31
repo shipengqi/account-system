@@ -86,7 +86,6 @@ export class ProjectsComponent implements OnInit {
         this.tableLoading = false;
       },
       error: (err) => {
-        this._message.error(err.message);
         this.tableLoading = false;
       }
     })
@@ -119,7 +118,6 @@ export class ProjectsComponent implements OnInit {
       },
       error: (err) => {
         this.editorVisible = false;
-        this._message.error(err.message);
       }
     });
   }
@@ -136,9 +134,6 @@ export class ProjectsComponent implements OnInit {
           next: () => {
             this._message.success(this._translate.instant('global.delete-success'));
             this.list();
-          },
-          error: (err) => {
-            this._message.error(err.message);
           }
         });
       },
