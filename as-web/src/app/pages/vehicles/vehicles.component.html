@@ -47,7 +47,7 @@
 </app-content-body>
 <ng-template #totalTemplate>{{ 'global.total' | translate }} {{ total }} {{ 'global.item' | translate }}</ng-template>
 
-<nz-modal [(nzVisible)]="editorVisible" nzTitle="{{ 'global.add' | translate }}" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="editorVisible" [nzTitle]="editorTitle" (nzOnCancel)="handleCancel()">
   <div *nzModalContent>
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>

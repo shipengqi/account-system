@@ -28,6 +28,7 @@ export class ProjectsComponent implements OnInit {
   total = 0;
   items: IProject[] = [];
 
+  editorTitle = '';
   editorVisible = false;
   editorSaving = false;
   isEditMode = false;
@@ -69,11 +70,13 @@ export class ProjectsComponent implements OnInit {
     this.editorVisible = true;
     this.isEditMode = false;
     this.editId = 0;
+    this.editorTitle = this._translate.instant('global.add');
     if (item) {
       this.nameCtrl.setValue(item.name);
       this.commentCtrl.setValue(item.comment);
       this.isEditMode = true;
       this.editId = item.id;
+      this.editorTitle = this._translate.instant('global.edit');
     }
   }
 
