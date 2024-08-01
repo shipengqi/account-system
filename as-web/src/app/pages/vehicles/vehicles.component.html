@@ -51,13 +51,13 @@
   <div *nzModalContent>
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.vehicle-number' | translate }}</nz-form-label>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.vehicle-number' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="vehicle-number"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.brand' | translate }}</nz-form-label>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.brand' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="brand"/>
         </nz-form-control>

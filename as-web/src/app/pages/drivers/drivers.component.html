@@ -1,5 +1,5 @@
 <app-content-toolbar>
-  <button nz-button (click)="openEditor()" [nzType]="'primary'">
+  <button nz-button (click)="openEditor()" [nzType]="'primary'" data-testid="add-driver">
     <i nz-icon nzType="plus"></i>
     <span>{{ 'global.add' | translate }}</span>
   </button>
@@ -51,19 +51,19 @@
   <div *nzModalContent>
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'driver.name' | translate }}</nz-form-label>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'driver.name' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="name"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.phone' | translate }}</nz-form-label>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.phone' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="phone"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSpan]="4">{{ 'global.address' | translate }}</nz-form-label>
+        <nz-form-label nzRequired [nzSpan]="4">{{ 'global.address' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="7">
           <input nz-input formControlName="address"/>
         </nz-form-control>
