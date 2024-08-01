@@ -10,8 +10,8 @@ import {NzMessageService} from "ng-zorro-antd/message";
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
-  constructor(private _message: NzMessageService) {
-  }
+  constructor(private _message: NzMessageService) {}
+  
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError(err => {
@@ -19,7 +19,7 @@ export class ResponseInterceptor implements HttpInterceptor {
         if (err instanceof ErrorEvent) {
           errorMessage = `An error occurred: ${err.error.message}`;
         } else {
-          // alert the error, then throws the error so that the caller can handle it
+          // alert the error by default, then throws the error so that the caller can handle it
           if (err.error && err.error.code) {
             this._message.error(err.error.message);
             return throwError(() => err.error);
