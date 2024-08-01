@@ -9,6 +9,7 @@ include hack/include/tools.mk
 include hack/include/ui.mk
 include hack/include/go.mk
 include hack/include/release.mk
+include hack/include/gen.mk
 
 # ==============================================================================
 # Usage
@@ -59,6 +60,11 @@ clean:
 .PHONY: lint
 lint:
 	@$(MAKE) go.lint
+
+## gen: Generate all necessary files, such as error code files.
+.PHONY: gen
+gen:
+	@$(MAKE) gen.run
 
 ## help: show help information.
 .PHONY: help

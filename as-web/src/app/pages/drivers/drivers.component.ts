@@ -44,8 +44,7 @@ export class DriversComponent implements OnInit {
     private _message: NzMessageService,
     private _translate: TranslateService,
     private _driversSvc: DriversService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.selfFormGroup.addControl(
@@ -101,7 +100,6 @@ export class DriversComponent implements OnInit {
         this.tableLoading = false;
       },
       error: (err) => {
-        this._message.error(err.message);
         this.tableLoading = false;
       }
     })
@@ -134,7 +132,6 @@ export class DriversComponent implements OnInit {
       },
       error: (err) => {
         this.editorVisible = false;
-        this._message.error(err.message);
       }
     });
   }
@@ -151,9 +148,6 @@ export class DriversComponent implements OnInit {
           next: () => {
             this._message.success(this._translate.instant('global.delete-success'));
             this.list();
-          },
-          error: (err) => {
-            this._message.error(err.message);
           }
         });
       },

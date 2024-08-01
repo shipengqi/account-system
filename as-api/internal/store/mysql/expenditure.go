@@ -35,12 +35,18 @@ func (v *expenditures) Create(ctx context.Context, expenditure *v1.Expenditure, 
 	// 	return nil
 	// })
 
-	return v.db.Create(expenditure).Error
+	if err := v.db.Create(expenditure).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Update updates a expenditure information.
 func (v *expenditures) Update(ctx context.Context, expenditure *v1.Expenditure, opts metav1.UpdateOptions) (err error) {
-	return v.db.Where("id = ?", expenditure.ID).Updates(expenditure).Error
+	if err = v.db.Where("id = ?", expenditure.ID).Updates(expenditure).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return
 }
 
 // Delete deletes a expenditure.
@@ -50,19 +56,20 @@ func (v *expenditures) Delete(ctx context.Context, id int, opts metav1.DeleteOpt
 	}
 
 	expenditure := &v1.Expenditure{}
-	err := v.db.Where("id = ?", id).First(&expenditure).Error
-	if err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+	if err := v.db.Where("id = ?", id).First(&expenditure).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
-	return v.db.Where("id = ?", id).Delete(expenditure).Error
+	if err := v.db.Where("id = ?", id).Delete(expenditure).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Get returns a expenditure.
 func (v *expenditures) Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Expenditure, error) {
 	expenditure := &v1.Expenditure{}
-	err := v.db.Where("id = ?", id).First(&expenditure).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Where("id = ?", id).First(&expenditure).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return expenditure, nil
@@ -75,17 +82,16 @@ func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.E
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
 	sqlstr := ExpenditureListSql(ol.Offset, ol.Limit, opts.Extend)
-	err := v.db.Raw(sqlstr).Scan(&ret.Items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw(sqlstr).Scan(&ret.Items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	var total int64
 	// err = v.db.Model(&v1.Expenditure{}).Count(&total).Error
 	totalsql := ExpenditureTotalSql(opts.Extend)
-	err = v.db.Raw(totalsql).Scan(&total).Error
+	err := v.db.Raw(totalsql).Scan(&total).Error
 	if err != nil {
-		return nil, err
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	ret.Total = total
@@ -94,9 +100,8 @@ func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.E
 
 func (v *expenditures) OverallExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
 	items := make([]*v1.Expenditure, 0)
-	err := v.db.Raw("select cost from as_expenditure order by id").Scan(&items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw("select cost from as_expenditure order by id").Scan(&items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return items, nil
 }
@@ -104,9 +109,8 @@ func (v *expenditures) OverallExpenditure(ctx context.Context) ([]*v1.Expenditur
 func (v *expenditures) TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) ([]*v1.Expenditure, error) {
 	items := make([]*v1.Expenditure, 0)
 	sql := timelineExpenditureSql(vehicles, timeline, etype)
-	err := v.db.Raw(sql).Scan(&items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw(sql).Scan(&items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return items, nil
 }
@@ -115,9 +119,8 @@ func (v *expenditures) TimelineExpenditure(ctx context.Context, vehicles, timeli
 func (v *expenditures) CMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
 	m := make([]*v1.Expenditure, 0)
 
-	err := v.db.Raw(expenditureWithDateSql(CurrentMonthCursor)).Scan(&m).Error
-	if err != nil {
-		return m, err
+	if err := v.db.Raw(expenditureWithDateSql(CurrentMonthCursor)).Scan(&m).Error; err != nil {
+		return m, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return m, nil
 }
@@ -126,9 +129,8 @@ func (v *expenditures) CMExpenditure(ctx context.Context) ([]*v1.Expenditure, er
 func (v *expenditures) LYMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
 	lastm := make([]*v1.Expenditure, 0)
 
-	err := v.db.Raw(expenditureWithDateSql(MOMMonthCursor)).Scan(&lastm).Error
-	if err != nil {
-		return lastm, err
+	if err := v.db.Raw(expenditureWithDateSql(MOMMonthCursor)).Scan(&lastm).Error; err != nil {
+		return lastm, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return lastm, nil
 }
@@ -137,9 +139,8 @@ func (v *expenditures) LYMExpenditure(ctx context.Context) ([]*v1.Expenditure, e
 func (v *expenditures) LMExpenditure(ctx context.Context) ([]*v1.Expenditure, error) {
 	lastm := make([]*v1.Expenditure, 0)
 
-	err := v.db.Raw(expenditureWithDateSql(M2MMonthCursor)).Scan(&lastm).Error
-	if err != nil {
-		return lastm, err
+	if err := v.db.Raw(expenditureWithDateSql(M2MMonthCursor)).Scan(&lastm).Error; err != nil {
+		return lastm, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return lastm, nil
 }

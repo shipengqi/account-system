@@ -27,3 +27,7 @@ install.releaser:
 .PHONY: install.ginkgo
 install.ginkgo:
 	@go install github.com/onsi/ginkgo/v2/ginkgo@latest
+
+.PHONY: install.jaguar
+install.ginkgo:
+	@go install github.com/shipengqi/jaguar/cmd/jaguar@latest

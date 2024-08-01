@@ -3,7 +3,6 @@ import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {forkJoin} from "rxjs";
 import moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
-import {NzMessageService} from "ng-zorro-antd/message";
 import {G2BarData} from "@delon/chart/bar";
 import {G2PieClickItem, G2PieData} from "@delon/chart/pie";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
@@ -115,7 +114,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private _dashboardSvc: DashboardService,
-    private _message: NzMessageService,
     private _translate: TranslateService,
     private _vehiclesSvc: VehiclesService,
     private _driversSve: DriversService,
@@ -160,9 +158,6 @@ export class DashboardComponent implements OnInit {
 
             this.overallPieData = this.calculateOverallPieChartData();
             this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_categorize);
-          },
-          error: (err) => {
-            this._message.error(err.message);
           }
         });
 
@@ -194,13 +189,11 @@ export class DashboardComponent implements OnInit {
           },
           error: (err) => {
             this.loading = false;
-            this._message.error(err.message);
           }
         })
       },
       error: (err) => {
         this.loading = false;
-        this._message.error(err.message);
       }
     });
   }
@@ -255,7 +248,6 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         this.revenueChartLoading = false;
-        this._message.error(err.message);
       }
     })
   }
@@ -269,7 +261,6 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         this.expenditureChartLoading = false;
-        this._message.error(err.message);
       }
     })
   }
@@ -283,7 +274,6 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         this.payrollChartLoading = false;
-        this._message.error(err.message);
       }
     })
   }
@@ -297,7 +287,6 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         this.profitChartLoading = false;
-        this._message.error(err.message);
       }
     })
   }
@@ -508,6 +497,9 @@ export class DashboardComponent implements OnInit {
     }
     if (lm === 0 && cm > 0) {
       return 100
+    }
+    if (lm === 0 && cm == 0) {
+      return 0
     }
     percent = (cm - lm) / lm * 100
     return percent

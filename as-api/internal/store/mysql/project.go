@@ -22,21 +22,18 @@ func newProjects(ds *datastore) *projects {
 
 // Create creates a new project.
 func (v *projects) Create(ctx context.Context, project *v1.Project, opts metav1.CreateOptions) error {
-	// return u.db.Transaction(func(tx *gorm.DB) error {
-	// 	err := tx.Create(user).Error
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	// do more operations in transaction
-	// 	return nil
-	// })
-
-	return v.db.Create(project).Error
+	if err := v.db.Create(project).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Update updates a project information.
 func (v *projects) Update(ctx context.Context, project *v1.Project, opts metav1.UpdateOptions) (err error) {
-	return v.db.Where("id = ?", project.ID).Updates(project).Error
+	if err = v.db.Where("id = ?", project.ID).Updates(project).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return
 }
 
 // Delete deletes a project.
@@ -46,19 +43,20 @@ func (v *projects) Delete(ctx context.Context, id int, opts metav1.DeleteOptions
 	}
 
 	project := &v1.Project{}
-	err := v.db.Where("id = ?", id).First(&project).Error
-	if err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+	if err := v.db.Where("id = ?", id).First(&project).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
-	return v.db.Where("id = ?", id).Delete(project).Error
+	if err := v.db.Where("id = ?", id).Delete(project).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Get returns a project.
 func (v *projects) Get(ctx context.Context, name string, opts metav1.GetOptions) (*v1.Project, error) {
 	project := &v1.Project{}
-	err := v.db.Where("name = ?", name).First(&project).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Where("name = ?", name).First(&project).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return project, nil
@@ -78,6 +76,8 @@ func (v *projects) List(ctx context.Context, opts metav1.ListOptions) (*v1.Proje
 		Offset(-1).
 		Limit(-1).
 		Count(&ret.Total)
-
-	return ret, d.Error
+	if d.Error != nil {
+		return nil, errors.WrapCode(d.Error, code.ErrDatabase)
+	}
+	return ret, nil
 }

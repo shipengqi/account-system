@@ -8,10 +8,6 @@ import (
 	"github.com/shipengqi/log"
 )
 
-const (
-	SUCCESS = 0
-)
-
 // ErrResponse defines the return messages when an error occurred.
 // Reference is optional, if there is an error occurred, maybe it is useful to solve the error.
 // swagger:model

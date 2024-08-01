@@ -31,21 +31,18 @@ func newOrders(ds *datastore) *orders {
 
 // Create creates a new order.
 func (v *orders) Create(ctx context.Context, order *v1.Order, opts metav1.CreateOptions) error {
-	// return u.db.Transaction(func(tx *gorm.DB) error {
-	// 	err := tx.Create(user).Error
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	// do more operations in transaction
-	// 	return nil
-	// })
-
-	return v.db.Create(order).Error
+	if err := v.db.Create(order).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Update updates an order information.
 func (v *orders) Update(ctx context.Context, order *v1.Order, opts metav1.UpdateOptions) (err error) {
-	return v.db.Where("id = ?", order.ID).Updates(order).Error
+	if err = v.db.Where("id = ?", order.ID).Updates(order).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return
 }
 
 // Delete deletes an order.
@@ -55,19 +52,20 @@ func (v *orders) Delete(ctx context.Context, id int, opts metav1.DeleteOptions) 
 	}
 
 	order := &v1.Order{}
-	err := v.db.Where("id = ?", id).First(&order).Error
-	if err != nil {
-		return errors.WithCode(err, code.ErrDatabase)
+	if err := v.db.Where("id = ?", id).First(&order).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
 	}
-	return v.db.Where("id = ?", id).Delete(order).Error
+	if err := v.db.Where("id = ?", id).Delete(order).Error; err != nil {
+		return errors.WrapCode(err, code.ErrDatabase)
+	}
+	return nil
 }
 
 // Get returns an order.
 func (v *orders) Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Order, error) {
 	order := &v1.Order{}
-	err := v.db.Where("id = ?", id).First(&order).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Where("id = ?", id).First(&order).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	return order, nil
@@ -80,17 +78,15 @@ func (v *orders) List(ctx context.Context, opts metav1.ListOptions) (*v1.OrderLi
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
 	sqlstr := OrderListSql(ol.Offset, ol.Limit, opts.Extend)
-	err := v.db.Raw(sqlstr).Scan(&ret.Items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw(sqlstr).Scan(&ret.Items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	var total int64
 	// err = v.db.Model(&v1.Expenditure{}).Count(&total).Error
 	totalsql := OrderTotalSql(opts.Extend)
-	err = v.db.Raw(totalsql).Scan(&total).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw(totalsql).Scan(&total).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 
 	ret.Total = total
@@ -99,9 +95,8 @@ func (v *orders) List(ctx context.Context, opts metav1.ListOptions) (*v1.OrderLi
 
 func (v *orders) OverallRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 	items := make([]*v1.Order, 0)
-	err := v.db.Raw("select as_order.freight, as_order.payroll from as_order order by id").Scan(&items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw("select as_order.freight, as_order.payroll from as_order order by id").Scan(&items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return items, nil
 }
@@ -109,9 +104,8 @@ func (v *orders) OverallRevenueAndPayroll(ctx context.Context) ([]*v1.Order, err
 func (v *orders) TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) ([]*v1.Order, error) {
 	items := make([]*v1.Order, 0)
 	sql := timelineRevenueAndPayrollSql(vehicles, timeline)
-	err := v.db.Raw(sql).Scan(&items).Error
-	if err != nil {
-		return nil, err
+	if err := v.db.Raw(sql).Scan(&items).Error; err != nil {
+		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return items, nil
 }
@@ -120,9 +114,8 @@ func (v *orders) TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeli
 func (v *orders) CMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 	m := make([]*v1.Order, 0)
 
-	err := v.db.Raw(revenueAndPayrollWithDateSql(CurrentMonthCursor)).Scan(&m).Error
-	if err != nil {
-		return m, err
+	if err := v.db.Raw(revenueAndPayrollWithDateSql(CurrentMonthCursor)).Scan(&m).Error; err != nil {
+		return m, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return m, nil
 }
@@ -131,9 +124,8 @@ func (v *orders) CMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 func (v *orders) LYMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 	lastm := make([]*v1.Order, 0)
 
-	err := v.db.Raw(revenueAndPayrollWithDateSql(MOMMonthCursor)).Scan(&lastm).Error
-	if err != nil {
-		return lastm, err
+	if err := v.db.Raw(revenueAndPayrollWithDateSql(MOMMonthCursor)).Scan(&lastm).Error; err != nil {
+		return lastm, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return lastm, nil
 }
@@ -142,9 +134,8 @@ func (v *orders) LYMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) 
 func (v *orders) LMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 	lastm := make([]*v1.Order, 0)
 
-	err := v.db.Raw(revenueAndPayrollWithDateSql(M2MMonthCursor)).Scan(&lastm).Error
-	if err != nil {
-		return lastm, err
+	if err := v.db.Raw(revenueAndPayrollWithDateSql(M2MMonthCursor)).Scan(&lastm).Error; err != nil {
+		return lastm, errors.WrapCode(err, code.ErrDatabase)
 	}
 	return lastm, nil
 }

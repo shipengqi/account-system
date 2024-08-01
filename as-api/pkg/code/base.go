@@ -1,7 +1,7 @@
 package code
 
-//go:generate jaguar codegen -type=int
-//go:generate jaguar codegen -type=int -doc -output ../../docs/guide/api/error_code_generated.md
+//go:generate jaguar tool codegen -type=int
+//go:generate jaguar tool codegen -type=int -doc -output ../../../docs/guide/api/error_code_generated.md
 
 // Common: basic errors.
 // Code must start with 1xxxxx.
@@ -23,6 +23,9 @@ const (
 
 	// ErrPageNotFound - 404: Page not found.
 	ErrPageNotFound
+
+	// ErrInvalidType - 400: Invalid data type.
+	ErrInvalidType
 )
 
 // common: database errors.

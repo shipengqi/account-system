@@ -123,7 +123,6 @@ export class ExpenditureComponent implements OnInit {
       error: (err) => {
         this.isVehicleLoading = false;
         this.vehicleList = [];
-        this._message.error(err);
       }
     });
   }
@@ -144,7 +143,6 @@ export class ExpenditureComponent implements OnInit {
         this.tableLoading = false;
       },
       error: (err) => {
-        this._message.error(err.message);
         this.tableLoading = false;
       }
     })
@@ -193,7 +191,6 @@ export class ExpenditureComponent implements OnInit {
       },
       error: (err) => {
         this.editorVisible = false;
-        this._message.error(err.message);
       }
     });
   }
@@ -210,9 +207,6 @@ export class ExpenditureComponent implements OnInit {
           next: () => {
             this._message.success(this._translate.instant('global.delete-success'));
             this.list();
-          },
-          error: (err) => {
-            this._message.error(err.message);
           }
         });
       },

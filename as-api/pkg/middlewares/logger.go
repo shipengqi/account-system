@@ -140,7 +140,9 @@ func LoggerWithConfig(c gin.LoggerConfig) gin.HandlerFunc {
 
 			param.Path = path
 
-			GetLoggerWithCtx(ctx).Infot(formatter(param))
+			// Todo request id and username is unnecessary, so disable GetLoggerWithCtx
+			// GetLoggerWithCtx(ctx).Infot(formatter(param))
+			log.Infot(formatter(param))
 		}
 	}
 }

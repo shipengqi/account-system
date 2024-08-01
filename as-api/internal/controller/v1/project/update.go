@@ -17,7 +17,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	var r v1.Project
 
 	if err := ctx.ShouldBindJSON(&r); err != nil {
-		response.Fail(ctx, errors.WithCode(err, code.ErrBind))
+		response.Fail(ctx, errors.WrapCode(err, code.ErrBind))
 		return
 	}
 

@@ -15,7 +15,7 @@ func (c *Controller) List(ctx *gin.Context) {
 
 	var r metav1.ListOptions
 	if err := ctx.ShouldBindQuery(&r); err != nil {
-		response.Fail(ctx, errors.WithCode(err, code.ErrBind))
+		response.Fail(ctx, errors.WrapCode(err, code.ErrBind))
 		return
 	}
 

@@ -2,7 +2,7 @@
 
 # server configurations
 server:
-  mode: debug # server mode: release, debug, test，默认 release
+  mode: release # server mode: release, debug, test，默认 release
   healthz: true # 是否开启健康检查，如果开启会安装 /healthz 路由，默认 true
   middlewares: recovery,logger,secure,nocache,cors # 加载的 gin 中间件列表，多个中间件，逗号(,)隔开
   max-ping-count: 3 # http 服务启动后，自检尝试次数，默认 3
@@ -29,7 +29,7 @@ mysql:
   max-idle-connections: 100 # MySQL 最大空闲连接数，默认 100
   max-open-connections: 100 # MySQL 最大打开的连接数，默认 100
   max-connection-life-time: 10s # 空闲连接最大存活时间，默认 10s
-  debug: true # GORM debug mode
+  debug: false # GORM debug mode
   log-level: 4 # GORM log level, 1: silent, 2:error, 3:warn, 4:info
 
 feature:
