@@ -498,6 +498,9 @@ export class DashboardComponent implements OnInit {
     if (lm === 0 && cm > 0) {
       return 100
     }
+    if (lm === 0 && cm == 0) {
+      return 0
+    }
     percent = (cm - lm) / lm * 100
     return percent
   }
