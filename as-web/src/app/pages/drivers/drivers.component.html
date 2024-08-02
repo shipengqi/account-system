@@ -1,5 +1,8 @@
 <app-content-toolbar>
-  <button nz-button (click)="openEditor()" [nzType]="'primary'" data-testid="add-driver">
+  <button nz-button
+          (click)="openEditor()"
+          [nzType]="'primary'"
+          data-testid="add-driver-btn">
     <i nz-icon nzType="plus"></i>
     <span>{{ 'global.add' | translate }}</span>
   </button>
@@ -48,29 +51,29 @@
 <ng-template #totalTemplate>{{ 'global.total' | translate }} {{ total }} {{ 'global.item' | translate }}</ng-template>
 
 <nz-modal [(nzVisible)]="editorVisible" [nzTitle]="editorTitle" (nzOnCancel)="handleCancel()">
-  <div *nzModalContent data-testid="driver-form-model">
+  <div *nzModalContent data-testid="driver-form-modal">
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'driver.name' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="driver-form-name">
           <input nz-input formControlName="name"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.phone' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="driver-form-phone">
           <input nz-input formControlName="phone"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.address' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="driver-form-address">
           <input nz-input formControlName="address"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'global.comment' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="driver-form-comment">
           <textarea rows="4" nz-input formControlName="comment"></textarea>
         </nz-form-control>
       </nz-form-item>

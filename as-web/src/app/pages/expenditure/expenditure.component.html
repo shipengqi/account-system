@@ -4,7 +4,7 @@
       <div nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label>{{ 'expenditure.type' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="exp-search-type">
             <nz-select nzPlaceHolder="{{ 'expenditure.select-type' | translate }}"
                        [(ngModel)]="searchType"
                        [ngModelOptions]="{standalone: true}"
@@ -17,7 +17,7 @@
       <div nz-col nzMd="8" nzSm="24">
         <nz-form-item>
           <nz-form-label>{{ 'global.vehicle-number' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="exp-search-vehicle-number">
             <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
                        nzAllowClear
                        [(ngModel)]="searchVehicleID"
@@ -31,7 +31,7 @@
       <div nz-col nzMd="8" nzSm="24">
         <nz-form-item class="max-content">
           <nz-form-label>{{ 'expenditure.time' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="exp-search-time">
             <nz-range-picker [(ngModel)]="searchTime"
                              [ngModelOptions]="{standalone: true}"
                              [nzAllowClear]="true"></nz-range-picker>
@@ -41,11 +41,17 @@
     </div>
   </form>
   <div class="button-container">
-    <button nz-button (click)="search()" [nzLoading]="tableLoading" [nzType]="'primary'">
+    <button nz-button (click)="search()"
+            [nzLoading]="tableLoading"
+            [nzType]="'primary'"
+            data-testid="search-exp">
       <i nz-icon nzType="search"></i>
       <span>{{ 'global.search' | translate }}</span>
     </button>
-    <button nz-button (click)="openEditor()" [nzType]="'primary'">
+    <button nz-button
+            (click)="openEditor()"
+            [nzType]="'primary'"
+            data-testid="add-exp-btn">
       <i nz-icon nzType="plus"></i>
       <span>{{ 'global.add' | translate }}</span>
     </button>
@@ -86,9 +92,9 @@
       <td>{{ formatDatetime(data.created_at) }}</td>
       <td>{{ formatDatetime(data.updated_at) }}</td>
       <td>
-        <a (click)="openEditor(data)">{{ 'global.edit' | translate }}</a>
+        <a (click)="openEditor(data)" data-testid="exp-list-edit">{{ 'global.edit' | translate }}</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="openDeleteConfirm(data.id)">{{ 'global.delete' | translate }}</a>
+        <a (click)="openDeleteConfirm(data.id)" data-testid="exp-list-delete">{{ 'global.delete' | translate }}</a>
       </td>
     </tr>
     </tbody>
@@ -97,25 +103,28 @@
 <ng-template #totalTemplate>{{ 'global.total' | translate }} {{ total }} {{ 'global.item' | translate }}</ng-template>
 
 <nz-modal [(nzVisible)]="editorVisible" [nzTitle]="editorTitle" (nzOnCancel)="handleCancel()">
-  <div *nzModalContent>
+  <div *nzModalContent data-testid="exp-form-modal">
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'expenditure.type' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
-          <nz-select nzPlaceHolder="{{ 'expenditure.select-type' | translate }}" formControlName="type">
+        <nz-form-control [nzSpan]="7" data-testid="exp-form-type">
+          <nz-select
+            nzPlaceHolder="{{ 'expenditure.select-type' | translate }}"
+            formControlName="type"
+            nzAllowClear>
             <nz-option *ngFor="let i of types" [nzLabel]="i.text" [nzValue]="i.value"/>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'expenditure.time' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="exp-form-time">
           <nz-date-picker formControlName="time"></nz-date-picker>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'expenditure.cost' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="exp-form-cost">
           <nz-input-number-group nzAddOnAfter="￥">
             <nz-input-number formControlName="cost"></nz-input-number>
           </nz-input-number-group>
@@ -123,7 +132,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.vehicle-number' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="exp-form-vehicle-number">
           <nz-select
             nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
             formControlName="vehicle-number"
@@ -135,17 +144,18 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'global.comment' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="exp-form-comment">
           <textarea rows="4" nz-input formControlName="comment"></textarea>
         </nz-form-control>
       </nz-form-item>
     </form>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="handleCancel()">{{ 'global.cancel' | translate }}</button>
+    <button nz-button nzType="default" (click)="handleCancel()" data-testid="exp-form-cancel">{{ 'global.cancel' | translate }}</button>
     <button nz-button nzType="primary"
             [disabled]="selfFormGroup.invalid"
             [nzLoading]="editorSaving"
+            data-testid="exp-form-submit"
             (click)="handleSave()">{{ 'global.save' | translate }}
     </button>
   </div>

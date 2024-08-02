@@ -1,5 +1,5 @@
 <app-content-toolbar>
-  <button nz-button (click)="openEditor()" [nzType]="'primary'">
+  <button nz-button (click)="openEditor()" [nzType]="'primary'" data-testid="add-project-btn">
     <i nz-icon nzType="plus"></i>
     <span>{{ 'global.add' | translate }}</span>
   </button>
@@ -33,9 +33,9 @@
       <td>{{ formatDatetime(data.created_at) }}</td>
       <td>{{ formatDatetime(data.updated_at) }}</td>
       <td>
-        <a (click)="openEditor(data)">{{ 'global.edit' | translate }}</a>
+        <a (click)="openEditor(data)" data-testid="project-list-edit">{{ 'global.edit' | translate }}</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="openDeleteConfirm(data.id)">{{ 'global.delete' | translate }}</a>
+        <a (click)="openDeleteConfirm(data.id)" data-testid="project-list-delete">{{ 'global.delete' | translate }}</a>
       </td>
     </tr>
     </tbody>
@@ -44,27 +44,29 @@
 <ng-template #totalTemplate>{{ 'global.total' | translate }} {{ total }} {{ 'global.item' | translate }}</ng-template>
 
 <nz-modal [(nzVisible)]="editorVisible" [nzTitle]="editorTitle" (nzOnCancel)="handleCancel()">
-  <div *nzModalContent>
+  <div *nzModalContent data-testid="project-form-modal">
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'project.name' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="project-form-name">
           <input nz-input formControlName="name"/>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'global.comment' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="project-form-comment">
           <textarea rows="4" nz-input formControlName="comment"></textarea>
         </nz-form-control>
       </nz-form-item>
     </form>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="handleCancel()">{{ 'global.cancel' | translate }}</button>
+    <button nz-button nzType="default" (click)="handleCancel()"
+            data-testid="project-form-cancel">{{ 'global.cancel' | translate }}</button>
     <button nz-button nzType="primary"
             [disabled]="selfFormGroup.invalid"
             [nzLoading]="editorSaving"
+            data-testid="project-form-submit"
             (click)="handleSave()">{{ 'global.save' | translate }}</button>
   </div>
 </nz-modal>
