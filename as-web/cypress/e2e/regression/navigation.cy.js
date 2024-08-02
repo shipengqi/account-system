@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Navigation', () => {
 
   const menus = {

@@ -1,4 +1,9 @@
-import {clearATimePicker, enterOrderFormRequiredInput, selectATime, setOrderFormAliases} from "../../helpers/form";
+import {
+  clearATimePicker,
+  enterOrderFormRequiredInput,
+  selectATime,
+  setOrderFormAliases
+} from "../../helpers/form";
 import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllOrderReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";

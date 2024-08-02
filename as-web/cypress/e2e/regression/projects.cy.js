@@ -1,4 +1,8 @@
-import {checkProjectFormRequiredInput, enterProjectFormRequiredInput, setProjectFormAliases} from "../../helpers/form";
+import {
+  checkProjectFormRequiredInput,
+  enterProjectFormRequiredInput,
+  setProjectFormAliases
+} from "../../helpers/form";
 import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllProjectReqAliases, waitSuccessReq} from "../../helpers/request";
 
