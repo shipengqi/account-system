@@ -3,5 +3,7 @@ This is zhys account system.
 
 ## Todo
 
-- Cypress Regression tests
+- Cypress Regression orders/expenditure search tests
 - Error Code i18n
+- Request query/body/param data validation
+- Export xlsx

@@ -33,6 +33,8 @@ export class ExpenditureComponent implements OnInit {
   costCtrl: AbstractControl = new UntypedFormControl();
   vehicleCtrl: AbstractControl = new UntypedFormControl();
   commentCtrl: AbstractControl = new UntypedFormControl();
+
+  editorTitle = '';
   editorVisible = false;
   editorSaving = false;
   isEditMode = false;
@@ -152,6 +154,7 @@ export class ExpenditureComponent implements OnInit {
     this.editorVisible = true;
     this.isEditMode = false;
     this.editId = 0;
+    this.editorTitle = this._translate.instant('global.add');
     if (item) {
       this.typeCtrl.setValue(item.type);
       this.timeCtrl.setValue(item.expend_at);
@@ -160,6 +163,7 @@ export class ExpenditureComponent implements OnInit {
       this.commentCtrl.setValue(item.comment);
       this.isEditMode = true;
       this.editId = item.id;
+      this.editorTitle = this._translate.instant('global.edit');
     }
   }
 

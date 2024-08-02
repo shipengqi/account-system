@@ -4,7 +4,7 @@
       <div nz-col nzMd="8" nzSm="24" class="search-form-item">
         <nz-form-item>
           <nz-form-label>{{ 'global.project' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="order-search-project">
             <nz-select nzPlaceHolder="{{ 'global.select-project' | translate }}"
                        nzAllowClear
                        [(ngModel)]="searchProjectID"
@@ -18,7 +18,7 @@
       <div nz-col nzMd="8" nzSm="24" class="search-form-item">
         <nz-form-item>
           <nz-form-label>{{ 'global.vehicle-number' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="order-search-vehicle-number">
             <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
                        nzAllowClear
                        [(ngModel)]="searchVehicleID"
@@ -32,7 +32,7 @@
       <div nz-col nzMd="8" nzSm="24" class="search-form-item">
         <nz-form-item>
           <nz-form-label>{{ 'global.driver' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="order-search-driver">
             <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
                        nzAllowClear
                        [(ngModel)]="searchDriverID"
@@ -46,7 +46,7 @@
       <div nz-col nzMd="8" nzSm="24" class="search-form-item">
         <nz-form-item>
           <nz-form-label>{{ 'order.unload-time' | translate }}</nz-form-label>
-          <nz-form-control>
+          <nz-form-control data-testid="order-search-unload-time">
             <nz-range-picker
               [(ngModel)]="searchUnLoadTime"
               [ngModelOptions]="{standalone: true}"
@@ -66,11 +66,18 @@
     </div>
   </form>
   <div class="button-container">
-    <button nz-button (click)="search()" [nzLoading]="tableLoading" [nzType]="'primary'">
+    <button nz-button
+            (click)="search()"
+            [nzLoading]="tableLoading"
+            [nzType]="'primary'"
+            data-testid="search-order-btn">
       <i nz-icon nzType="search"></i>
       <span>{{ 'global.search' | translate }}</span>
     </button>
-    <button nz-button (click)="openEditor()" [nzType]="'primary'">
+    <button nz-button
+            (click)="openEditor()"
+            [nzType]="'primary'"
+            data-testid="add-order-btn">
       <i nz-icon nzType="plus"></i>
       <span>{{ 'global.add' | translate }}</span>
     </button>
@@ -113,20 +120,20 @@
       <td nzEllipsis>{{ data.comment }}</td>
       <td>{{ data.unload_at }}</td>
       <td>
-        <a (click)="openEditor(data)">{{ 'global.edit' | translate }}</a>
+        <a (click)="openEditor(data)" data-testid="order-list-edit">{{ 'global.edit' | translate }}</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="openDeleteConfirm(data.id)">{{ 'global.delete' | translate }}</a>
+        <a (click)="openDeleteConfirm(data.id)" data-testid="order-list-delete">{{ 'global.delete' | translate }}</a>
       </td>
     </tr>
     </tbody>
   </nz-table>
 </app-content-body>
-<nz-modal [(nzVisible)]="editorVisible" nzTitle="{{ 'global.add' | translate }}" (nzOnCancel)="handleCancel()">
-  <div *nzModalContent>
+<nz-modal [(nzVisible)]="editorVisible" [nzTitle]="editorTitle" (nzOnCancel)="handleCancel()">
+  <div *nzModalContent data-testid="order-form-modal">
     <form nz-form [formGroup]="selfFormGroup">
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.project' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="order-form-project">
           <nz-select nzPlaceHolder="{{ 'global.select-project' | translate }}"
                      nzAllowClear
                      formControlName="project"
@@ -137,7 +144,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.vehicle-number' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="order-form-vehicle-number">
           <nz-select
             nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
             formControlName="vehicle-number"
@@ -149,7 +156,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'global.driver' | translate }}</nz-form-label>
-        <nz-form-control [nzSpan]="7">
+        <nz-form-control [nzSpan]="7" data-testid="order-form-driver">
           <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
                      formControlName="driver"
                      nzAllowClear
@@ -160,13 +167,13 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="4">{{ 'order.unload-time' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="order-form-unload-time">
           <nz-date-picker formControlName="unload-time"></nz-date-picker>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'order.weight' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="order-form-weight">
           <nz-input-number-group nzAddOnAfter="吨">
             <nz-input-number formControlName="weight"></nz-input-number>
           </nz-input-number-group>
@@ -174,7 +181,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'order.freight' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="order-form-freight">
           <nz-input-number-group nzAddOnAfter="￥">
             <nz-input-number formControlName="freight"></nz-input-number>
           </nz-input-number-group>
@@ -182,7 +189,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'order.payroll' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="order-form-payroll">
           <nz-input-number-group nzAddOnAfter="￥">
             <nz-input-number formControlName="payroll"></nz-input-number>
           </nz-input-number-group>
@@ -190,17 +197,20 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSpan]="4">{{ 'global.comment' | translate }}</nz-form-label>
-        <nz-form-control>
+        <nz-form-control data-testid="order-form-comment">
           <textarea rows="4" nz-input formControlName="comment"></textarea>
         </nz-form-control>
       </nz-form-item>
     </form>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="default" (click)="handleCancel()">{{ 'global.cancel' | translate }}</button>
+    <button nz-button nzType="default"
+            (click)="handleCancel()"
+            data-testid="order-form-cancel">{{ 'global.cancel' | translate }}</button>
     <button nz-button nzType="primary"
             [disabled]="selfFormGroup.invalid"
             [nzLoading]="editorSaving"
+            data-testid="order-form-submit"
             (click)="handleSave()">{{ 'global.save' | translate }}
     </button>
   </div>
