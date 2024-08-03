@@ -27,7 +27,8 @@ import {DashboardService} from "../../shared/services/dashboard.service";
 })
 export class DashboardComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
-  loading = true;
+  overallLoading = true;
+  timelineLoading = true;
 
   pieChartDetailVisible = false;
   pieChartDetailTitle = '';
@@ -130,7 +131,8 @@ export class DashboardComponent implements OnInit {
       this._dashboardSvc.timelineProfit()
     ]);
 
-    this.loading = true;
+    this.overallLoading = true;
+    this.timelineLoading = true;
     forkJoin([
       this._vehiclesSvc.listAll(),
       this._driversSve.listAll()
@@ -158,6 +160,10 @@ export class DashboardComponent implements OnInit {
 
             this.overallPieData = this.calculateOverallPieChartData();
             this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_categorize);
+            this.overallLoading = false;
+          },
+          error: () => {
+            this.overallLoading = false;
           }
         });
 
@@ -185,15 +191,16 @@ export class DashboardComponent implements OnInit {
             this.calculateDriversPayrollChartsData(res[0]);
             this.calculateExpenditureChartsData(res[1]);
             this.calculateProfitChartsData(res[2]);
-            this.loading = false;
+            this.timelineLoading = false;
           },
           error: (err) => {
-            this.loading = false;
+            this.timelineLoading = false;
           }
         })
       },
       error: (err) => {
-        this.loading = false;
+        this.overallLoading = false;
+        this.timelineLoading = false;
       }
     });
   }

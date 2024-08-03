@@ -1,7 +1,10 @@
 <div nz-row [nzGutter]="24">
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-revenue' | translate }}" [total]="'¥'+formatTotal(overall.revpay.total_revenue)" contentHeight="44px"
-                [footer]="refooter">
+    <g2-card [loading]="overallLoading"
+      title="{{ 'analysis.overall-revenue' | translate }}"
+      [total]="'¥'+formatTotal(overall.revpay.total_revenue)"
+      contentHeight="44px"
+      [footer]="refooter">
       <trend [flag]="overall.revpay.mom_revenue && overall.revpay.mom_revenue > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
         <span class="pl-sm">{{ formatPercent(overall.revpay.mom_revenue) }}%</span>
@@ -19,8 +22,11 @@
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-expenditure' | translate }}" [total]="'¥ '+formatTotal(overall.exp.total)" contentHeight="44px"
-                [footer]="exfooter">
+    <g2-card [loading]="overallLoading"
+      title="{{ 'analysis.overall-expenditure' | translate }}"
+      [total]="'¥ '+formatTotal(overall.exp.total)"
+      contentHeight="44px"
+      [footer]="exfooter">
       <trend [flag]="overall.exp.mom && overall.exp.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
         <span class="pl-sm">{{ formatPercent(overall.exp.mom) }}%</span>
@@ -38,8 +44,11 @@
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-payroll' | translate }}" [total]="'¥ '+formatTotal(overall.revpay.total_payroll)" contentHeight="44px"
-                [footer]="pafooter">
+    <g2-card [loading]="overallLoading"
+      title="{{ 'analysis.overall-payroll' | translate }}"
+      [total]="'¥ '+formatTotal(overall.revpay.total_payroll)"
+      contentHeight="44px"
+      [footer]="pafooter">
       <trend [flag]="overall.revpay.mom_payroll && overall.revpay.mom_payroll > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
         <span class="pl-sm">{{ formatPercent(overall.revpay.mom_payroll) }}%</span>
@@ -57,8 +66,11 @@
     </g2-card>
   </div>
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
-    <g2-card title="{{ 'analysis.overall-profit' | translate }}" [total]="'¥ '+formatTotal(overall.profit.total)" contentHeight="44px"
-                [footer]="prfooter">
+    <g2-card [loading]="overallLoading"
+      title="{{ 'analysis.overall-profit' | translate }}"
+      [total]="'¥ '+formatTotal(overall.profit.total)"
+      contentHeight="44px"
+      [footer]="prfooter">
       <trend [flag]="overall.profit.mom && overall.profit.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
         {{ 'analysis.mom' | translate }}
         <span class="pl-sm">{{ formatPercent(overall.profit.mom) }}%</span>
@@ -85,7 +97,7 @@
       class="mb-0 dashboard-g2-pie-card"
     >
       <h4 class="my-xl">{{ 'analysis.month-revenue' | translate }}</h4>
-      @if (overallPieData) {
+      @if (overallPieData && !overallLoading) {
         <g2-pie
           [data]="overallPieData"
           [hasLegend]="true"
@@ -96,6 +108,10 @@
           [valueFormat]="handlePieValueFormat"
           (clickItem)="handlePieChartClick($event)"
         />
+      } @else {
+        <div class="spin-center">
+          <nz-spin nzSimple></nz-spin>
+        </div>
       }
     </nz-card>
   </div>
@@ -107,7 +123,7 @@
       class="mb-0 dashboard-g2-pie-card"
     >
       <h4 class="my-xl">{{ 'analysis.month-expenditure' | translate }}</h4>
-      @if (expenditurePieData) {
+      @if (expenditurePieData && !overallLoading) {
         <g2-pie
           [data]="expenditurePieData"
           [hasLegend]="true"
@@ -118,6 +134,10 @@
           [valueFormat]="handlePieValueFormat"
           (clickItem)="handlePieChartClick($event, true)"
         />
+      } @else {
+        <div class="spin-center">
+          <nz-spin nzSimple></nz-spin>
+        </div>
       }
     </nz-card>
   </div>
@@ -129,8 +149,12 @@
         <div nz-row>
           <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
             <div class="bar">
-              @if (revenueTabs[0].show) {
+              @if (revenueTabs[0].show && !timelineLoading) {
                 <g2-bar height="295" style="width: 100%" title="{{ 'analysis.revenue-trend' | translate }}" [data]="revenueBarData" />
+              } @else {
+                <div class="spin-center">
+                  <nz-spin nzSimple></nz-spin>
+                </div>
               }
             </div>
           </div>
@@ -154,13 +178,17 @@
         <div nz-row>
           <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
             <div class="bar">
-              @if (revenueTabs[1].show) {
+              @if (revenueTabs[1].show && !timelineLoading) {
                 <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.revenue-vehicle-trend' | translate }}"
                              [slider]="false"
                              [data]="revenueLineData"
                              [maxAxis]="globalVehiclesLineMaxAxis"
                              mask="YYYY/MM"
                              [titleMap]="globalVehiclesLineTitleMap"/>
+              } @else {
+                <div class="spin-center">
+                  <nz-spin nzSimple></nz-spin>
+                </div>
               }
             </div>
           </div>
@@ -205,8 +233,12 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (expenditureTabs[0].show) {
+            @if (expenditureTabs[0].show && !timelineLoading) {
               <g2-bar height="295" style="width: 100%" title="{{ 'analysis.expenditure-trend' | translate }}" [data]="expenditureBarData" />
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
@@ -230,13 +262,17 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (expenditureTabs[1].show) {
+            @if (expenditureTabs[1].show && !timelineLoading) {
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
                            [slider]="false"
                            [data]="expenditureLineData"
                            [maxAxis]="globalVehiclesLineMaxAxis"
                            mask="YYYY/MM"
                            [titleMap]="globalVehiclesLineTitleMap"/>
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
@@ -287,8 +323,12 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (payrollTabs[0].show) {
+            @if (payrollTabs[0].show && !timelineLoading) {
               <g2-bar height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}" [data]="payrollBarData" />
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
@@ -312,13 +352,17 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (payrollTabs[1].show) {
+            @if (payrollTabs[1].show && !timelineLoading) {
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}"
                            [slider]="false"
                            [data]="payrollLineData"
                            [maxAxis]="globalDriversLineMaxAxis"
                            mask="YYYY/MM"
                            [titleMap]="globalDriversLineTitleMap"/>
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
@@ -363,8 +407,12 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (profitTabs[0].show) {
+            @if (profitTabs[0].show && !timelineLoading) {
               <g2-bar height="295" style="width: 100%" title="{{ 'analysis.profit-trend' | translate }}" [data]="profitBarData" />
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
@@ -388,13 +436,17 @@
       <div nz-row>
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
-            @if (profitTabs[1].show) {
+            @if (profitTabs[1].show && !timelineLoading) {
               <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.profit-vehicle-trend' | translate }}"
                            [slider]="false"
                            [data]="profitLineData"
                            [maxAxis]="globalVehiclesLineMaxAxis"
                            mask="YYYY/MM"
                            [titleMap]="globalVehiclesLineTitleMap"/>
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
             }
           </div>
         </div>
