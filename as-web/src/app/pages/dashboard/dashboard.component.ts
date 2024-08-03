@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
   overallPieTotal = 0;
   overallPieData: G2PieData[] = [];
   expenditurePieTotal = 0;
-  expenditurePieData: G2PieData[] =  [];
+  expenditurePieData: G2PieData[] = [];
 
   globalVehiclesLineTitleMap: G2TimelineMap = {y1: ''};
   globalDriversLineTitleMap: G2TimelineMap = {y1: ''};
@@ -160,6 +160,7 @@ export class DashboardComponent implements OnInit {
 
             this.overallPieData = this.calculateOverallPieChartData();
             this.expenditurePieData = this.calculateExpenditurePieChartData(this.overall.exp.cm_categorize);
+
             this.overallLoading = false;
           },
           error: () => {
