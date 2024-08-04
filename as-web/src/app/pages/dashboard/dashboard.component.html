@@ -211,9 +211,10 @@
       <ng-template #revenueExtraTemplate>
         <div>
           <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
-                     class="select-disabled mr-sm"
+                     class="mr-sm"
                      nzMode="multiple"
                      [nzMaxMultipleCount]="5"
+                     [(ngModel)]="revenueSelectedVehicles"
                      nzAllowClear>
             <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
           </nz-select>
@@ -301,9 +302,10 @@
           <nz-option *ngFor="let o of expendTypes" [nzValue]="o.value" [nzLabel]="o.text"/>
         </nz-select>
         <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
-                   class="select-disabled mr-sm"
+                   class="mr-sm"
                    nzMode="multiple"
                    [nzMaxMultipleCount]="5"
+                   [(ngModel)]="expenditureSelectedVehicles"
                    nzAllowClear>
           <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
         </nz-select>
@@ -385,9 +387,10 @@
     <ng-template #payrollExtraTemplate>
       <div>
         <nz-select nzPlaceHolder="{{ 'global.select-driver' | translate }}"
-                   class="select-disabled mr-sm"
+                   class="mr-sm"
                    nzMode="multiple"
                    [nzMaxMultipleCount]="5"
+                   [(ngModel)]="payrollSelectedDrivers"
                    nzAllowClear>
           <nz-option *ngFor="let o of drivers" [nzValue]="o.id" [nzLabel]="o.name"/>
         </nz-select>
@@ -469,10 +472,11 @@
     <ng-template #profitExtraTemplate>
       <div>
         <nz-select nzPlaceHolder="{{ 'global.select-vehicle-number' | translate }}"
-                   class="select-disabled mr-sm"
+                   class="mr-sm"
                    nzMode="multiple"
                    [nzDropdownMatchSelectWidth]="false"
                    [nzMaxMultipleCount]="5"
+                   [(ngModel)]="profitSelectedVehicles"
                    nzAllowClear>
           <nz-option *ngFor="let o of vehicles" [nzValue]="o.id" [nzLabel]="o.number"/>
         </nz-select>

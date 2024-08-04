@@ -11,9 +11,10 @@ func (c *Controller) TimelineRevenueAndPayroll(ctx *gin.Context) {
 	log.Info("get timeline revenue and payroll function called.")
 
 	vs := ctx.QueryArray("vehicles")
+	ds := ctx.QueryArray("drivers")
 	ts := ctx.QueryArray("timeline")
 
-	res, err := c.svc.Dashboard().TimelineRevenueAndPayroll(ctx, vs, ts)
+	res, err := c.svc.Dashboard().TimelineRevenueAndPayroll(ctx, vs, ds, ts)
 	if err != nil {
 		response.Fail(ctx, err)
 		return

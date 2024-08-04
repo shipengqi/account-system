@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
   expenditureLineData: G2TimelineData[] = [];
   expenditureRankListData: Array<{ title: string; total: number }> = [];
   expenditureRangeDate: Date[] = [];
+  expenditureSelectedVehicles: number[] = [];
   expenditureChartLoading = false;
 
   revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
@@ -57,6 +58,7 @@ export class DashboardComponent implements OnInit {
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
   revenueRangeDate: Date[] = [];
+  revenueSelectedVehicles: number[] = [];
   searchExpenditureType = -1;
   revenueChartLoading = false;
 
@@ -65,6 +67,7 @@ export class DashboardComponent implements OnInit {
   payrollLineData: G2TimelineData[] = [];
   payrollRankListData: Array<{ title: string; total: number }> = [];
   payrollRangeDate: Date[] = [];
+  payrollSelectedDrivers: number[] = [];
   payrollChartLoading = false;
 
   profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
@@ -72,6 +75,7 @@ export class DashboardComponent implements OnInit {
   profitLineData: G2TimelineData[] = [];
   profitRankListData: Array<{ title: string; total: number }> = [];
   profitRangeDate: Date[] = [];
+  profitSelectedVehicles: number[] = [];
   profitChartLoading = false;
 
   expendTypes = [
@@ -121,16 +125,6 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const overalls = forkJoin([
-      this._dashboardSvc.overallRevPay(),
-      this._dashboardSvc.overallExp()
-    ]);
-    const timelines = forkJoin([
-      this._dashboardSvc.timelineRevPay(),
-      this._dashboardSvc.timelineExp(),
-      this._dashboardSvc.timelineProfit()
-    ]);
-
     this.overallLoading = true;
     this.timelineLoading = true;
     forkJoin([
@@ -140,6 +134,18 @@ export class DashboardComponent implements OnInit {
       next: (res) => {
         this.vehicles = res[0].items;
         this.drivers = res[1].items;
+
+        let vehicleIds = this.vehicles.map(v => v.id);
+        let driverIds = this.drivers.map(v => v.id);
+        const overalls = forkJoin([
+          this._dashboardSvc.overallRevPay(),
+          this._dashboardSvc.overallExp()
+        ]);
+        const timelines = forkJoin([
+          this._dashboardSvc.timelineRevPay(vehicleIds, []),
+          this._dashboardSvc.timelineExp(vehicleIds),
+          this._dashboardSvc.timelineProfit(vehicleIds)
+        ]);
 
         overalls.subscribe({
           next: (res) => {
@@ -248,7 +254,9 @@ export class DashboardComponent implements OnInit {
 
   onRevenueChartSearch(): void {
     this.revenueChartLoading = true;
-    this._dashboardSvc.timelineRevPay(this.revenueRangeDate).subscribe({
+    let vehicles = this.revenueSelectedVehicles.length > 0 ?
+      this.revenueSelectedVehicles : this.vehicles.map(v => v.id);
+    this._dashboardSvc.timelineRevPay(vehicles, [], this.revenueRangeDate).subscribe({
       next: (res) => {
         this.calculateVehiclesRevenueChartsData(res);
         this.revenueChartLoading = false;
@@ -261,7 +269,9 @@ export class DashboardComponent implements OnInit {
   }
   onExpenditureChartSearch(): void {
     this.expenditureChartLoading = true;
-    this._dashboardSvc.timelineExp(this.searchExpenditureType, this.expenditureRangeDate).subscribe({
+    let vehicles = this.expenditureSelectedVehicles.length > 0 ?
+      this.expenditureSelectedVehicles : this.vehicles.map(v => v.id);
+    this._dashboardSvc.timelineExp(vehicles, this.searchExpenditureType, this.expenditureRangeDate).subscribe({
       next: (res) => {
         this.calculateExpenditureChartsData(res);
         this.expenditureChartLoading = false;
@@ -274,7 +284,9 @@ export class DashboardComponent implements OnInit {
   }
   onPayrollChartSearch(): void {
     this.payrollChartLoading = true;
-    this._dashboardSvc.timelineRevPay(this.payrollRangeDate).subscribe({
+    let drivers = this.payrollSelectedDrivers.length > 0 ?
+      this.payrollSelectedDrivers : this.drivers.map(v => v.id);
+    this._dashboardSvc.timelineRevPay([], drivers, this.payrollRangeDate).subscribe({
       next: (res) => {
         this.calculateDriversPayrollChartsData(res);
         this.payrollChartLoading = false;
@@ -287,7 +299,9 @@ export class DashboardComponent implements OnInit {
   }
   onProfitChartSearch(): void {
     this.profitChartLoading = true;
-    this._dashboardSvc.timelineProfit(this.profitRangeDate).subscribe({
+    let vehicles = this.profitSelectedVehicles.length > 0 ?
+      this.profitSelectedVehicles : this.vehicles.map(v => v.id);
+    this._dashboardSvc.timelineProfit(vehicles, this.profitRangeDate).subscribe({
       next: (res) => {
         this.calculateProfitChartsData(res);
         this.profitChartLoading = false;
