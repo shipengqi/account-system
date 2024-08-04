@@ -7,11 +7,15 @@ import {
 import {catchError, Observable, throwError} from "rxjs";
 import {Injectable} from "@angular/core";
 import {NzMessageService} from "ng-zorro-antd/message";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable()
 export class ResponseInterceptor implements HttpInterceptor {
-  constructor(private _message: NzMessageService) {}
-  
+  constructor(
+    private _message: NzMessageService,
+    private _translate: TranslateService
+  ) {}
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError(err => {
@@ -21,7 +25,9 @@ export class ResponseInterceptor implements HttpInterceptor {
         } else {
           // alert the error by default, then throws the error so that the caller can handle it
           if (err.error && err.error.code) {
-            this._message.error(err.error.message);
+            let codeMsg = this._translate.instant(`errors.${err.error.code}`)
+            let msg = codeMsg.endsWith(`${err.error.code}`) ? err.error.message : codeMsg;
+            this._message.error(msg);
             return throwError(() => err.error);
           }
           errorMessage = `Server returned code: ${err.status}, with message: ${err.message}`;

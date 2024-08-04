@@ -176,5 +176,27 @@
     "timeline-mask": "YYYY/MM",
     "revenue-proportion": "Monthly Proportion Of Revenue",
     "expenditure-proportion": "Monthly Proportion Of Expenditure"
+  },
+  "errors": {
+    "100001": "OK",
+    "100002": "Internal server error",
+    "100003": "Error occurred while binding the request body to the struct",
+    "100004": "Validation failed",
+    "100005": "Token invalid",
+    "100006": "Page not found",
+    "100007": "Invalid data type",
+    "100101": "Database error",
+    "110001": "User not found",
+    "110002": "User already exist",
+    "110101": "Order not found",
+    "110102": "Order already exist",
+    "110201": "Expenditure not found",
+    "110202": "Expenditure already exist",
+    "110301": "Vehicle not found",
+    "110302": "Vehicle already exist",
+    "110401": "Driver not found",
+    "110402": "Driver already exist",
+    "110501": "Project not found",
+    "110502": "Project already exist"
   }
 }
