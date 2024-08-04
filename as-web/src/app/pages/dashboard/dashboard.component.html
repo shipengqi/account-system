@@ -150,7 +150,14 @@
           <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
             <div class="bar">
               @if (revenueTabs[0].show && !timelineLoading) {
-                <g2-bar height="295" style="width: 100%" title="{{ 'analysis.revenue-trend' | translate }}" [data]="revenueBarData" />
+                @if (revenueBarData.length > 0) {
+                  <g2-bar height="295"
+                          style="width: 100%" title="{{ 'analysis.revenue-trend' | translate }}"
+                          [data]="revenueBarData"
+                  />
+                } @else {
+                  <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+                }
               } @else {
                 <div class="spin-center">
                   <nz-spin nzSimple></nz-spin>
@@ -162,12 +169,16 @@
             <div class="rank">
               <h4 class="ranking-title">{{ 'analysis.revenue-rank' | translate }}</h4>
               <ul class="rank-list">
-                @for (i of revenueRankListData; track $index) {
-                  <li>
-                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                    <span class="title">{{ i.title }}</span>
-                    <span class="value">¥ {{ i.total }}</span>
-                  </li>
+                @if (revenueRankListData && revenueRankListData.length > 0) {
+                  @for (i of revenueRankListData; track $index) {
+                    <li>
+                      <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                      <span class="title">{{ i.title }}</span>
+                      <span class="value">¥ {{ i.total }}</span>
+                    </li>
+                  }
+                } @else {
+                  <nz-empty nzNotFoundImage="simple"></nz-empty>
                 }
               </ul>
             </div>
@@ -179,12 +190,16 @@
           <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
             <div class="bar">
               @if (revenueTabs[1].show && !timelineLoading) {
-                <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.revenue-vehicle-trend' | translate }}"
-                             [slider]="false"
-                             [data]="revenueLineData"
-                             [maxAxis]="globalVehiclesLineMaxAxis"
-                             mask="YYYY/MM"
-                             [titleMap]="globalVehiclesLineTitleMap"/>
+                @if (revenueLineData.length > 0) {
+                  <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.revenue-vehicle-trend' | translate }}"
+                               [slider]="false"
+                               [data]="revenueLineData"
+                               [maxAxis]="globalVehiclesLineMaxAxis"
+                               mask="YYYY/MM"
+                               [titleMap]="globalVehiclesLineTitleMap"/>
+                } @else {
+                  <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+                }
               } @else {
                 <div class="spin-center">
                   <nz-spin nzSimple></nz-spin>
@@ -196,12 +211,16 @@
             <div class="rank">
               <h4 class="ranking-title">{{ 'analysis.revenue-rank' | translate }}</h4>
               <ul class="rank-list">
-                @for (i of revenueRankListData; track $index) {
-                  <li>
-                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                    <span class="title">{{ i.title }}</span>
-                    <span class="value">¥ {{ i.total }}</span>
-                  </li>
+                @if (revenueRankListData && revenueRankListData.length > 0) {
+                  @for (i of revenueRankListData; track $index) {
+                    <li>
+                      <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                      <span class="title">{{ i.title }}</span>
+                      <span class="value">¥ {{ i.total }}</span>
+                    </li>
+                  }
+                } @else {
+                  <nz-empty nzNotFoundImage="simple"></nz-empty>
                 }
               </ul>
             </div>
@@ -235,7 +254,14 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (expenditureTabs[0].show && !timelineLoading) {
-              <g2-bar height="295" style="width: 100%" title="{{ 'analysis.expenditure-trend' | translate }}" [data]="expenditureBarData" />
+              @if (expenditureBarData.length > 0) {
+                <g2-bar height="295"
+                        style="width: 100%"
+                        title="{{ 'analysis.expenditure-trend' | translate }}"
+                        [data]="expenditureBarData" />
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -247,12 +273,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.expenditure-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of expenditureRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">¥ {{ i.total }}</span>
-                </li>
+              @if (expenditureRankListData && expenditureRankListData.length > 0) {
+                @for (i of expenditureRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
@@ -264,12 +294,16 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (expenditureTabs[1].show && !timelineLoading) {
-              <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
-                           [slider]="false"
-                           [data]="expenditureLineData"
-                           [maxAxis]="globalVehiclesLineMaxAxis"
-                           mask="YYYY/MM"
-                           [titleMap]="globalVehiclesLineTitleMap"/>
+              @if (expenditureLineData.length > 0) {
+                <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
+                             [slider]="false"
+                             [data]="expenditureLineData"
+                             [maxAxis]="globalVehiclesLineMaxAxis"
+                             mask="YYYY/MM"
+                             [titleMap]="globalVehiclesLineTitleMap"/>
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -281,12 +315,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.expenditure-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of expenditureRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">¥ {{ i.total }}</span>
-                </li>
+              @if (expenditureRankListData && expenditureRankListData.length > 0) {
+                @for (i of expenditureRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
@@ -326,7 +364,15 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (payrollTabs[0].show && !timelineLoading) {
-              <g2-bar height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}" [data]="payrollBarData" />
+              @if (payrollBarData.length > 0) {
+                <g2-bar
+                  height="295"
+                  style="width: 100%"
+                  title="{{ 'analysis.payroll-trend' | translate }}"
+                  [data]="payrollBarData" />
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -338,12 +384,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.payroll-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of payrollRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">¥ {{ i.total }}</span>
-                </li>
+              @if (payrollRankListData && payrollRankListData.length > 0) {
+                @for (i of payrollRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
@@ -355,12 +405,16 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (payrollTabs[1].show && !timelineLoading) {
-              <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}"
-                           [slider]="false"
-                           [data]="payrollLineData"
-                           [maxAxis]="globalDriversLineMaxAxis"
-                           mask="YYYY/MM"
-                           [titleMap]="globalDriversLineTitleMap"/>
+              @if (payrollLineData.length > 0) {
+                <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}"
+                             [slider]="false"
+                             [data]="payrollLineData"
+                             [maxAxis]="globalDriversLineMaxAxis"
+                             mask="YYYY/MM"
+                             [titleMap]="globalDriversLineTitleMap"/>
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -372,12 +426,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.payroll-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of payrollRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">¥ {{ i.total }}</span>
-                </li>
+              @if (payrollRankListData && payrollRankListData.length > 0) {
+                @for (i of payrollRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
@@ -411,7 +469,15 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (profitTabs[0].show && !timelineLoading) {
-              <g2-bar height="295" style="width: 100%" title="{{ 'analysis.profit-trend' | translate }}" [data]="profitBarData" />
+              @if (profitBarData.length > 0) {
+                <g2-bar
+                  height="295"
+                  style="width: 100%"
+                  title="{{ 'analysis.profit-trend' | translate }}"
+                  [data]="profitBarData" />
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -423,12 +489,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.profit-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of profitRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">{{ i.total  }}</span>
-                </li>
+              @if (profitRankListData && profitRankListData.length > 0) {
+                @for (i of profitRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
@@ -440,12 +510,16 @@
         <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
           <div class="bar">
             @if (profitTabs[1].show && !timelineLoading) {
-              <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.profit-vehicle-trend' | translate }}"
-                           [slider]="false"
-                           [data]="profitLineData"
-                           [maxAxis]="globalVehiclesLineMaxAxis"
-                           mask="YYYY/MM"
-                           [titleMap]="globalVehiclesLineTitleMap"/>
+              @if (profitLineData.length > 0) {
+                <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.profit-vehicle-trend' | translate }}"
+                             [slider]="false"
+                             [data]="profitLineData"
+                             [maxAxis]="globalVehiclesLineMaxAxis"
+                             mask="YYYY/MM"
+                             [titleMap]="globalVehiclesLineTitleMap"/>
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
             } @else {
               <div class="spin-center">
                 <nz-spin nzSimple></nz-spin>
@@ -457,12 +531,16 @@
           <div class="rank">
             <h4 class="ranking-title">{{ 'analysis.profit-rank' | translate }}</h4>
             <ul class="rank-list">
-              @for (i of profitRankListData; track $index) {
-                <li>
-                  <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
-                  <span class="title">{{ i.title }}</span>
-                  <span class="value">¥ {{ i.total }}</span>
-                </li>
+              @if (profitRankListData && profitRankListData.length > 0) {
+                @for (i of profitRankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
               }
             </ul>
           </div>
