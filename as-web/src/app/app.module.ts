@@ -2,11 +2,11 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  provideHttpClient,
   withFetch,
-  withInterceptors,
   HttpBackend,
-  withInterceptorsFromDi, HTTP_INTERCEPTORS
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi
 } from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 

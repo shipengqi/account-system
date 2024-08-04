@@ -1,4 +1,4 @@
-<ul nz-menu nzMode="inline" class="h-100" [nzInlineCollapsed]="_collapsed">
+<ul nz-menu nzMode="inline" class="layout-side-list-wrap h-100" [nzInlineCollapsed]="_collapsed">
   <ng-container *ngTemplateOutlet="menuTmpl; context: { $implicit: menus }"></ng-container>
   <ng-template #menuTmpl let-menus>
     <ng-container *ngFor="let menu of menus">
@@ -34,8 +34,8 @@
       </li>
     </ng-container>
   </ng-template>
-  <div *ngIf="collapsible" class="layout-side-trigger border-top-1 bg-blue-lighter"
-       [style.width.px]="siderWidth()" (click)="setCollapsed(!_collapsed)">
-      <span nz-icon [nzType]="_collapsed ? 'menu-unfold' : 'menu-fold'"></span>
-  </div>
 </ul>
+<div *ngIf="collapsible" class="layout-side-trigger border-top-1 bg-blue-lighter"
+     [style.width.px]="siderWidth()" (click)="setCollapsed(!_collapsed)">
+  <span nz-icon [nzType]="_collapsed ? 'menu-unfold' : 'menu-fold'"></span>
+</div>
