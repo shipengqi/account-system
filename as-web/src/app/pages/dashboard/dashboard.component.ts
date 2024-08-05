@@ -38,41 +38,50 @@ export class DashboardComponent implements OnInit {
   expenditurePieTotal = 0;
   expenditurePieData: G2PieData[] = [];
 
-  globalVehiclesLineTitleMap: G2TimelineMap = {y1: ''};
-  globalDriversLineTitleMap: G2TimelineMap = {y1: ''};
-  globalVehiclesIdToLineTitleMap: any = {};
-  globalDriversIdToLineTitleMap: any = {};
-  globalVehiclesLineMaxAxis = 2;
-  globalDriversLineMaxAxis = 2;
-
   expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
   expenditureBarData: G2BarData[] = [];
   expenditureLineData: G2TimelineData[] = [];
   expenditureRankListData: Array<{ title: string; total: number }> = [];
   expenditureRangeDate: Date[] = [];
+  expenditureSelectedVehicles: number[] = [];
   expenditureChartLoading = false;
+  expLineTitleMap: G2TimelineMap = {y1: ''};
+  expVehiclesIdToLineTitleMap: any = {};
+  expLineMaxAxis = 2;
 
   revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
   revenueBarData: G2BarData[] = [];
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
   revenueRangeDate: Date[] = [];
+  revenueSelectedVehicles: number[] = [];
   searchExpenditureType = -1;
   revenueChartLoading = false;
+  revenueLineTitleMap: G2TimelineMap = {y1: ''};
+  revenueVehiclesIdToLineTitleMap: any = {};
+  revenueLineMaxAxis = 2;
 
   payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
   payrollBarData: G2BarData[] = [];
   payrollLineData: G2TimelineData[] = [];
   payrollRankListData: Array<{ title: string; total: number }> = [];
   payrollRangeDate: Date[] = [];
+  payrollSelectedDrivers: number[] = [];
   payrollChartLoading = false;
+  payrollLineTitleMap: G2TimelineMap = {y1: ''};
+  payrollDriversIdToLineTitleMap: any = {};
+  payrollLineMaxAxis = 2;
 
   profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
   profitBarData: G2BarData[] = [];
   profitLineData: G2TimelineData[] = [];
   profitRankListData: Array<{ title: string; total: number }> = [];
   profitRangeDate: Date[] = [];
+  profitSelectedVehicles: number[] = [];
   profitChartLoading = false;
+  profitLineTitleMap: G2TimelineMap = {y1: ''};
+  profitVehiclesIdToLineTitleMap: any = {};
+  profitLineMaxAxis = 2;
 
   expendTypes = [
     {text: this._translate.instant('expenditure.toll'), value: 1},
@@ -121,16 +130,6 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const overalls = forkJoin([
-      this._dashboardSvc.overallRevPay(),
-      this._dashboardSvc.overallExp()
-    ]);
-    const timelines = forkJoin([
-      this._dashboardSvc.timelineRevPay(),
-      this._dashboardSvc.timelineExp(),
-      this._dashboardSvc.timelineProfit()
-    ]);
-
     this.overallLoading = true;
     this.timelineLoading = true;
     forkJoin([
@@ -140,6 +139,20 @@ export class DashboardComponent implements OnInit {
       next: (res) => {
         this.vehicles = res[0].items;
         this.drivers = res[1].items;
+
+        // this timeline chart can only be set for 5 y-axis
+        let vehicleIds = this.vehicles.map(v => v.id).slice(0, 5);
+        let driverIds = this.drivers.map(v => v.id).slice(0, 5);
+        const overalls = forkJoin([
+          this._dashboardSvc.overallRevPay(),
+          this._dashboardSvc.overallExp()
+        ]);
+        const timelines = forkJoin([
+          this._dashboardSvc.timelineRev(vehicleIds),
+          this._dashboardSvc.timelinePay(driverIds),
+          this._dashboardSvc.timelineExp(vehicleIds),
+          this._dashboardSvc.timelineProfit(vehicleIds)
+        ]);
 
         overalls.subscribe({
           next: (res) => {
@@ -170,28 +183,21 @@ export class DashboardComponent implements OnInit {
 
         timelines.subscribe({
           next: (res) => {
-            let vehiclesTitleNum = 1;
-            this.globalVehiclesLineMaxAxis = this.vehicles.length;
             for (const v of this.vehicles) {
               this.vehiclesMap[`${v.id}`] = v.number;
-              // set titleMap of g2-timeline component
-              // since the titleMap cannot rerender, so init titleMap with full data
-              this.globalVehiclesLineTitleMap[`y${vehiclesTitleNum}`] = v.number;
-              this.globalVehiclesIdToLineTitleMap[v.id] = `y${vehiclesTitleNum}`;
-              vehiclesTitleNum ++;
             }
-            let driversTitleNum = 1;
-            this.globalDriversLineMaxAxis = this.drivers.length;
+
             for (const v of this.drivers) {
               this.driversMap[`${v.id}`] = v.name;
-              this.globalDriversLineTitleMap[`y${driversTitleNum}`] = v.name;
-              this.globalDriversIdToLineTitleMap[v.id] = `y${driversTitleNum}`;
-              driversTitleNum ++;
             }
+            this.setRevLineData(vehicleIds);
+            this.setExpLineData(vehicleIds);
+            this.setPayrollLineData(driverIds);
+            this.setProfitLineData(vehicleIds);
             this.calculateVehiclesRevenueChartsData(res[0]);
-            this.calculateDriversPayrollChartsData(res[0]);
-            this.calculateExpenditureChartsData(res[1]);
-            this.calculateProfitChartsData(res[2]);
+            this.calculateDriversPayrollChartsData(res[1]);
+            this.calculateExpenditureChartsData(res[2]);
+            this.calculateProfitChartsData(res[3]);
             this.timelineLoading = false;
           },
           error: (err) => {
@@ -246,9 +252,77 @@ export class DashboardComponent implements OnInit {
     this.onTabChange(this.profitTabs, idx);
   }
 
+  resetRevLineData() {
+    this.revenueLineTitleMap = {y1: ''};
+    this.revenueVehiclesIdToLineTitleMap = {};
+    this.revenueLineMaxAxis = 2;
+  }
+
+  setRevLineData(vehicles: number[]) {
+    this.resetRevLineData();
+
+    this.revenueLineMaxAxis = vehicles.length;
+    for (let i = 0; i < vehicles.length; i ++) {
+      this.revenueLineTitleMap[`y${i+1}`] = this.vehiclesMap[vehicles[i]];
+      this.revenueVehiclesIdToLineTitleMap[vehicles[i]] = `y${i+1}`;
+    }
+  }
+
+  resetExpLineData() {
+    this.expLineTitleMap = {y1: ''};
+    this.expVehiclesIdToLineTitleMap = {};
+    this.expLineMaxAxis = 2;
+  }
+
+  setExpLineData(vehicles: number[]) {
+    this.resetExpLineData();
+
+    this.expLineMaxAxis = vehicles.length;
+    for (let i = 0; i < vehicles.length; i ++) {
+      this.expLineTitleMap[`y${i+1}`] = this.vehiclesMap[vehicles[i]];
+      this.expVehiclesIdToLineTitleMap[vehicles[i]] = `y${i+1}`;
+    }
+  }
+
+  resetPayrollLineData() {
+    this.payrollLineTitleMap = {y1: ''};
+    this.payrollDriversIdToLineTitleMap = {};
+    this.payrollLineMaxAxis = 2;
+  }
+
+  setPayrollLineData(drivers: number[]) {
+    this.resetPayrollLineData();
+
+    this.payrollLineMaxAxis = drivers.length;
+    for (let i = 0; i < drivers.length; i ++) {
+      this.payrollLineTitleMap[`y${i+1}`] = this.driversMap[drivers[i]];
+      this.payrollDriversIdToLineTitleMap[drivers[i]] = `y${i+1}`;
+    }
+  }
+
+  resetProfitLineData() {
+    this.profitLineTitleMap = {y1: ''};
+    this.profitVehiclesIdToLineTitleMap = {};
+    this.profitLineMaxAxis = 2;
+  }
+
+  setProfitLineData(vehicles: number[]) {
+    this.resetProfitLineData();
+
+    this.profitLineMaxAxis = vehicles.length;
+    for (let i = 0; i < vehicles.length; i ++) {
+      this.profitLineTitleMap[`y${i+1}`] = this.vehiclesMap[vehicles[i]];
+      this.profitVehiclesIdToLineTitleMap[vehicles[i]] = `y${i+1}`;
+    }
+  }
+
   onRevenueChartSearch(): void {
     this.revenueChartLoading = true;
-    this._dashboardSvc.timelineRevPay(this.revenueRangeDate).subscribe({
+    let vehicles = this.revenueSelectedVehicles.length > 0 ?
+      this.revenueSelectedVehicles : this.vehicles.map(v => v.id).slice(0, 5);
+    this.setRevLineData(vehicles);
+
+    this._dashboardSvc.timelineRev(vehicles, this.revenueRangeDate).subscribe({
       next: (res) => {
         this.calculateVehiclesRevenueChartsData(res);
         this.revenueChartLoading = false;
@@ -261,7 +335,11 @@ export class DashboardComponent implements OnInit {
   }
   onExpenditureChartSearch(): void {
     this.expenditureChartLoading = true;
-    this._dashboardSvc.timelineExp(this.searchExpenditureType, this.expenditureRangeDate).subscribe({
+    let vehicles = this.expenditureSelectedVehicles.length > 0 ?
+      this.expenditureSelectedVehicles : this.vehicles.map(v => v.id).slice(0, 5);
+    this.setExpLineData(vehicles);
+
+    this._dashboardSvc.timelineExp(vehicles, this.searchExpenditureType, this.expenditureRangeDate).subscribe({
       next: (res) => {
         this.calculateExpenditureChartsData(res);
         this.expenditureChartLoading = false;
@@ -274,7 +352,11 @@ export class DashboardComponent implements OnInit {
   }
   onPayrollChartSearch(): void {
     this.payrollChartLoading = true;
-    this._dashboardSvc.timelineRevPay(this.payrollRangeDate).subscribe({
+    let drivers = this.payrollSelectedDrivers.length > 0 ?
+      this.payrollSelectedDrivers : this.drivers.map(v => v.id).slice(0, 5);
+    this.setPayrollLineData(drivers);
+
+    this._dashboardSvc.timelinePay(drivers, this.payrollRangeDate).subscribe({
       next: (res) => {
         this.calculateDriversPayrollChartsData(res);
         this.payrollChartLoading = false;
@@ -287,7 +369,11 @@ export class DashboardComponent implements OnInit {
   }
   onProfitChartSearch(): void {
     this.profitChartLoading = true;
-    this._dashboardSvc.timelineProfit(this.profitRangeDate).subscribe({
+    let vehicles = this.profitSelectedVehicles.length > 0 ?
+      this.profitSelectedVehicles : this.vehicles.map(v => v.id).slice(0, 5);
+    this.setProfitLineData(vehicles);
+
+    this._dashboardSvc.timelineProfit(vehicles, this.profitRangeDate).subscribe({
       next: (res) => {
         this.calculateProfitChartsData(res);
         this.profitChartLoading = false;
@@ -335,9 +421,9 @@ export class DashboardComponent implements OnInit {
     this.revenueRankListData = rank;
 
     for (const ld in charsData.revenue_line_data) {
-      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
+      let vdata = this.genLineInitData(ld, Object.keys(this.revenueLineTitleMap).length);
       for (const tv in charsData.revenue_line_data[ld]) {
-        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.revenue_line_data[ld][tv];
+        vdata[this.revenueVehiclesIdToLineTitleMap[tv]] = charsData.revenue_line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -358,7 +444,6 @@ export class DashboardComponent implements OnInit {
     this.payrollBarData = barData.sort((d1, d2) => {
       return new Date(d1.x).getTime() - new Date(d2.x).getTime();
     });
-
     for (const bd in charsData.driver_data) {
       rank.push({
         title: this.driversMap[bd],
@@ -368,9 +453,9 @@ export class DashboardComponent implements OnInit {
     this.payrollRankListData = rank;
 
     for (const ld in charsData.payroll_line_data) {
-      let vdata = this.genLineInitData(ld, Object.keys(this.globalDriversLineTitleMap).length);
+      let vdata = this.genLineInitData(ld, Object.keys(this.payrollLineTitleMap).length);
       for (const tv in charsData.payroll_line_data[ld]) {
-        vdata[this.globalDriversIdToLineTitleMap[tv]] = charsData.payroll_line_data[ld][tv];
+        vdata[this.payrollDriversIdToLineTitleMap[tv]] = charsData.payroll_line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -401,9 +486,9 @@ export class DashboardComponent implements OnInit {
     this.expenditureRankListData = rank;
 
     for (const ld in charsData.line_data) {
-      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
+      let vdata = this.genLineInitData(ld, Object.keys(this.expLineTitleMap).length);
       for (const tv in charsData.line_data[ld]) {
-        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
+        vdata[this.expVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
       }
       lineData.push(vdata);
     }
@@ -435,9 +520,9 @@ export class DashboardComponent implements OnInit {
     this.profitRankListData = rank;
 
     for (const ld in charsData.line_data) {
-      let vdata = this.genLineInitData(ld, Object.keys(this.globalVehiclesLineTitleMap).length);
+      let vdata = this.genLineInitData(ld, Object.keys(this.profitLineTitleMap).length);
       for (const tv in charsData.line_data[ld]) {
-        vdata[this.globalVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
+        vdata[this.profitVehiclesIdToLineTitleMap[tv]] = charsData.line_data[ld][tv];
       }
       lineData.push(vdata);
     }

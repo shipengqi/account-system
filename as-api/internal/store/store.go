@@ -55,7 +55,7 @@ type OrderStore interface {
 	Get(ctx context.Context, id int, opts metav1.GetOptions) (*v1.Order, error)
 	List(ctx context.Context, opts metav1.ListOptions) (*v1.OrderList, error)
 	OverallRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error)
-	TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) ([]*v1.Order, error)
+	TimelineRevenueAndPayroll(ctx context.Context, vehicles, drivers, timeline []string) ([]*v1.Order, error)
 	CMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error)
 	LYMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error)
 	LMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error)

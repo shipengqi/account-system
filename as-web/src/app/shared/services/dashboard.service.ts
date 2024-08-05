@@ -28,21 +28,38 @@ export class DashboardService {
     return this._http.get<OverallGeneral>(analysisUrl+"/overall/exp");
   }
 
-  timelineRevPay(range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
+  timelineRev(vehicleIds: number[], range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
     const params = getDateRangeParam(range);
+    if (vehicleIds?.length > 0) {
+      params.vehicles = vehicleIds;
+    }
     return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay", {params: params});
   }
 
-  timelineExp(searchType: number = -1, range?: (Date | null)[]): Observable<TimelineExpenditure> {
+  timelinePay(driverIds: number[], range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
+    const params = getDateRangeParam(range);
+    if (driverIds?.length > 0) {
+      params.drivers = driverIds;
+    }
+    return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay", {params: params});
+  }
+
+  timelineExp(vehicleIds: number[], searchType: number = -1, range?: (Date | null)[]): Observable<TimelineExpenditure> {
     const params = getDateRangeParam(range);
     if (searchType > -1) {
       params.type = searchType;
     }
+    if (vehicleIds?.length > 0) {
+      params.vehicles = vehicleIds;
+    }
     return this._http.get<TimelineExpenditure>(analysisUrl+"/timeline/exp", {params: params});
   }
 
-  timelineProfit(range?: (Date | null)[]): Observable<TimelineProfit> {
+  timelineProfit(vehicleIds: number[], range?: (Date | null)[]): Observable<TimelineProfit> {
     const params = getDateRangeParam(range);
+    if (vehicleIds?.length > 0) {
+      params.vehicles = vehicleIds;
+    }
     return this._http.get<TimelineProfit>(analysisUrl+"/timeline/profit", {params: params});
   }
 }

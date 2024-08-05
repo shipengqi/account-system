@@ -101,9 +101,9 @@ func (v *orders) OverallRevenueAndPayroll(ctx context.Context) ([]*v1.Order, err
 	return items, nil
 }
 
-func (v *orders) TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) ([]*v1.Order, error) {
+func (v *orders) TimelineRevenueAndPayroll(ctx context.Context, vehicles, drivers, timeline []string) ([]*v1.Order, error) {
 	items := make([]*v1.Order, 0)
-	sql := timelineRevenueAndPayrollSql(vehicles, timeline)
+	sql := timelineRevenueAndPayrollSql(vehicles, drivers, timeline)
 	if err := v.db.Raw(sql).Scan(&items).Error; err != nil {
 		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
@@ -140,7 +140,7 @@ func (v *orders) LMRevenueAndPayroll(ctx context.Context) ([]*v1.Order, error) {
 	return lastm, nil
 }
 
-func timelineRevenueAndPayrollSql(vehicles, timeline []string) string {
+func timelineRevenueAndPayrollSql(vehicles, drivers, timeline []string) string {
 	// default timeline start and end date
 	lstart, _ := timeutil.MonthIntervalTimeFromNow(-11)
 	_, lend := timeutil.MonthIntervalTimeFromNow(0)
@@ -170,6 +170,23 @@ func timelineRevenueAndPayrollSql(vehicles, timeline []string) string {
 			buf.WriteString(v)
 			buf.WriteString("'")
 			if i < len(vehicles)-1 {
+				buf.WriteString(",")
+			}
+		}
+		buf.WriteString(") ")
+	}
+
+	if len(drivers) > 0 {
+		// vehicles limit 5
+		if len(drivers) > 5 {
+			drivers = drivers[:5]
+		}
+		buf.WriteString(" and driver_id in (")
+		for i, d := range drivers {
+			buf.WriteString("'")
+			buf.WriteString(d)
+			buf.WriteString("'")
+			if i < len(drivers)-1 {
 				buf.WriteString(",")
 			}
 		}

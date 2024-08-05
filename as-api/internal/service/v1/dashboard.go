@@ -16,7 +16,7 @@ var _ DashboardService = &dashboardsvc{}
 type DashboardService interface {
 	OverallRevenueAndPayroll(ctx context.Context) (*v1.OverallRevenueAndPayroll, error)
 	OverallExpenditure(ctx context.Context) (*v1.OverallExpenditure, error)
-	TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) (*v1.TimelineRevenueAndPayroll, error)
+	TimelineRevenueAndPayroll(ctx context.Context, vehicles, drivers, timeline []string) (*v1.TimelineRevenueAndPayroll, error)
 	TimelineExpenditure(ctx context.Context, vehicles, timeline []string, etype int) (*v1.TimelineExpenditure, error)
 	TimelineProfit(ctx context.Context, vehicles, timeline []string) (*v1.TimelineProfit, error)
 }
@@ -105,8 +105,8 @@ func (u *dashboardsvc) OverallRevenueAndPayroll(ctx context.Context) (*v1.Overal
 	return res, nil
 }
 
-func (u *dashboardsvc) TimelineRevenueAndPayroll(ctx context.Context, vehicles, timeline []string) (*v1.TimelineRevenueAndPayroll, error) {
-	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, timeline)
+func (u *dashboardsvc) TimelineRevenueAndPayroll(ctx context.Context, vehicles, drivers, timeline []string) (*v1.TimelineRevenueAndPayroll, error) {
+	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, drivers, timeline)
 	if err != nil {
 		return nil, errors.WithMessage(err, "fetch timeline revenue and payroll")
 	}
@@ -207,7 +207,7 @@ func (u *dashboardsvc) TimelineExpenditure(ctx context.Context, vehicles, timeli
 }
 
 func (u *dashboardsvc) TimelineProfit(ctx context.Context, vehicles, timeline []string) (*v1.TimelineProfit, error) {
-	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, timeline)
+	revpay, err := u.store.Orders().TimelineRevenueAndPayroll(ctx, vehicles, nil, timeline)
 	if err != nil {
 		return nil, errors.WithMessage(err, "fetch timeline profit.revenue and profit.payroll")
 	}

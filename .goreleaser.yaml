@@ -78,6 +78,7 @@ changelog:
     - title: Other work
       order: 9999
 release:
+  prerelease: auto
   footer: |
     **Full Changelog**: https://github.com/shipengqi/account-system/compare/{{ .PreviousTag }}...{{ .Tag }}
 
