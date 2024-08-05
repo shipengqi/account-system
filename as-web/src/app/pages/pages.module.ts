@@ -31,6 +31,7 @@ import {G2CardModule} from "@delon/chart/card";
 import {G2PieModule} from "@delon/chart/pie";
 import {TrendModule} from "@delon/chart/trend";
 import {NzEmptyModule} from 'ng-zorro-antd/empty';
+import {NzBackTopModule} from "ng-zorro-antd/back-top";
 
 import {LayoutModule} from '../core/layout';
 import {ExceptionModule} from '../core/exception';
@@ -96,7 +97,8 @@ import {TimelineComponent} from "./dashboard/timeline/timeline.component";
     G2BarModule,
     G2TimelineModule,
     G2PieModule,
-    NzEmptyModule
+    NzEmptyModule,
+    NzBackTopModule
   ]
 })
 export class PagesModule {}
