@@ -104,7 +104,7 @@
           [subTitle]="'analysis.month-revenue' | translate"
           [height]="248"
           [lineWidth]="4"
-          [total]="overallPieTotal"
+          [total]="'¥ ' + formatTotal(overallPieTotal)"
           [valueFormat]="handlePieValueFormat"
           (clickItem)="handlePieChartClick($event)"
         />
