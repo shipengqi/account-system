@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
   expenditurePieTotal = 0;
   expenditurePieData: G2PieData[] = [];
 
-  expenditureTabs: Array<{ key: string; show?: boolean }> = [{key: 'expenditure', show: true}, {key: 'e-details', show: false}];
   expenditureBarData: G2BarData[] = [];
   expenditureLineData: G2TimelineData[] = [];
   expenditureRankListData: Array<{ title: string; total: number }> = [];
@@ -49,7 +48,6 @@ export class DashboardComponent implements OnInit {
   expVehiclesIdToLineTitleMap: any = {};
   expLineMaxAxis = 2;
 
-  revenueTabs: Array<{ key: string; show?: boolean }> = [{key: 'revenue', show: true}, {key: 'r-details', show: false}];
   revenueBarData: G2BarData[] = [];
   revenueLineData: G2TimelineData[] = [];
   revenueRankListData: Array<{ title: string; total: number }> = [];
@@ -61,7 +59,6 @@ export class DashboardComponent implements OnInit {
   revenueVehiclesIdToLineTitleMap: any = {};
   revenueLineMaxAxis = 2;
 
-  payrollTabs: Array<{ key: string; show?: boolean }> = [{key: 'payroll', show: true}, {key: 'p-details', show: false}];
   payrollBarData: G2BarData[] = [];
   payrollLineData: G2TimelineData[] = [];
   payrollRankListData: Array<{ title: string; total: number }> = [];
@@ -72,7 +69,6 @@ export class DashboardComponent implements OnInit {
   payrollDriversIdToLineTitleMap: any = {};
   payrollLineMaxAxis = 2;
 
-  profitTabs: Array<{ key: string; show?: boolean }> = [{key: 'profit', show: true}, {key: 'pro-details', show: false}];
   profitBarData: G2BarData[] = [];
   profitLineData: G2TimelineData[] = [];
   profitRankListData: Array<{ title: string; total: number }> = [];
@@ -234,22 +230,6 @@ export class DashboardComponent implements OnInit {
 
   handlePieValueFormat(val: number): string {
     return `&yen ${val.toFixed(2)}`;
-  }
-
-  expenditureTabChange(idx: number): void {
-    this.onTabChange(this.expenditureTabs, idx);
-  }
-
-  revenueTabChange(idx: number): void {
-    this.onTabChange(this.revenueTabs, idx);
-  }
-
-  payrollTabChange(idx: number): void {
-    this.onTabChange(this.payrollTabs, idx);
-  }
-
-  profitTabChange(idx: number): void {
-    this.onTabChange(this.profitTabs, idx);
   }
 
   resetRevLineData() {
@@ -614,18 +594,6 @@ export class DashboardComponent implements OnInit {
     return profit;
   }
 
-  private onTabChange(tabs: Array<{ key: string; show?: boolean }>, idx: number): void {
-    if (!tabs[idx].show) {
-      tabs[idx].show = true;
-      for (let i = 0; i < tabs.length; i++) {
-        if (i === idx) {
-          continue;
-        }
-        tabs[i].show = false;
-      }
-      this.cdr.detectChanges();
-    }
-  }
 
   private genLineInitData(timestr: string, ylength: number): any {
     let ldata: any = {

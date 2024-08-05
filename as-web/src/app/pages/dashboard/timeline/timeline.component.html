@@ -1,0 +1,90 @@
+<nz-card [nzBordered]="false" class="ant-card__body-nopadding overall-chart-card">
+  <nz-tabset [nzAnimated]="false"
+             [nzTabBarExtraContent]="extra"
+             (nzSelectedIndexChange)="onTabChange($event)">
+    <nz-tab [nzTitle]="barTabTitle">
+      <div nz-row>
+        <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
+          <div class="bar">
+            @if (tabs[0].show && !loading) {
+              @if (barData.length > 0) {
+                <g2-bar
+                  height="295"
+                  style="width: 100%"
+                  [title]="barTabSubTitle"
+                  [data]="barData" />
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
+            }
+          </div>
+        </div>
+        <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="8">
+          <div class="rank">
+            <h4 class="ranking-title">{{ rankListTitle }}</h4>
+            <ul class="rank-list">
+              @if (rankListData && rankListData.length > 0) {
+                @for (i of rankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nz-tab>
+    <nz-tab [nzTitle]="timelineTabTitle">
+      <div nz-row>
+        <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="16">
+          <div class="bar">
+            @if (tabs[1].show && !loading) {
+              @if (lineData.length > 0) {
+                <g2-timeline height="295" style="width: 100%"
+                             [title]="timelineTabSubTitle"
+                             [slider]="false"
+                             [data]="lineData"
+                             [maxAxis]="lineMaxAxis"
+                             mask="YYYY/MM"
+                             [titleMap]="lineTitleMap"/>
+              } @else {
+                <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
+              }
+            } @else {
+              <div class="spin-center">
+                <nz-spin nzSimple></nz-spin>
+              </div>
+            }
+          </div>
+        </div>
+        <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="8">
+          <div class="rank">
+            <h4 class="ranking-title">{{ rankListTitle }}</h4>
+            <ul class="rank-list">
+              @if (rankListData && rankListData.length > 0) {
+                @for (i of rankListData; track $index) {
+                  <li>
+                    <span class="number" [ngClass]="{ active: $index < 3 }">{{ $index + 1 }}</span>
+                    <span class="title">{{ i.title }}</span>
+                    <span class="value">¥ {{ i.total }}</span>
+                  </li>
+                }
+              } @else {
+                <nz-empty nzNotFoundImage="simple"></nz-empty>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>

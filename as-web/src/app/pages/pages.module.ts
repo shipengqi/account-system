@@ -44,7 +44,7 @@ import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {DriversComponent} from "./drivers/drivers.component";
 import {ProjectsComponent} from "./projects/projects.component";
 import {PagesComponent} from "./pages.component";
-
+import {TimelineComponent} from "./dashboard/timeline/timeline.component";
 
 
 @NgModule({
@@ -55,7 +55,8 @@ import {PagesComponent} from "./pages.component";
     ExpenditureComponent,
     VehiclesComponent,
     DriversComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    TimelineComponent
   ],
   imports: [
     CommonModule,
