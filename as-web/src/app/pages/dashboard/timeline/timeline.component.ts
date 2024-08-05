@@ -1,4 +1,5 @@
-import {ChangeDetectorRef, Component, Injectable, Input, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, TemplateRef} from '@angular/core';
+
 import {G2BarData} from "@delon/chart/bar";
 import {G2TimelineData, G2TimelineMap} from "@delon/chart/timeline";
 
