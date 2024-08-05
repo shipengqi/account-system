@@ -194,9 +194,9 @@
                   <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.revenue-vehicle-trend' | translate }}"
                                [slider]="false"
                                [data]="revenueLineData"
-                               [maxAxis]="globalVehiclesLineMaxAxis"
+                               [maxAxis]="revenueLineMaxAxis"
                                mask="YYYY/MM"
-                               [titleMap]="globalVehiclesLineTitleMap"/>
+                               [titleMap]="revenueLineTitleMap"/>
                 } @else {
                   <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
                 }
@@ -298,9 +298,9 @@
                 <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.expenditure-type-trend' | translate }}"
                              [slider]="false"
                              [data]="expenditureLineData"
-                             [maxAxis]="globalVehiclesLineMaxAxis"
+                             [maxAxis]="expLineMaxAxis"
                              mask="YYYY/MM"
-                             [titleMap]="globalVehiclesLineTitleMap"/>
+                             [titleMap]="expLineTitleMap"/>
               } @else {
                 <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
               }
@@ -409,9 +409,9 @@
                 <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.payroll-trend' | translate }}"
                              [slider]="false"
                              [data]="payrollLineData"
-                             [maxAxis]="globalDriversLineMaxAxis"
+                             [maxAxis]="payrollLineMaxAxis"
                              mask="YYYY/MM"
-                             [titleMap]="globalDriversLineTitleMap"/>
+                             [titleMap]="payrollLineTitleMap"/>
               } @else {
                 <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
               }
@@ -514,9 +514,9 @@
                 <g2-timeline height="295" style="width: 100%" title="{{ 'analysis.profit-vehicle-trend' | translate }}"
                              [slider]="false"
                              [data]="profitLineData"
-                             [maxAxis]="globalVehiclesLineMaxAxis"
+                             [maxAxis]="profitLineMaxAxis"
                              mask="YYYY/MM"
-                             [titleMap]="globalVehiclesLineTitleMap"/>
+                             [titleMap]="profitLineTitleMap"/>
               } @else {
                 <nz-empty class="dashboard-timeline__mh" nzNotFoundImage="simple"></nz-empty>
               }

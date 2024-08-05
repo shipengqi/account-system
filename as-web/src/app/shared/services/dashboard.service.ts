@@ -28,12 +28,16 @@ export class DashboardService {
     return this._http.get<OverallGeneral>(analysisUrl+"/overall/exp");
   }
 
-  timelineRevPay(vehicleIds: number[], driverIds: number[],
-                 range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
+  timelineRev(vehicleIds: number[], range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
     const params = getDateRangeParam(range);
     if (vehicleIds?.length > 0) {
       params.vehicles = vehicleIds;
     }
+    return this._http.get<TimelineRevenueAndPayroll>(analysisUrl+"/timeline/revpay", {params: params});
+  }
+
+  timelinePay(driverIds: number[], range?: (Date | null)[]): Observable<TimelineRevenueAndPayroll> {
+    const params = getDateRangeParam(range);
     if (driverIds?.length > 0) {
       params.drivers = driverIds;
     }
