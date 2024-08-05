@@ -31,6 +31,7 @@ import {G2CardModule} from "@delon/chart/card";
 import {G2PieModule} from "@delon/chart/pie";
 import {TrendModule} from "@delon/chart/trend";
 import {NzEmptyModule} from 'ng-zorro-antd/empty';
+import {NzBackTopModule} from "ng-zorro-antd/back-top";
 
 import {LayoutModule} from '../core/layout';
 import {ExceptionModule} from '../core/exception';
@@ -44,7 +45,7 @@ import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {DriversComponent} from "./drivers/drivers.component";
 import {ProjectsComponent} from "./projects/projects.component";
 import {PagesComponent} from "./pages.component";
-
+import {TimelineComponent} from "./dashboard/timeline/timeline.component";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import {PagesComponent} from "./pages.component";
     ExpenditureComponent,
     VehiclesComponent,
     DriversComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    TimelineComponent
   ],
   imports: [
     CommonModule,
@@ -95,7 +97,8 @@ import {PagesComponent} from "./pages.component";
     G2BarModule,
     G2TimelineModule,
     G2PieModule,
-    NzEmptyModule
+    NzEmptyModule,
+    NzBackTopModule
   ]
 })
 export class PagesModule {}
