@@ -12,6 +12,10 @@ describe('Orders Search', () => {
   const nextMonthDate = moment(currentDate).add(1, 'months').format('YYYY-MM-DD');
   const endOfNextMonth = moment(nextMonthDate).endOf("month").format('YYYY-MM-DD');
 
+  const nextMonthDate1 = moment(nextMonthDate).add(1, 'days').format('YYYY-MM-DD');
+  const nextMonthDate2 = moment(nextMonthDate).add(2, 'days').format('YYYY-MM-DD');
+  const nextMonthDate3 = moment(nextMonthDate).add(3, 'days').format('YYYY-MM-DD');
+
   const testOrders = [
     // same vehicle number, different driver
     {
@@ -22,20 +26,20 @@ describe('Orders Search', () => {
     },
     {
       project: 1,
-      unloadTime: nextMonthDate,
+      unloadTime: nextMonthDate1,
       driver: 2,
       vehicleNumber: 1,
     },
     // same driver, different vehicle number
     {
       project: 2,
-      unloadTime: nextMonthDate,
+      unloadTime: nextMonthDate2,
       driver: 1,
       vehicleNumber: 1,
     },
     {
       project: 2,
-      unloadTime: nextMonthDate,
+      unloadTime: nextMonthDate3,
       driver: 1,
       vehicleNumber: 2,
     },
@@ -165,6 +169,31 @@ describe('Orders Search', () => {
 
           cy.get('tbody nz-empty').should('be.visible');
         });
+      })
+    })
+
+    context('order', () => {
+      beforeEach(() => {
+        cy.get('[data-testid="order-search-unload-time"]').find('input').as('orderSearchRange');
+        cy.get('@orderSearchRange').first().click().type(`${nextMonthDate}{enter}`);
+        cy.get('@orderSearchRange').last().type(`${endOfNextMonth}{enter}`);
+        cy.get('[data-testid="search-order-btn"]').should('be.enabled').click();
+        waitSuccessReq('@listOrdersReq');
+      });
+
+      it('should be ordered by unload time', () => {
+        cy.get('table thead nz-table-sorters').click();
+        waitSuccessReq('@listOrdersReq');
+        cy.get('nz-table').find('tbody tr:first')
+          .contains('td', nextMonthDate)
+          .should('be.visible')
+
+        cy.get('table thead nz-table-sorters').click();
+        waitSuccessReq('@listOrdersReq');
+
+        cy.get('nz-table').find('tbody tr:first')
+          .contains('td', nextMonthDate3)
+          .should('be.visible')
       })
     })
   })

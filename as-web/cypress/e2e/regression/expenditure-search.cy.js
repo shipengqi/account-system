@@ -9,6 +9,10 @@ describe('Expenditure Search', () => {
   const nextMonthDate = moment(currentDate).add(1, 'months').format('YYYY-MM-DD');
   const endOfNextMonth = moment(nextMonthDate).endOf("month").format('YYYY-MM-DD');
 
+  const nextMonthDate1 = moment(nextMonthDate).add(1, 'days').format('YYYY-MM-DD');
+  const nextMonthDate2 = moment(nextMonthDate).add(2, 'days').format('YYYY-MM-DD');
+
+
   const testExps = [
     // same vehicle number, different driver
     {
@@ -19,13 +23,13 @@ describe('Expenditure Search', () => {
     },
     {
       type: 1,
-      time: nextMonthDate,
+      time: nextMonthDate1,
       cost: 1000,
       vehicleNumber: 2,
     },
     {
       type: 2,
-      time: nextMonthDate,
+      time: nextMonthDate2,
       cost: 1000,
       vehicleNumber: 1,
     }
@@ -124,6 +128,32 @@ describe('Expenditure Search', () => {
           cy.get('tbody tr').should('have.length', 1);
           cy.get('tbody nz-empty').should('not.exist');
         });
+      })
+    })
+
+    context('order', () => {
+      beforeEach(() => {
+        cy.get('[data-testid="exp-search-time"]').find('input').as('expSearchRange');
+        cy.get('@expSearchRange').first().click().type(`${nextMonthDate}{enter}`);
+        cy.get('@expSearchRange').last().type(`${endOfNextMonth}{enter}`);
+
+        cy.get('[data-testid="search-exp-btn"]').should('be.enabled').click();
+        waitSuccessReq('@listExpReq');
+      });
+
+      it('should be ordered by expend time', () => {
+        cy.get('table thead nz-table-sorters').click();
+        waitSuccessReq('@listExpReq');
+        cy.get('nz-table').find('tbody tr:first')
+          .contains('td', nextMonthDate)
+          .should('be.visible')
+
+        cy.get('table thead nz-table-sorters').click();
+        waitSuccessReq('@listExpReq');
+
+        cy.get('nz-table').find('tbody tr:first')
+          .contains('td', nextMonthDate2)
+          .should('be.visible')
       })
     })
   })

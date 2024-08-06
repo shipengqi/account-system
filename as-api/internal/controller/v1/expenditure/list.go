@@ -2,6 +2,7 @@ package expenditure
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/shipengqi/asapi/pkg/util/queryutil"
 	"github.com/shipengqi/errors"
 	"github.com/shipengqi/log"
 
@@ -32,12 +33,7 @@ func (c *Controller) List(ctx *gin.Context) {
 	if end, ok := ctx.GetQuery("expend_end"); ok && end != "" {
 		r.Extend["expend_end"] = end
 	}
-	if order, ok := ctx.GetQuery("expend_at_order"); ok && order != "" {
-		if order == "ascend" {
-			order = "asc"
-		} else {
-			order = "desc"
-		}
+	if order := queryutil.GetQueryOrder(ctx, "expend_at_order"); order != "" {
 		r.Order = order
 	}
 
