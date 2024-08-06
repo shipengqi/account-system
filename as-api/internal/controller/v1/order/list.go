@@ -8,6 +8,7 @@ import (
 	metav1 "github.com/shipengqi/asapi/pkg/api/meta/v1"
 	"github.com/shipengqi/asapi/pkg/code"
 	"github.com/shipengqi/asapi/pkg/response"
+	"github.com/shipengqi/asapi/pkg/util/queryutil"
 )
 
 func (c *Controller) List(ctx *gin.Context) {
@@ -35,14 +36,10 @@ func (c *Controller) List(ctx *gin.Context) {
 	if end, ok := ctx.GetQuery("unload_end"); ok && end != "" {
 		r.Extend["unload_end"] = end
 	}
-	if order, ok := ctx.GetQuery("unload_at_order"); ok && order != "" {
-		if order == "ascend" {
-			order = "asc"
-		} else {
-			order = "desc"
-		}
+	if order := queryutil.GetQueryOrder(ctx, "unload_at_order"); order != "" {
 		r.Order = order
 	}
+
 	users, err := c.svc.Orders().List(ctx, r)
 	if err != nil {
 		response.Fail(ctx, err)

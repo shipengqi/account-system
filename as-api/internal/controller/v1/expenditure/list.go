@@ -8,6 +8,7 @@ import (
 	metav1 "github.com/shipengqi/asapi/pkg/api/meta/v1"
 	"github.com/shipengqi/asapi/pkg/code"
 	"github.com/shipengqi/asapi/pkg/response"
+	"github.com/shipengqi/asapi/pkg/util/queryutil"
 )
 
 func (c *Controller) List(ctx *gin.Context) {
@@ -32,12 +33,7 @@ func (c *Controller) List(ctx *gin.Context) {
 	if end, ok := ctx.GetQuery("expend_end"); ok && end != "" {
 		r.Extend["expend_end"] = end
 	}
-	if order, ok := ctx.GetQuery("expend_at_order"); ok && order != "" {
-		if order == "ascend" {
-			order = "asc"
-		} else {
-			order = "desc"
-		}
+	if order := queryutil.GetQueryOrder(ctx, "expend_at_order"); order != "" {
 		r.Order = order
 	}
 
