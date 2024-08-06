@@ -32,6 +32,14 @@ func (c *Controller) List(ctx *gin.Context) {
 	if end, ok := ctx.GetQuery("expend_end"); ok && end != "" {
 		r.Extend["expend_end"] = end
 	}
+	if order, ok := ctx.GetQuery("expend_at_order"); ok && order != "" {
+		if order == "ascend" {
+			order = "asc"
+		} else {
+			order = "desc"
+		}
+		r.Order = order
+	}
 
 	users, err := c.svc.Expenditures().List(ctx, r)
 	if err != nil {

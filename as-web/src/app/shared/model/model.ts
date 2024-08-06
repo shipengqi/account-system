@@ -46,4 +46,5 @@ export interface ExpenditureSearchData {
   type: number;
   expend_range: string[];
   vehicle_id: number;
+  expend_at_order?: string;
 }

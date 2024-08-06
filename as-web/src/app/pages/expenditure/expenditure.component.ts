@@ -13,7 +13,7 @@ import {NzMessageService} from "ng-zorro-antd/message";
 import {NzTableQueryParams} from 'ng-zorro-antd/table';
 import {TranslateService} from "@ngx-translate/core";
 
-import {IExpenditure, IVehicle} from "../../shared/model/model";
+import {ExpenditureSearchData, IExpenditure, IVehicle} from "../../shared/model/model";
 import {ExpenditureService} from "../../shared/services/expenditure.service";
 import {VehiclesService} from "../../shared/services/vehicles.service";
 
@@ -94,24 +94,22 @@ export class ExpenditureComponent implements OnInit {
     {text: this._translate.instant('expenditure.other-fees'), value: 6},
   ];
   tableLoading = true;
-  sortOrder = 'ascend';
   pageSize = 10;
   pageIndex = 1;
+  expendAtSortOrder: string|null = null;
+  expendAtSortDirections = ['ascend', 'descend', null];
   total = 0;
   items: IExpenditure[] = [];
 
-  search() {
+  search(): void {
     this.list();
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex, sort } = params;
-    const currentSort = sort.find(item => item.value !== null);
-    // const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || 'ascend';
+    const { pageSize, pageIndex } = params;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.sortOrder = sortOrder;
+
     this.list();
   }
 
@@ -132,11 +130,14 @@ export class ExpenditureComponent implements OnInit {
   list() {
     this.tableLoading = true;
 
-    const searchData = {
+    const searchData: ExpenditureSearchData = {
       type: this.searchType || -1,
       expend_range: this.searchTime || [],
       vehicle_id: this.searchVehicleID || -1,
     };
+    if (this.expendAtSortOrder) {
+      searchData.expend_at_order = this.expendAtSortOrder;
+    }
 
     this._expenditureSvc.list(this.pageIndex, this.pageSize, searchData).subscribe({
       next: (res) => {
