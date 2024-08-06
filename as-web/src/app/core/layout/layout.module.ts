@@ -25,6 +25,7 @@ import {HeaderUserComponent} from './widgets';
 import {HeaderNavComponent} from './widgets';
 import {HeaderNavItemComponent} from './widgets';
 import {HeaderNotifyComponent} from './widgets';
+import {HeaderHelpComponent} from "./widgets";
 import {HeaderNotifyItemComponent} from './widgets';
 import {ToolbarButtonComponent} from './widgets';
 import {ToolbarSearchComponent} from './widgets';
@@ -45,7 +46,8 @@ import {ToolbarItemComponent} from './widgets'
     ToolbarButtonComponent,
     ToolbarSearchComponent,
     ToolbarComponent,
-    ToolbarItemComponent
+    ToolbarItemComponent,
+    HeaderHelpComponent
   ],
   exports: [
     LayoutComponent,
@@ -59,7 +61,8 @@ import {ToolbarItemComponent} from './widgets'
     ToolbarButtonComponent,
     ToolbarSearchComponent,
     ToolbarComponent,
-    ToolbarItemComponent
+    ToolbarItemComponent,
+    HeaderHelpComponent
   ],
   imports: [
     CommonModule,

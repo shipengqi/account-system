@@ -29,9 +29,10 @@ import {BasicComponent} from './basic.component';
 import {ACLModule} from './core/acl';
 import {ResponseInterceptor} from "./shared/interceptors/response-interceptors";
 
-import { registerLocaleData } from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
+
 registerLocaleData(en);
 registerLocaleData(zh);
 
@@ -42,7 +43,7 @@ registerLocaleData(zh);
 
 // Import all. NOT RECOMMENDED.
 import * as AllIcons from '@ant-design/icons-angular/icons';
-
+import {NzAvatarComponent} from "ng-zorro-antd/avatar";
 
 
 const antDesignIcons = AllIcons as {
@@ -53,7 +54,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
   return new MultiTranslateHttpLoader(_httpBackend, [
-    {prefix: './assets/i18n/', suffix: '.json'},
+    {prefix: './assets/i18n/', suffix: '.json'}
   ]);
 }
 
@@ -83,7 +84,8 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
         deps: [HttpBackend],
       },
     }),
-    ACLModule.forRoot({})
+    ACLModule.forRoot({}),
+    NzAvatarComponent
   ],
   providers: [
     NzMessageService,

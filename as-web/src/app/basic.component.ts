@@ -1,13 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {NzMessageService} from 'ng-zorro-antd/message';
 
 import {LayoutOptions} from './core/layout';
+import {ConfigService} from "./shared/services/config.service";
+import moment from "moment";
 
 @Component({
   selector: 'app-layout-basic',
   template: `
     <app-layout [options]="options"
                 [content]="contentTmpl">
+      <app-layout-header-item direction="right">
+        <app-header-help [version]="buildVersion" [date]="buildDate" [loading]="loading"></app-header-help>
+      </app-layout-header-item>
       <app-layout-header-item direction="right">
         <app-header-user [showCenter]="false" [showLogout]="false" [showSettings]="false"></app-header-user>
       </app-layout-header-item>
@@ -26,7 +30,23 @@ export class BasicComponent implements OnInit {
     hideSider: true,
   };
 
-  constructor(private _msg: NzMessageService) {}
+  loading = true;
+  buildVersion = 'Dev';
+  buildDate = moment().format('M/D/YYYY');
 
-  ngOnInit(): void {}
+  constructor(private _config: ConfigService) {}
+
+  ngOnInit(): void {
+    this.loading = true;
+    this._config.getBuildInfo().subscribe({
+      next: (res) => {
+        this.buildVersion = res.version;
+        this.buildDate = moment(res.time).format('M/D/YYYY');
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    })
+  }
 }

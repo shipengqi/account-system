@@ -5,3 +5,4 @@ export {ToolbarComponent} from './toolbar/toolbar.component';
 export {ToolbarItemComponent} from './toolbar/toolbar-item/toolbar-item.component'
 export {ToolbarButtonComponent} from './toolbar-btn/toolbar-btn.component';
 export {ToolbarSearchComponent} from './toolbar-search/toolbar-search.component';
+export {HeaderHelpComponent} from './header-help/header-help.component';
