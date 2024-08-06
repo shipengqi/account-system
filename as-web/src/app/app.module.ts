@@ -18,6 +18,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
+import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {MultiTranslateHttpLoader} from 'ngx-translate-multi-http-loader';
 
@@ -37,19 +38,32 @@ registerLocaleData(en);
 registerLocaleData(zh);
 
 // Import what you need. RECOMMENDED.
-// Todo should use this for release version
-// import { AccountBookFill, AlertFill, AlertOutline } from '@ant-design/icons-angular/icons';
-// const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
-
-// Import all. NOT RECOMMENDED.
-import * as AllIcons from '@ant-design/icons-angular/icons';
-import {NzAvatarComponent} from "ng-zorro-antd/avatar";
-
-
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+import {
+  UserOutline,
+  SearchOutline,
+  PlusOutline,
+  FundProjectionScreenOutline,
+  PicRightOutline,
+  MoneyCollectOutline,
+  TruckOutline,
+  UsergroupAddOutline,
+  ProductOutline,
+  MenuFoldOutline,
+  MenuUnfoldOutline
+} from '@ant-design/icons-angular/icons';
+const icons: IconDefinition[] = [
+  UserOutline,
+  SearchOutline,
+  PlusOutline,
+  FundProjectionScreenOutline,
+  PicRightOutline,
+  MoneyCollectOutline,
+  TruckOutline,
+  UsergroupAddOutline,
+  ProductOutline,
+  MenuFoldOutline,
+  MenuUnfoldOutline
+];
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
@@ -76,6 +90,7 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
     SharedModule,
     NzButtonModule,
     NzInputModule,
+    NzAvatarModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
@@ -84,8 +99,7 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
         deps: [HttpBackend],
       },
     }),
-    ACLModule.forRoot({}),
-    NzAvatarComponent
+    ACLModule.forRoot({})
   ],
   providers: [
     NzMessageService,
