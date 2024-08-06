@@ -72,6 +72,7 @@ type ListOptions struct {
 	FieldSelector string `json:"field_selector,omitempty" form:"field_selector"`
 
 	// Order specify the sort order of records
+	// Todo use map[string]string to support multiple sort columns
 	Order string `json:"order,omitempty" form:"order"`
 
 	// Offset specify the number of records to skip before starting to return the records.

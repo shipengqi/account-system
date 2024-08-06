@@ -81,7 +81,7 @@ func (v *expenditures) List(ctx context.Context, opts metav1.ListOptions) (*v1.E
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
-	sqlstr := ExpenditureListSql(ol.Offset, ol.Limit, opts.Extend)
+	sqlstr := ExpenditureListSql(ol.Offset, ol.Limit, opts.Extend, opts.Order)
 	if err := v.db.Raw(sqlstr).Scan(&ret.Items).Error; err != nil {
 		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
@@ -202,15 +202,20 @@ func expenditureWithDateSql(mon int) string {
 }
 
 // ExpenditureListSql returns expenditure list.
-func ExpenditureListSql(offset, limit int, filters map[string]string) string {
+func ExpenditureListSql(offset, limit int, filters map[string]string, order string) string {
 	var buf bytes.Buffer
 	buf.WriteString("select as_expenditure.id, as_expenditure.type, as_expenditure.cost")
 	buf.WriteString(", as_expenditure.vehicle_id, as_expenditure.expend_at, as_expenditure.comment")
 	buf.WriteString(", as_expenditure.created_at, as_expenditure.updated_at, as_vehicle.number as vehicle_number ")
 	buf.WriteString("from as_expenditure ")
 	buf.WriteString("left join as_vehicle on as_vehicle.id = as_expenditure.vehicle_id ")
-	appendExpendFilersSql(&buf, filters)
-	buf.WriteString("order by id desc")
+	appendExtendFilersSql(&buf, filters)
+	if order != "" {
+		buf.WriteString("order by expend_at ")
+		buf.WriteString(order)
+	} else {
+		buf.WriteString("order by id desc")
+	}
 	buf.WriteString(fmt.Sprintf(" limit %d,%d", offset, limit))
 	return buf.String()
 }
@@ -220,11 +225,11 @@ func ExpenditureTotalSql(filters map[string]string) string {
 	var buf bytes.Buffer
 	buf.WriteString("select count(*)")
 	buf.WriteString("from as_expenditure ")
-	appendExpendFilersSql(&buf, filters)
+	appendExtendFilersSql(&buf, filters)
 	return buf.String()
 }
 
-func appendExpendFilersSql(buf *bytes.Buffer, filters map[string]string) {
+func appendExtendFilersSql(buf *bytes.Buffer, filters map[string]string) {
 	var condition int
 	if len(filters) > 0 {
 		buf.WriteString("where ")

@@ -39,6 +39,9 @@ export class OrdersService {
         params['unload_start'] = moment(searchData.unload_range[0]).format('YYYY-MM-DD');
         params['unload_end'] = moment(searchData.unload_range[1]).format('YYYY-MM-DD');
       }
+      if (searchData.unload_at_order) {
+        params['unload_at_order'] = searchData.unload_at_order;
+      }
     }
 
     return this._http.get<ListResponse>(ordersUrl, {params: params}).pipe(

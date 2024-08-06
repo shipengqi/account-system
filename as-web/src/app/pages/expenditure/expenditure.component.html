@@ -75,7 +75,12 @@
       <th nzWidth="120px">{{ 'expenditure.cost' | translate }}</th>
       <th nzWidth="120px">{{ 'global.vehicle-number' | translate }}</th>
       <th>{{ 'global.comment' | translate }}</th>
-      <th>{{ 'expenditure.time' | translate }}</th>
+      <th
+        [(nzSortOrder)]="expendAtSortOrder"
+        [nzSortDirections]="expendAtSortDirections"
+      >
+        {{ 'expenditure.time' | translate }}
+      </th>
       <th>{{ 'global.created_at' | translate }}</th>
       <th>{{ 'global.updated_at' | translate }}</th>
       <th>{{ 'global.action' | translate }}</th>

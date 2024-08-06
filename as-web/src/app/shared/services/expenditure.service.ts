@@ -36,6 +36,9 @@ export class ExpenditureService {
         params['expend_start'] = moment(searchData.expend_range[0]).format('YYYY-MM-DD');
         params['expend_end'] = moment(searchData.expend_range[1]).format('YYYY-MM-DD');
       }
+      if (searchData.expend_at_order) {
+        params['expend_at_order'] = searchData.expend_at_order;
+      }
     }
 
     return this._http.get<ListResponse>(expendituresUrl, {params: params}).pipe(

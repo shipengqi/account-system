@@ -23,4 +23,5 @@ export interface OrderSearchData {
   vehicle_id: number;
   project_id: number;
   driver_id: number;
+  unload_at_order?: string;
 }

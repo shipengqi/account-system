@@ -35,7 +35,14 @@ func (c *Controller) List(ctx *gin.Context) {
 	if end, ok := ctx.GetQuery("unload_end"); ok && end != "" {
 		r.Extend["unload_end"] = end
 	}
-
+	if order, ok := ctx.GetQuery("unload_at_order"); ok && order != "" {
+		if order == "ascend" {
+			order = "asc"
+		} else {
+			order = "desc"
+		}
+		r.Order = order
+	}
 	users, err := c.svc.Orders().List(ctx, r)
 	if err != nil {
 		response.Fail(ctx, err)
