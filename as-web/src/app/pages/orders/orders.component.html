@@ -104,7 +104,10 @@
       <th>{{ 'order.freight' | translate }}</th>
       <th>{{ 'order.payroll' | translate }}</th>
       <th>{{ 'global.comment' | translate }}</th>
-      <th>{{ 'order.unload-time' | translate }}</th>
+      <th
+        [(nzSortOrder)]="unloadAtSortOrder"
+        [nzSortDirections]="unloadAtSortDirections"
+      >{{ 'order.unload-time' | translate }}</th>
       <th>{{ 'global.action' | translate }}</th>
     </tr>
     </thead>

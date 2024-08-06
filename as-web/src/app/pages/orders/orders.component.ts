@@ -13,7 +13,7 @@ import {NzMessageService} from "ng-zorro-antd/message";
 import {TranslateService} from "@ngx-translate/core";
 import {NzTableQueryParams} from "ng-zorro-antd/table";
 
-import {IOrder} from "../../shared/model/order";
+import {IOrder, OrderSearchData} from "../../shared/model/order";
 import {VehiclesService} from "../../shared/services/vehicles.service";
 import {IProject, IVehicle, IDriver} from "../../shared/model/model";
 import {DriversService} from "../../shared/services/drivers.service";
@@ -54,6 +54,8 @@ export class OrdersComponent implements OnInit {
   isDriverLoading = false;
 
   tableLoading = true;
+  unloadAtSortOrder: string|null = null;
+  unloadAtSortDirections = ['ascend', 'descend', null];
   pageSize = 10;
   pageIndex = 1;
   total = 0;
@@ -194,12 +196,15 @@ export class OrdersComponent implements OnInit {
   list() {
     this.tableLoading = true;
 
-    const searchData = {
+    const searchData: OrderSearchData = {
       unload_range: this.searchUnLoadTime || [],
       project_id: this.searchProjectID || -1,
       vehicle_id: this.searchVehicleID || -1,
       driver_id: this.searchDriverID || -1,
     };
+    if (this.unloadAtSortOrder) {
+      searchData.unload_at_order = this.unloadAtSortOrder;
+    }
 
     this._ordersSvc.list(this.pageIndex, this.pageSize, searchData).subscribe({
       next: (res) => {

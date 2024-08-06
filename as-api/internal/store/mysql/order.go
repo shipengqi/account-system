@@ -77,7 +77,7 @@ func (v *orders) List(ctx context.Context, opts metav1.ListOptions) (*v1.OrderLi
 
 	// Todo order, selector, add status option
 	ol := gormutil.DePointer(opts.Offset, opts.Limit)
-	sqlstr := OrderListSql(ol.Offset, ol.Limit, opts.Extend)
+	sqlstr := OrderListSql(ol.Offset, ol.Limit, opts.Extend, opts.Order)
 	if err := v.db.Raw(sqlstr).Scan(&ret.Items).Error; err != nil {
 		return nil, errors.WrapCode(err, code.ErrDatabase)
 	}
@@ -210,7 +210,7 @@ func revenueAndPayrollWithDateSql(mon int) string {
 }
 
 // OrderListSql returns order list.
-func OrderListSql(offset, limit int, filters map[string]string) string {
+func OrderListSql(offset, limit int, filters map[string]string, order string) string {
 	var buf bytes.Buffer
 	buf.WriteString("select as_order.id, as_order.vehicle_id, as_order.project_id")
 	buf.WriteString(", as_order.driver_id, as_order.unload_at, as_order.load_at")
@@ -222,7 +222,12 @@ func OrderListSql(offset, limit int, filters map[string]string) string {
 	buf.WriteString("left join as_project on as_project.id = as_order.project_id ")
 	buf.WriteString("left join as_driver on as_driver.id = as_order.driver_id ")
 	appendOrderFilersSql(&buf, filters)
-	buf.WriteString("order by id desc")
+	if order != "" {
+		buf.WriteString("order by unload_at ")
+		buf.WriteString(order)
+	} else {
+		buf.WriteString("order by id desc")
+	}
 	buf.WriteString(fmt.Sprintf(" limit %d,%d", offset, limit))
 	return buf.String()
 }
