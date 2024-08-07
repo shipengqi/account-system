@@ -50,6 +50,7 @@
             @if (tabs[1].show && !loading) {
               @if (lineData.length > 0) {
                 <g2-timeline height="295" style="width: 100%"
+                             position="bottom"
                              [title]="timelineTabSubTitle"
                              [slider]="false"
                              [data]="lineData"

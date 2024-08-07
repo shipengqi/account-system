@@ -144,7 +144,7 @@
   </div>
 </div>
 
-<!-- revenue chart -->
+<!-- revenue timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="revenueBarData"
@@ -176,7 +176,7 @@
   </div>
 </ng-template>
 
-<!-- expenditure chart -->
+<!-- expenditure timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="expenditureBarData"
@@ -214,7 +214,7 @@
   </div>
 </ng-template>
 
-<!-- payroll chart -->
+<!-- payroll timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="payrollBarData"
@@ -246,7 +246,7 @@
   </div>
 </ng-template>
 
-<!-- profit chart -->
+<!-- profit timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="profitBarData"
@@ -278,6 +278,8 @@
     </button>
   </div>
 </ng-template>
+
+<!-- overall pie chart common modal -->
 <nz-modal [(nzVisible)]="pieChartDetailVisible" [nzTitle]="pieChartDetailTitle" (nzOnCancel)="pieChartDetailVisible = false">
   <ng-container *nzModalContent>
     <ul class="dashboard-g2-pie__detail">
