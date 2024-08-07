@@ -1,9 +1,9 @@
 import {
   checkProjectFormRequiredInput,
-  enterProjectFormRequiredInput,
+  enterProjectFormRequiredInput, inputType,
   setProjectFormAliases
 } from "../../helpers/form";
-import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllProjectReqAliases, waitSuccessReq} from "../../helpers/request";
 
 describe('Projects', () => {
@@ -45,7 +45,7 @@ describe('Projects', () => {
       })
       it('should add a new project', () => {
         enterProjectFormRequiredInput(testProject);
-        cy.get('@projectFormComment').clear().type(testProject.comment);
+        inputType('@projectFormComment', testProject.comment);
         cy.get('@projectFormSubmit').should('be.enabled').click();
 
         waitSuccessReq('@addProjectReq');
@@ -83,11 +83,12 @@ describe('Projects', () => {
       cy.get('[data-testid="project-form-modal"]').should('be.visible');
       checkProjectFormRequiredInput(testProject);
 
-      cy.get('@projectFormName').clear().type(updateProjectName);
+      inputType('@projectFormName', updateProjectName);
       cy.get('@projectFormSubmit').should('be.enabled').click();
 
       waitSuccessReq('@updateProjectReq');
       waitSuccessReq('@listProjectsReq');
+      checkFirstItemFromList(updateProjectName);
     });
   })
 })

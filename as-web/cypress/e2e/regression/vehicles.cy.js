@@ -1,9 +1,9 @@
 import {
   checkVehicleFormRequiredInput,
-  enterVehicleFormRequiredInput,
+  enterVehicleFormRequiredInput, inputType,
   setVehicleFormAliases
 } from "../../helpers/form";
-import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllVehicleReqAliases, waitSuccessReq} from "../../helpers/request";
 
 describe('Vehicles', () => {
@@ -46,7 +46,7 @@ describe('Vehicles', () => {
       })
       it('should add a new vehicle', () => {
         enterVehicleFormRequiredInput(testVehicle);
-        cy.get('@vehicleFormComment').clear().type(testVehicle.comment);
+        inputType('@vehicleFormComment', testVehicle.comment);
         cy.get('@vehicleFormSubmit').should('be.enabled').click();
 
         waitSuccessReq('@addVehicleReq');
@@ -84,11 +84,12 @@ describe('Vehicles', () => {
       cy.get('[data-testid="vehicle-form-modal"]').should('be.visible');
       checkVehicleFormRequiredInput(testVehicle);
 
-      cy.get('@vehicleFormVehicleNumber').clear().type(updateVehicleName);
+      inputType('@vehicleFormVehicleNumber', updateVehicleName);
       cy.get('@vehicleFormSubmit').should('be.enabled').click();
 
       waitSuccessReq('@updateVehicleReq');
       waitSuccessReq('@listVehiclesReq');
+      checkFirstItemFromList(updateVehicleName);
     });
   })
 })

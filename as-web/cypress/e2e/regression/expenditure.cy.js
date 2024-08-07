@@ -1,5 +1,5 @@
-import {enterExpFormRequiredInput, selectATime, setExpFormAliases} from "../../helpers/form";
-import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {enterExpFormRequiredInput, inputType, selectATime, setExpFormAliases} from "../../helpers/form";
+import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllExpReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";
 
@@ -54,7 +54,7 @@ describe('Expenditure', () => {
       })
       it('should add a new exp', () => {
         enterExpFormRequiredInput(testExp);
-        cy.get('@expFormComment').clear().type(testExp.comment);
+        inputType('@expFormComment', testExp.comment);
         cy.get('@expFormSubmit').should('be.enabled').click();
 
         waitSuccessReq('@addExpReq');
@@ -106,6 +106,7 @@ describe('Expenditure', () => {
 
         waitSuccessReq('@updateExpReq');
         waitSuccessReq('@listExpReq');
+        checkFirstItemFromList(updateDate);
       })
     });
   })
