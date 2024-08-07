@@ -161,9 +161,9 @@
     "watchpack" "2.4.1"
 
 "@angular/cdk@^18.0.0":
-  "integrity" "sha512-IaDjvRUgAoKnEeafrnBX+hjTR+1M3O3fV3AybBCjN4NuiPtuyOJiTMg0cTv6RbluJ/SenbT4MQq3tMpOsa9i4w=="
-  "resolved" "https://registry.npmjs.org/@angular/cdk/-/cdk-18.1.1.tgz"
-  "version" "18.1.1"
+  "integrity" "sha512-u14xbuXQz+36nBeHSwRcwRoS64WNhOdK97H47nI1WaIZZaGGvKHR1Wwk2XletDRtIHv2622sJm8h+dbaBNeTGQ=="
+  "resolved" "https://registry.npmjs.org/@angular/cdk/-/cdk-18.1.3.tgz"
+  "version" "18.1.3"
   dependencies:
     "tslib" "^2.3.0"
   optionalDependencies:
@@ -589,10 +589,10 @@
     "@antv/util" "~2.0.5"
     "tslib" "^2.0.0"
 
-"@antv/g2@^5.2.1":
-  "integrity" "sha512-Kb3e1ohkLxGEd0+yjc/2ff2hAzIUzUoSR+PP0riI1Pp+c6CobLiK68ji6aoCmfndQMDknvLYAZHSOL8OXc7ChA=="
-  "resolved" "https://registry.npmjs.org/@antv/g2/-/g2-5.2.1.tgz"
-  "version" "5.2.1"
+"@antv/g2@^5.2.2":
+  "integrity" "sha512-f8PAFFtsTueumh01nmeoovQSm3PCzW3sObSi9PW//fIIZjdLyMoQwxmbZjFm2po97cX0kWIbgaHv+bKsu/DrsQ=="
+  "resolved" "https://registry.npmjs.org/@antv/g2/-/g2-5.2.2.tgz"
+  "version" "5.2.2"
   dependencies:
     "@antv/component" "^2.0.0"
     "@antv/coord" "^0.4.6"
@@ -1718,14 +1718,14 @@
     "debug" "^3.1.0"
     "lodash.once" "^4.1.1"
 
-"@delon/abc@^18.0.2":
-  "integrity" "sha512-AFHdvoSywxOCkuGgqAB7z3c6kiJPb2MLs4stSa9UkbDXIigRmTvRsIx4J3HjzS45yRCy8xN8xvITKH8hQgD1gA=="
-  "resolved" "https://registry.npmjs.org/@delon/abc/-/abc-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/abc@^18.1.0":
+  "integrity" "sha512-zT0xcmTXjkeoYJaRVro8CvZ7MdJH2ccof9VgKvIzpJODG77rozOoL1R9f87+KwQx+X/wJm16CFyhwXst8F1rXw=="
+  "resolved" "https://registry.npmjs.org/@delon/abc/-/abc-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
-    "@delon/acl" "^18.0.2"
-    "@delon/theme" "^18.0.2"
-    "@delon/util" "^18.0.2"
+    "@delon/acl" "^18.1.0"
+    "@delon/theme" "^18.1.0"
+    "@delon/util" "^18.1.0"
     "@github/hotkey" "^3.1.1"
     "file-saver" "^2.0.5"
     "isutf8" "^4.0.0"
@@ -1735,54 +1735,54 @@
     "tslib" "^2.3.0"
     "xlsx" "^0.18.5"
 
-"@delon/acl@^18.0.2":
-  "integrity" "sha512-Wzi2UIHhWo7btLM+GGEpS3gZR1rORyr2ITz5TTtljMT5HgpWr2zAuEr7cdd1Z5QnnVBR4Cm9eDDW+43NmLFO6g=="
-  "resolved" "https://registry.npmjs.org/@delon/acl/-/acl-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/acl@^18.1.0":
+  "integrity" "sha512-gnCAdeyfbnGs2UkVhNr1yVgdIsQN/crWG+utG4jmnItcX93wUftq/y9z0PbATr+zVDxYCBehP8ueLr4wGD8rEw=="
+  "resolved" "https://registry.npmjs.org/@delon/acl/-/acl-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
-    "@delon/util" "^18.0.2"
+    "@delon/util" "^18.1.0"
     "tslib" "^2.3.0"
 
-"@delon/chart@^18.0.2":
-  "integrity" "sha512-9TAYNrA4wGPEEpLBfdtHrXJdgslkVXkatUTbUQDnd5NJ0Czve/DLKb1Akx89R66uNvHwTU8/UJF65yKex5iB5g=="
-  "resolved" "https://registry.npmjs.org/@delon/chart/-/chart-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/chart@^18.1.0":
+  "integrity" "sha512-RwW2ZaM+hUutzFbC3YO63bMqu+JOHssHZYVylZ+P1kZPP1WD8wXkQdKmZQuQAK8/GaMj2GjOqQX3Zd78W2N0Kw=="
+  "resolved" "https://registry.npmjs.org/@delon/chart/-/chart-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
     "@antv/data-set" "^0.11.8"
     "@antv/g2" "^4.2.10"
-    "@delon/theme" "^18.0.2"
-    "@delon/util" "^18.0.2"
-    "echarts" "^5.5.0"
+    "@delon/theme" "^18.1.0"
+    "@delon/util" "^18.1.0"
+    "echarts" "^5.5.1"
     "tslib" "^2.3.0"
 
-"@delon/form@^18.0.2":
-  "integrity" "sha512-2WQP0ATh6RewIwblN1IqCbOYvW5Ng65oPcgmngAcjYW8jS6WWs0LfWn00HJZWvj70DNLW0q+6gKEELzX9GCv0A=="
-  "resolved" "https://registry.npmjs.org/@delon/form/-/form-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/form@^18.1.0":
+  "integrity" "sha512-tdbG31w/rqA9MXvRt/z5p7/+eiukh5JL3MUrr+gn4JJ/VjL0HDAVag09JJG1/lC7qorD92xVskxcHS8KpGCMBA=="
+  "resolved" "https://registry.npmjs.org/@delon/form/-/form-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
-    "@delon/acl" "^18.0.2"
-    "@delon/theme" "^18.0.2"
-    "@delon/util" "^18.0.2"
-    "ajv" "^8.16.0"
+    "@delon/acl" "^18.1.0"
+    "@delon/theme" "^18.1.0"
+    "@delon/util" "^18.1.0"
+    "ajv" "^8.17.1"
     "ajv-formats" "^3.0.1"
     "tslib" "^2.3.0"
 
-"@delon/theme@^18.0.2":
-  "integrity" "sha512-AFvPY0NbU6Y8jAEV8nuqdbe7LDURvFbWxXZ/DkVTe1mHMF78ZNpD8oVBHuCjRouJIWwGPif7rz6tGqF9haHEog=="
-  "resolved" "https://registry.npmjs.org/@delon/theme/-/theme-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/theme@^18.1.0":
+  "integrity" "sha512-IHVzMX1HSVusGaVYhDwn8s8nzh7fDvq3GGX8nF6hD3VUlWLixlStwFmopjAZTcu/2c1nElmPcRMtDJeTZqAu5A=="
+  "resolved" "https://registry.npmjs.org/@delon/theme/-/theme-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
-    "@delon/abc" "^18.0.2"
-    "@delon/acl" "^18.0.2"
-    "@delon/form" "^18.0.2"
-    "@delon/util" "^18.0.2"
-    "ng-zorro-antd" "^18.0.1"
+    "@delon/abc" "^18.1.0"
+    "@delon/acl" "^18.1.0"
+    "@delon/form" "^18.1.0"
+    "@delon/util" "^18.1.0"
+    "ng-zorro-antd" "^18.1.0"
     "tslib" "^2.3.0"
 
-"@delon/util@^18.0.2":
-  "integrity" "sha512-l5cc+KEqplcfGPKdc44UWl0MQP34iuvbjSEz1FPn9NoFJQomGlwkikKgsADt5HvFjFGX+n5s5B/l/y/C3IiumQ=="
-  "resolved" "https://registry.npmjs.org/@delon/util/-/util-18.0.2.tgz"
-  "version" "18.0.2"
+"@delon/util@^18.1.0":
+  "integrity" "sha512-8l4XqVFqyk4Weq2I7Kcx/l2mRYsR/YCix+EAWrzxB6gbonavh9GruQ2pbfuLvAdHJ0qDoqDj3C4tFlgwqBvr8g=="
+  "resolved" "https://registry.npmjs.org/@delon/util/-/util-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
     "extend" "^3.0.2"
     "tslib" "^2.3.0"
@@ -2717,7 +2717,7 @@
     "require-from-string" "^2.0.2"
     "uri-js" "^4.4.1"
 
-"ajv@^8.16.0":
+"ajv@^8.17.1":
   "integrity" "sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g=="
   "resolved" "https://registry.npmjs.org/ajv/-/ajv-8.17.1.tgz"
   "version" "8.17.1"
@@ -3480,9 +3480,9 @@
     "browserslist" "^4.23.0"
 
 "core-js@^3.26.1":
-  "integrity" "sha512-Xn6qmxrQZyB0FFY8E3bgRXei3lWDJHhvI+u0q9TKIYM49G8pAr0FgnnrFRAmsbptZL1yxRADVXn+x5AGsbBfyw=="
-  "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.37.1.tgz"
-  "version" "3.37.1"
+  "integrity" "sha512-XPpwqEodRljce9KswjZShh95qJ1URisBeKCjUdq27YdenkslVe7OO0ZJhlYXAChW7OhXaRLl8AAba7IBfoIHug=="
+  "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.38.0.tgz"
+  "version" "3.38.0"
 
 "core-util-is@~1.0.0":
   "integrity" "sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ=="
@@ -4102,7 +4102,7 @@
     "jsbn" "~0.1.0"
     "safer-buffer" "^2.1.0"
 
-"echarts@^5.5.0":
+"echarts@^5.5.1":
   "integrity" "sha512-Fce8upazaAXUVUVsjgV6mBnGuqgO+JNDlcgF79Dksy4+wgGpQB2lmYoO4TSweFg/mZITdpGHomw/cNBJZj1icA=="
   "resolved" "https://registry.npmjs.org/echarts/-/echarts-5.5.1.tgz"
   "version" "5.5.1"
@@ -6398,10 +6398,10 @@
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
 
-"ng-zorro-antd@^18.0.1":
-  "integrity" "sha512-jqShD//KEKKEl54GAuwxBczF6nyg0V/iohuAUhra5UhjhHbO4Dted1fzotiiCojPme6+zOukwi+iHVHs7HjuQQ=="
-  "resolved" "https://registry.npmjs.org/ng-zorro-antd/-/ng-zorro-antd-18.0.1.tgz"
-  "version" "18.0.1"
+"ng-zorro-antd@^18.1.0":
+  "integrity" "sha512-0G9ZAK+Z6XYQXE9uCu+PSevOt+s4YzddLS2Wm6xXHlzm8z3PctUWgTaqlKpxYown7KWDV212uPejokcsaiOuQg=="
+  "resolved" "https://registry.npmjs.org/ng-zorro-antd/-/ng-zorro-antd-18.1.0.tgz"
+  "version" "18.1.0"
   dependencies:
     "@angular/cdk" "^18.0.0"
     "@ant-design/icons-angular" "^18.0.0"

@@ -26,6 +26,8 @@ context('Navigation', () => {
     cy.get('.layout-header-logo-full')
       .should('have.attr', 'src', './assets/full-logo-white-mid.png');
     cy.get('app-header-user').should('be.visible');
+    cy.get('app-header-help').should('be.visible').click();
+    cy.get('.header-help-menu .ant-dropdown-menu-item').should('have.length', 2);
   })
 
   it('should collapse and expand navigation sider', () => {

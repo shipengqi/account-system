@@ -3,7 +3,7 @@
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
     <g2-card [loading]="overallLoading"
       title="{{ 'analysis.overall-revenue' | translate }}"
-      [total]="'¥'+formatTotal(overall.revpay.total_revenue)"
+      [total]="formatTotal(overall.revpay.total_revenue)"
       contentHeight="44px"
       [footer]="refooter">
       <trend [flag]="overall.revpay.mom_revenue && overall.revpay.mom_revenue > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
@@ -17,7 +17,7 @@
       <ng-template #refooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-revenue' | translate }}
-          <span class="ml-sm">¥ {{formatTotal(overall.revpay.cm_revenue)}}</span>
+          <span class="ml-sm">¥ {{formatTotalWithoutPrefix(overall.revpay.cm_revenue)}}</span>
         </p>
       </ng-template>
     </g2-card>
@@ -25,7 +25,7 @@
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
     <g2-card [loading]="overallLoading"
       title="{{ 'analysis.overall-expenditure' | translate }}"
-      [total]="'¥ '+formatTotal(overall.exp.total)"
+      [total]="formatTotal(overall.exp.total)"
       contentHeight="44px"
       [footer]="exfooter">
       <trend [flag]="overall.exp.mom && overall.exp.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
@@ -39,7 +39,7 @@
       <ng-template #exfooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-expenditure' | translate }}
-          <span class="ml-sm">¥ {{formatTotal(overall.exp.cm)}}</span>
+          <span class="ml-sm">¥ {{formatTotalWithoutPrefix(overall.exp.cm)}}</span>
         </p>
       </ng-template>
     </g2-card>
@@ -47,7 +47,7 @@
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
     <g2-card [loading]="overallLoading"
       title="{{ 'analysis.overall-payroll' | translate }}"
-      [total]="'¥ '+formatTotal(overall.revpay.total_payroll)"
+      [total]="formatTotal(overall.revpay.total_payroll)"
       contentHeight="44px"
       [footer]="pafooter">
       <trend [flag]="overall.revpay.mom_payroll && overall.revpay.mom_payroll > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
@@ -61,7 +61,7 @@
       <ng-template #pafooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-payroll' | translate }}
-          <span class="ml-sm">¥ {{formatTotal(overall.revpay.cm_payroll)}}</span>
+          <span class="ml-sm">¥ {{formatTotalWithoutPrefix(overall.revpay.cm_payroll)}}</span>
         </p>
       </ng-template>
     </g2-card>
@@ -69,7 +69,7 @@
   <div nz-col nzXs="24" nzSm="12" nzMd="12" nzLg="6">
     <g2-card [loading]="overallLoading"
       title="{{ 'analysis.overall-profit' | translate }}"
-      [total]="'¥ '+formatTotal(overall.profit.total)"
+      [total]="formatTotal(overall.profit.total)"
       contentHeight="44px"
       [footer]="prfooter">
       <trend [flag]="overall.profit.mom && overall.profit.mom > 0 ? 'up' : 'down'" style="display: block; margin-top: 2px">
@@ -83,7 +83,7 @@
       <ng-template #prfooter>
         <p class="text-truncate mb0">
           {{ 'analysis.month-profit' | translate }}
-          <span class="ml-sm">¥ {{formatTotal(overall.profit.cm)}}</span>
+          <span class="ml-sm">¥ {{formatTotalWithoutPrefix(overall.profit.cm)}}</span>
         </p>
       </ng-template>
     </g2-card>
@@ -105,7 +105,7 @@
           [subTitle]="'analysis.month-revenue' | translate"
           [height]="248"
           [lineWidth]="4"
-          [total]="'¥ ' + formatTotal(overallPieTotal)"
+          [total]="formatTotal(overallPieTotal)"
           [valueFormat]="handlePieValueFormat"
           (clickItem)="handlePieChartClick($event)"
         />
@@ -131,7 +131,7 @@
           [subTitle]="'analysis.month-expenditure' | translate"
           [height]="248"
           [lineWidth]="4"
-          [total]="'¥ ' + formatTotal(expenditurePieTotal)"
+          [total]="formatTotal(expenditurePieTotal)"
           [valueFormat]="handlePieValueFormat"
           (clickItem)="handlePieChartClick($event, true)"
         />
@@ -144,7 +144,7 @@
   </div>
 </div>
 
-<!-- revenue chart -->
+<!-- revenue timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="revenueBarData"
@@ -176,7 +176,7 @@
   </div>
 </ng-template>
 
-<!-- expenditure chart -->
+<!-- expenditure timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="expenditureBarData"
@@ -214,7 +214,7 @@
   </div>
 </ng-template>
 
-<!-- payroll chart -->
+<!-- payroll timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="payrollBarData"
@@ -246,7 +246,7 @@
   </div>
 </ng-template>
 
-<!-- profit chart -->
+<!-- profit timeline chart -->
 <app-timeline
   [loading]="timelineLoading"
   [barData]="profitBarData"
@@ -278,6 +278,8 @@
     </button>
   </div>
 </ng-template>
+
+<!-- overall pie chart common modal -->
 <nz-modal [(nzVisible)]="pieChartDetailVisible" [nzTitle]="pieChartDetailTitle" (nzOnCancel)="pieChartDetailVisible = false">
   <ng-container *nzModalContent>
     <ul class="dashboard-g2-pie__detail">
