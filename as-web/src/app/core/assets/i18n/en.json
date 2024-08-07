@@ -3,6 +3,10 @@
     "notify": {
       "title": "Notifications",
       "see-all": "See All"
+    },
+    "help": {
+      "build-version": "Build Version",
+      "build-date": "Build Date"
     }
   }
 }

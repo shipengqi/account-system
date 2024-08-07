@@ -3,6 +3,10 @@
     "notify": {
       "title": "通知",
       "see-all": "查看所有"
+    },
+    "help": {
+      "build-version": "构建版本",
+      "build-date": "构建日期"
     }
   },
   "header": {

@@ -18,6 +18,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
+import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {MultiTranslateHttpLoader} from 'ngx-translate-multi-http-loader';
 
@@ -29,31 +30,45 @@ import {BasicComponent} from './basic.component';
 import {ACLModule} from './core/acl';
 import {ResponseInterceptor} from "./shared/interceptors/response-interceptors";
 
-import { registerLocaleData } from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
+
 registerLocaleData(en);
 registerLocaleData(zh);
 
 // Import what you need. RECOMMENDED.
-// Todo should use this for release version
-// import { AccountBookFill, AlertFill, AlertOutline } from '@ant-design/icons-angular/icons';
-// const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
-
-// Import all. NOT RECOMMENDED.
-import * as AllIcons from '@ant-design/icons-angular/icons';
-
-
-
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+import {
+  UserOutline,
+  SearchOutline,
+  PlusOutline,
+  FundProjectionScreenOutline,
+  PicRightOutline,
+  MoneyCollectOutline,
+  TruckOutline,
+  UsergroupAddOutline,
+  ProductOutline,
+  MenuFoldOutline,
+  MenuUnfoldOutline
+} from '@ant-design/icons-angular/icons';
+const icons: IconDefinition[] = [
+  UserOutline,
+  SearchOutline,
+  PlusOutline,
+  FundProjectionScreenOutline,
+  PicRightOutline,
+  MoneyCollectOutline,
+  TruckOutline,
+  UsergroupAddOutline,
+  ProductOutline,
+  MenuFoldOutline,
+  MenuUnfoldOutline
+];
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(_httpBackend: HttpBackend) {
   return new MultiTranslateHttpLoader(_httpBackend, [
-    {prefix: './assets/i18n/', suffix: '.json'},
+    {prefix: './assets/i18n/', suffix: '.json'}
   ]);
 }
 
@@ -75,6 +90,7 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
     SharedModule,
     NzButtonModule,
     NzInputModule,
+    NzAvatarModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {

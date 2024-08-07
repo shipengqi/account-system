@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shipengqi/errors"
 
+	"github.com/shipengqi/asapi/internal/controller/v1/config"
 	"github.com/shipengqi/asapi/internal/controller/v1/dashboard"
 	"github.com/shipengqi/asapi/internal/controller/v1/driver"
 	"github.com/shipengqi/asapi/internal/controller/v1/expenditure"
@@ -40,6 +41,13 @@ func installControllers(g *gin.Engine) {
 	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
 	v1 := g.Group("/api/v1")
 	{
+		configv1 := v1.Group("/config")
+		{
+			configc := config.New(storeIns)
+
+			configv1.GET("buildInfo", configc.GetBuildInfo)
+		}
+
 		projectv1 := v1.Group("/projects")
 		{
 			projectc := project.New(storeIns)
