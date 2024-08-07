@@ -370,6 +370,10 @@ export class DashboardComponent implements OnInit {
   }
 
   formatTotal(n: number): string {
+    return '&yen ' + this.formatTotalWithoutPrefix(n);
+  }
+
+  formatTotalWithoutPrefix(n: number): string {
     if (n < 1000000) {
       return n.toString();
     }
