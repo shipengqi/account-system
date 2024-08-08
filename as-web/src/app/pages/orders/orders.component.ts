@@ -182,7 +182,7 @@ export class OrdersComponent implements OnInit {
       this.projectCtrl.setValue(item.project_id);
       this.vehicleCtrl.setValue(item.vehicle_id);
       this.driverCtrl.setValue(item.driver_id)
-      this.unloadTimeCtrl.setValue(item.unload_at)
+      this.unloadTimeCtrl.setValue(new Date(item.unload_at));
       this.weightCtrl.setValue(item.weight);
       this.freightCtrl.setValue(item.freight);
       this.payrollCtrl.setValue(item.payroll);
