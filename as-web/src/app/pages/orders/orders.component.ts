@@ -220,6 +220,9 @@ export class OrdersComponent implements OnInit {
 
   handleCancel() {
     this.editorVisible = false;
+    if (this.isEditMode) {
+      this.selfFormGroup.reset();
+    }
   }
 
   handleSave() {
