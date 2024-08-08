@@ -1,4 +1,11 @@
-import {enterExpFormRequiredInput, inputType, selectATime, setExpFormAliases} from "../../helpers/form";
+import {
+  checkExpFormRequiredInput,
+  checkExpFormRequiredInputEmpty,
+  enterExpFormRequiredInput,
+  inputType,
+  selectATime,
+  setExpFormAliases
+} from "../../helpers/form";
 import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllExpReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";
@@ -48,6 +55,14 @@ describe('Expenditure', () => {
       cy.get('@expFormSubmit').should('be.disabled');
     });
 
+    it('should not be clean when click cancel', () => {
+      enterExpFormRequiredInput(testExp);
+      cy.get('[data-testid="exp-form-cancel"]').click();
+      cy.get('[data-testid="add-exp-btn"]').click();
+      cy.get('[data-testid="exp-form-modal"]').should('be.visible');
+      cy.get('@expFormSubmit').should('be.enabled');
+    });
+
     context('Add With Clean', () => {
       afterEach(() => {
         deleteFirstItemFromList('[data-testid="exp-list-delete"]', '@deleteExpReq');
@@ -94,6 +109,15 @@ describe('Expenditure', () => {
 
     afterEach(() => {
       deleteFirstItemFromList('[data-testid="exp-list-delete"]', '@deleteExpReq');
+    })
+
+    it('should clean form data after cancel edit.editor', () => {
+      clickEditFirstItemFromList('[data-testid="exp-list-edit"]');
+      cy.get('[data-testid="exp-form-cancel"]').click();
+      cy.get('[data-testid="add-exp-btn"]').click();
+      cy.get('[data-testid="exp-form-modal"]').should('be.visible');
+      checkExpFormRequiredInputEmpty();
+      cy.get('[data-testid="exp-form-cancel"]').click();
     })
 
     it('should update different dates of exp', () => {

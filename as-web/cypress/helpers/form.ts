@@ -101,6 +101,15 @@ export function checkExpFormRequiredInput(testExp: any) {
   cy.get('@expFormVehicleNumber').should('have.value', testExp.vehicleNumber);
 }
 
+export function checkExpFormRequiredInputEmpty() {
+  checkExpFormRequiredInput({
+    type: '',
+    time: '',
+    cost: '',
+    vehicleNumber: '',
+  })
+}
+
 // ------------------------------------
 // order form helpers
 export function setOrderFormAliases() {
@@ -134,6 +143,15 @@ export function checkOrderFormRequiredInput(testOrder: any) {
   cy.get('@orderFormUnloadTime').should('have.value', testOrder.unloadTime);
 }
 
+export function checkOrderFormRequiredInputEmpty() {
+  checkOrderFormRequiredInput({
+    project: '',
+    unloadTime: '',
+    driver: '',
+    vehicleNumber: ''
+  })
+}
+
 // -------------------------------
 // common helpers
 
@@ -142,7 +160,7 @@ export function selectAnOption(alias: string, optionIndex: number) {
   cy.wait(100);
   cy.get('nz-option-item').each(($el, index) => {
     if ((index+1) === optionIndex) {
-      cy.wrap($el).click();
+      cy.wrap($el).click({force: true});
     }
   });
 }

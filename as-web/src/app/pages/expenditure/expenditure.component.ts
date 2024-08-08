@@ -158,7 +158,7 @@ export class ExpenditureComponent implements OnInit {
     this.editorTitle = this._translate.instant('global.add');
     if (item) {
       this.typeCtrl.setValue(item.type);
-      this.timeCtrl.setValue(item.expend_at);
+      this.timeCtrl.setValue(new Date(item.expend_at));
       this.costCtrl.setValue(item.cost);
       this.vehicleCtrl.setValue(item.vehicle_id);
       this.commentCtrl.setValue(item.comment);
@@ -170,6 +170,9 @@ export class ExpenditureComponent implements OnInit {
 
   handleCancel() {
     this.editorVisible = false;
+    if (this.isEditMode) {
+      this.selfFormGroup.reset();
+    }
   }
 
   handleSave() {

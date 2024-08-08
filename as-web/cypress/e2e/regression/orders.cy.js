@@ -1,4 +1,6 @@
 import {
+  checkOrderFormRequiredInput,
+  checkOrderFormRequiredInputEmpty,
   clearATimePicker,
   enterOrderFormRequiredInput, inputType,
   selectATime,
@@ -56,6 +58,14 @@ describe('Orders', () => {
       cy.get('@orderFormSubmit').should('be.disabled');
     });
 
+    it('should not be clean when click cancel', () => {
+      enterOrderFormRequiredInput(testOrder);
+      cy.get('[data-testid="order-form-cancel"]').click();
+      cy.get('[data-testid="add-order-btn"]').click();
+      cy.get('[data-testid="order-form-modal"]').should('be.visible');
+      cy.get('@orderFormSubmit').should('be.enabled');
+    });
+
     context('Add With Clean', () => {
       afterEach(() => {
         deleteFirstItemFromList('[data-testid="order-list-delete"]', '@deleteOrderReq');
@@ -95,6 +105,15 @@ describe('Orders', () => {
 
     afterEach(() => {
       deleteFirstItemFromList('[data-testid="order-list-delete"]', '@deleteOrderReq');
+    })
+
+    it('should clean form data after cancel edit.editor', () => {
+      clickEditFirstItemFromList('[data-testid="order-list-edit"]');
+      cy.get('[data-testid="order-form-cancel"]').click();
+      cy.get('[data-testid="add-order-btn"]').click();
+      cy.get('[data-testid="order-form-modal"]').should('be.visible');
+      checkOrderFormRequiredInputEmpty();
+      cy.get('[data-testid="order-form-cancel"]').click();
     })
 
     it('should update different dates of order', () => {
