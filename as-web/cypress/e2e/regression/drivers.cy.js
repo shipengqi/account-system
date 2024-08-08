@@ -1,5 +1,10 @@
-import {checkDriverFormRequiredInput, enterDriverFormRequiredInput, setDriverFormAliases} from "../../helpers/form";
-import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {
+  inputType,
+  setDriverFormAliases,
+  checkDriverFormRequiredInput,
+  enterDriverFormRequiredInput
+} from "../../helpers/form";
+import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllDriverReqAliases, waitSuccessReq} from "../../helpers/request";
 
 describe('Drivers', () => {
@@ -43,7 +48,7 @@ describe('Drivers', () => {
       })
       it('should add a new driver', () => {
         enterDriverFormRequiredInput(testDriver);
-        cy.get('@driverFormComment').clear().type(testDriver.comment);
+        inputType('@driverFormComment', testDriver.comment);
         cy.get('@driverFormSubmit').should('be.enabled').click();
 
         waitSuccessReq('@addDriverReq');
@@ -81,11 +86,12 @@ describe('Drivers', () => {
       cy.get('[data-testid="driver-form-modal"]').should('be.visible');
       checkDriverFormRequiredInput(testDriver);
 
-      cy.get('@driverFormName').clear().type(updateDriverName);
+      inputType('@driverFormName', updateDriverName);
       cy.get('@driverFormSubmit').should('be.enabled').click();
 
       waitSuccessReq('@updateDriverReq');
       waitSuccessReq('@listDriversReq');
+      checkFirstItemFromList(updateDriverName);
     });
   })
 })

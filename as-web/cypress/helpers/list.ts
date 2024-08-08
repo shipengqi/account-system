@@ -16,3 +16,12 @@ export function deleteConfirm(reqAlias?: string) {
     waitSuccessReq(reqAlias);
   }
 }
+
+export function checkFirstItemFromList(value: string) {
+  cy.get('nz-table')
+    .find('tbody tr:first')
+    // finds first <td> element with text content matching regular expression
+    .contains('td', value)
+    .should('be.visible')
+}
+

@@ -1,10 +1,10 @@
 import {
   clearATimePicker,
-  enterOrderFormRequiredInput,
+  enterOrderFormRequiredInput, inputType,
   selectATime,
   setOrderFormAliases
 } from "../../helpers/form";
-import {clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
 import {setAllOrderReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";
 
@@ -62,7 +62,7 @@ describe('Orders', () => {
       })
       it('should add a new order', () => {
         enterOrderFormRequiredInput(testOrder);
-        cy.get('@orderFormComment').clear().type(testOrder.comment);
+        inputType('@orderFormComment', testOrder.comment);
         cy.get('@orderFormSubmit').should('be.enabled').click();
 
         waitSuccessReq('@addOrderReq');
@@ -107,6 +107,7 @@ describe('Orders', () => {
 
         waitSuccessReq('@updateOrderReq');
         waitSuccessReq('@listOrdersReq');
+        checkFirstItemFromList(updateDate);
       })
     });
   })

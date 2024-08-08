@@ -12,9 +12,9 @@ export function setDriverFormAliases() {
 export function enterDriverFormRequiredInput(testDriver: any) {
   cy.get('@driverFormSubmit').should('be.disabled');
 
-  cy.get('@driverFormName').clear().type(testDriver.name);
-  cy.get('@driverFormPhone').clear().type(testDriver.phone);
-  cy.get('@driverFormAddress').clear().type(testDriver.address);
+  inputType('@driverFormName', testDriver.name);
+  inputType('@driverFormPhone', testDriver.phone);
+  inputType('@driverFormAddress', testDriver.address);
 
   cy.get('@driverFormSubmit').should('be.enabled');
 }
@@ -38,8 +38,8 @@ export function setVehicleFormAliases() {
 export function enterVehicleFormRequiredInput(testVehicle: any) {
   cy.get('@vehicleFormSubmit').should('be.disabled');
 
-  cy.get('@vehicleFormVehicleNumber').clear().type(testVehicle.name);
-  cy.get('@vehicleFormBrand').clear().type(testVehicle.brand);
+  inputType('@vehicleFormVehicleNumber', testVehicle.name);
+  inputType('@vehicleFormBrand', testVehicle.brand);
 
   cy.get('@vehicleFormSubmit').should('be.enabled');
 }
@@ -61,7 +61,7 @@ export function setProjectFormAliases() {
 export function enterProjectFormRequiredInput(testProject: any) {
   cy.get('@projectFormSubmit').should('be.disabled');
 
-  cy.get('@projectFormName').clear().type(testProject.name);
+  inputType('@projectFormName', testProject.name);
 
   cy.get('@projectFormSubmit').should('be.enabled');
 }
@@ -88,7 +88,7 @@ export function enterExpFormRequiredInput(testExp: any) {
   selectAnOption('@expFormType', testExp.type)
   selectATime('@expFormTime', testExp.time)
 
-  cy.get('@expFormCost').clear().type(testExp.cost);
+  inputType('@expFormCost', testExp.cost);
   selectAnOption('@expFormVehicleNumber', testExp.vehicleNumber)
 
   cy.get('@expFormSubmit').should('be.enabled');
@@ -149,9 +149,17 @@ export function selectAnOption(alias: string, optionIndex: number) {
 
 export function selectATime(alias: string, time: string) {
   cy.get(alias).clear();
-  cy.get(alias).click().clear().type(`${time}{enter}`);
+  inputTypeWithEnter(alias, time);
 }
 
 export function clearATimePicker(parent: string) {
   cy.get(parent).find('.ant-picker-clear').click({force: true});
+}
+
+export function inputType(alias: string, value: string) {
+  cy.get(alias).click().clear().type(value, {force: true});
+}
+
+export function inputTypeWithEnter(alias: string, value: string) {
+  cy.get(alias).click().clear().type(`${value}{enter}`);
 }

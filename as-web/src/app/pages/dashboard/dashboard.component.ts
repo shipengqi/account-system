@@ -402,7 +402,9 @@ export class DashboardComponent implements OnInit {
         total: charsData.vehicle_data[bd]
       })
     }
-    this.revenueRankListData = rank;
+    this.revenueRankListData = rank.sort((d1, d2) => {
+      return d2.total - d1.total;
+    });
 
     for (const ld in charsData.revenue_line_data) {
       let vdata = this.genLineInitData(ld, Object.keys(this.revenueLineTitleMap).length);
@@ -434,7 +436,9 @@ export class DashboardComponent implements OnInit {
         total: charsData.driver_data[bd]
       })
     }
-    this.payrollRankListData = rank;
+    this.payrollRankListData = rank.sort((d1, d2) => {
+      return d2.total - d1.total;
+    });
 
     for (const ld in charsData.payroll_line_data) {
       let vdata = this.genLineInitData(ld, Object.keys(this.payrollLineTitleMap).length);
@@ -467,7 +471,9 @@ export class DashboardComponent implements OnInit {
         total: charsData.vehicle_data[bd]
       })
     }
-    this.expenditureRankListData = rank;
+    this.expenditureRankListData = rank.sort((d1, d2) => {
+      return d2.total - d1.total;
+    });
 
     for (const ld in charsData.line_data) {
       let vdata = this.genLineInitData(ld, Object.keys(this.expLineTitleMap).length);
@@ -501,7 +507,9 @@ export class DashboardComponent implements OnInit {
         total: charsData.vehicle_data[bd]
       })
     }
-    this.profitRankListData = rank;
+    this.profitRankListData = rank.sort((d1, d2) => {
+      return d2.total - d1.total;
+    });
 
     for (const ld in charsData.line_data) {
       let vdata = this.genLineInitData(ld, Object.keys(this.profitLineTitleMap).length);
