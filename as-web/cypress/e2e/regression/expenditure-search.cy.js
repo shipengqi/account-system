@@ -1,6 +1,10 @@
-import {enterExpFormRequiredInput, selectAnOption, setExpFormAliases} from "../../helpers/form";
+import {
+  selectAnOption,
+  setExpFormAliases,
+  enterExpFormRequiredInput
+} from "../../helpers/form";
 import {setAllExpReqAliases, waitSuccessReq} from "../../helpers/request";
-import {deleteFirstItemFromList} from "../../helpers/list";
+import {deleteFirstItemFromList, typeRangePicker} from "../../helpers/list";
 
 import moment from "moment/moment";
 
@@ -47,8 +51,7 @@ describe('Expenditure Search', () => {
       cy.wait('@listExpReq');
 
       cy.get('[data-testid="exp-search-time"]').find('input').as('expSearchRange');
-      cy.get('@expSearchRange').first().click().type(`${nextMonthDate}{enter}`);
-      cy.get('@expSearchRange').last().type(`${endOfNextMonth}{enter}`);
+      typeRangePicker('@expSearchRange', nextMonthDate, endOfNextMonth);
       cy.get('[data-testid="search-exp-btn"]').should('be.enabled').click();
       waitSuccessReq('@listExpReq');
       cy.get('tbody tr').should('have.length', 3);
@@ -78,8 +81,7 @@ describe('Expenditure Search', () => {
     context('search', () => {
       beforeEach(() => {
         cy.get('[data-testid="exp-search-time"]').find('input').as('expSearchRange');
-        cy.get('@expSearchRange').first().click().type(`${nextMonthDate}{enter}`);
-        cy.get('@expSearchRange').last().type(`${endOfNextMonth}{enter}`);
+        typeRangePicker('@expSearchRange', nextMonthDate, endOfNextMonth);
       });
 
       it('should search three exps only with date filter', () => {
@@ -134,8 +136,7 @@ describe('Expenditure Search', () => {
     context('order', () => {
       beforeEach(() => {
         cy.get('[data-testid="exp-search-time"]').find('input').as('expSearchRange');
-        cy.get('@expSearchRange').first().click().type(`${nextMonthDate}{enter}`);
-        cy.get('@expSearchRange').last().type(`${endOfNextMonth}{enter}`);
+        typeRangePicker('@expSearchRange', nextMonthDate, endOfNextMonth);
 
         cy.get('[data-testid="search-exp-btn"]').should('be.enabled').click();
         waitSuccessReq('@listExpReq');

@@ -25,3 +25,7 @@ export function checkFirstItemFromList(value: string) {
     .should('be.visible')
 }
 
+export function typeRangePicker(alias: string, start: string, end: string) {
+  cy.get(alias).first().click().clear().type(`${start}{enter}`, {force: true});
+  cy.get(alias).last().click().clear().type(`${end}{enter}`, {force: true});
+}

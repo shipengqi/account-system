@@ -28,4 +28,5 @@ as-web/.vscode
 as-web/dist
 as-web/cypress/e2e/1-getting-started
 as-web/cypress/e2e/2-advanced-examples
+as-web/cypress/screenshots
 as-api/resources/dist

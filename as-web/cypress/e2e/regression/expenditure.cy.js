@@ -1,12 +1,15 @@
 import {
-  checkExpFormRequiredInput,
-  checkExpFormRequiredInputEmpty,
-  enterExpFormRequiredInput,
   inputType,
   selectATime,
-  setExpFormAliases
+  setExpFormAliases,
+  enterExpFormRequiredInput,
+  checkExpFormRequiredInputEmpty
 } from "../../helpers/form";
-import {checkFirstItemFromList, clickEditFirstItemFromList, deleteFirstItemFromList} from "../../helpers/list";
+import {
+  checkFirstItemFromList,
+  deleteFirstItemFromList,
+  clickEditFirstItemFromList
+} from "../../helpers/list";
 import {setAllExpReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";
 

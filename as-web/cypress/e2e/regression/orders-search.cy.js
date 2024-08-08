@@ -3,7 +3,7 @@ import {
   selectAnOption,
   setOrderFormAliases
 } from "../../helpers/form";
-import {deleteFirstItemFromList} from "../../helpers/list";
+import {deleteFirstItemFromList, typeRangePicker} from "../../helpers/list";
 import {setAllOrderReqAliases, waitSuccessReq} from "../../helpers/request";
 import moment from "moment/moment";
 
@@ -56,8 +56,8 @@ describe('Orders Search', () => {
       cy.reload();
       cy.wait('@listOrdersReq');
       cy.get('[data-testid="order-search-unload-time"]').find('input').as('orderSearchRange');
-      cy.get('@orderSearchRange').first().click().clear().type(`${nextMonthDate}{enter}`);
-      cy.get('@orderSearchRange').last().click().clear().type(`${endOfNextMonth}{enter}`);
+      typeRangePicker('@orderSearchRange', nextMonthDate, endOfNextMonth);
+
       cy.get('[data-testid="search-order-btn"]').should('be.enabled').click();
       waitSuccessReq('@listOrdersReq');
       cy.get('tbody tr').should('have.length', 4);
@@ -87,8 +87,7 @@ describe('Orders Search', () => {
     context('search', () => {
       beforeEach(() => {
         cy.get('[data-testid="order-search-unload-time"]').find('input').as('orderSearchRange');
-        cy.get('@orderSearchRange').first().click().type(`${nextMonthDate}{enter}`);
-        cy.get('@orderSearchRange').last().type(`${endOfNextMonth}{enter}`);
+        typeRangePicker('@orderSearchRange', nextMonthDate, endOfNextMonth);
       });
 
       it('should search four orders only with date filter', () => {
@@ -175,8 +174,8 @@ describe('Orders Search', () => {
     context('order', () => {
       beforeEach(() => {
         cy.get('[data-testid="order-search-unload-time"]').find('input').as('orderSearchRange');
-        cy.get('@orderSearchRange').first().click().type(`${nextMonthDate}{enter}`);
-        cy.get('@orderSearchRange').last().type(`${endOfNextMonth}{enter}`);
+        typeRangePicker('@orderSearchRange', nextMonthDate, endOfNextMonth);
+
         cy.get('[data-testid="search-order-btn"]').should('be.enabled').click();
         waitSuccessReq('@listOrdersReq');
       });
