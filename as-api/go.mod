@@ -1,6 +1,6 @@
 module github.com/shipengqi/asapi
 
-go 1.20
+go 1.23
 
 require (
 	github.com/AlekSi/pointer v1.2.0
