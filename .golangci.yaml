@@ -32,4 +32,4 @@ linters-settings:
 
 issues:
   exclude-files:
-    - '*html\.go'
+    - '.*html\.go'
