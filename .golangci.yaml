@@ -32,4 +32,4 @@ linters-settings:
 
 issues:
   exclude-files:
-    - path: 'as-api/resources/html.go'
+    - 'as-api/resources/html.go'
