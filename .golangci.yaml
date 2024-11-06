@@ -31,5 +31,5 @@ linters-settings:
     threshold: 600
 
 issues:
-  exclude-dirs:
-    - as-api/resources
+  exclude-files:
+    - path: 'as-api/resources/html.go'
