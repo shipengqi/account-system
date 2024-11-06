@@ -28,3 +28,7 @@ linters-settings:
     local-prefixes: github.com/shipengqi/asapi
   dupl:
     threshold: 600
+
+issues:
+  exclude-dirs:
+    - as-api/resources
