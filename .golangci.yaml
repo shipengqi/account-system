@@ -19,7 +19,6 @@ linters:
     - revive
     - gosec
     - gosimple
-    - typecheck
     - unused
 
 linters-settings:
@@ -29,7 +28,3 @@ linters-settings:
     local-prefixes: github.com/shipengqi/asapi
   dupl:
     threshold: 600
-
-issues:
-  exclude-files:
-    - '.*html\.go'
