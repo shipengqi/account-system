@@ -19,7 +19,6 @@ linters:
     - revive
     - gosec
     - gosimple
-    - typecheck
     - unused
 
 linters-settings:
