@@ -1,4 +1,4 @@
-//nolint:typecheck
+//nolint:all
 package resources
 
 import "embed"
