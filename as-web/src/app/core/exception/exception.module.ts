@@ -9,7 +9,7 @@ import {NotFoundComponent} from './not-found.component';
 import {ForbiddenComponent} from './forbidden.component';
 import {ErrorComponent} from './error.component';
 import {ExceptionComponent} from './exception.component';
-import {ExceptionRoutingMoudle} from './exception-routing.moudle';
+import {ExceptionRoutingModule} from './exception-routing.moudle';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import {ExceptionRoutingMoudle} from './exception-routing.moudle';
     NzResultModule,
     NzButtonModule,
     TranslateModule,
-    ExceptionRoutingMoudle,
+    ExceptionRoutingModule,
   ]
 })
 export class ExceptionModule {}

@@ -1,31 +1,44 @@
 import {
-  Directive,
-  EmbeddedViewRef,
+  inject,
   Input,
-  OnDestroy,
+  Directive,
   TemplateRef,
+  EmbeddedViewRef,
   ViewContainerRef
 } from '@angular/core';
-import {Subscription} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+
+import {filter, Subscription} from 'rxjs';
 
 import {ACLService} from './acl.service';
 import {ACLCanType} from './acl.types';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[aclIf]',
-  exportAs: 'aclIf'
+  exportAs: 'aclIf',
+  standalone: true
 })
-export class ACLIfDirective implements OnDestroy {
+export class ACLIfDirective {
+  private readonly _acl = inject(ACLService);
+  private readonly _viewContainer = inject(ViewContainerRef);
+  static ngAcceptInputType_except: boolean | string | undefined | null;
 
   private _value!: ACLCanType;
   private _change$: Subscription;
-  private _thenTemplateRef: TemplateRef<void> | null = null;
+  private _thenTemplateRef: TemplateRef<void> | null = inject(TemplateRef<void>);
   private _elseTemplateRef: TemplateRef<void> | null = null;
   private _thenViewRef: EmbeddedViewRef<void> | null = null;
   private _elseViewRef: EmbeddedViewRef<void> | null = null;
   private _except = false;
+
+  constructor() {
+    this._change$ = this._acl.change
+      .pipe(
+        takeUntilDestroyed(),
+        filter(r => r != null)
+      )
+      .subscribe(() => this._updateView());
+  }
 
   @Input()
   set aclIf(value: ACLCanType) {
@@ -55,17 +68,12 @@ export class ACLIfDirective implements OnDestroy {
     return this._except;
   }
 
-  constructor(
-    templateRef: TemplateRef<void>,
-    private _svc: ACLService,
-    private _viewContainer: ViewContainerRef
-  ) {
-    this._change$ = this._svc.change.pipe(filter(r => r != null)).subscribe(() => this._updateView());
-    this._thenTemplateRef = templateRef;
+  ngOnDestroy(): void {
+    this._change$.unsubscribe();
   }
 
   protected _updateView(): void {
-    const res = this._svc.can(this._value);
+    const res = this._acl.can(this._value);
     if ((res && !this.except) || (!res && this.except)) {
       if (!this._thenViewRef) {
         this._viewContainer.clear();
@@ -83,9 +91,5 @@ export class ACLIfDirective implements OnDestroy {
         }
       }
     }
-  }
-
-  ngOnDestroy(): void {
-    this._change$.unsubscribe();
   }
 }

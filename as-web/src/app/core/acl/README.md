@@ -43,28 +43,29 @@ export class AppComponent {
 
 `ACLConfig`：
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `[guard_url]` | `string` | 路由守卫失败后跳转 | `/403` |
-| `[preCan]` | `(roleOrAbility: ACLCanType) => ACLType` | `can` 执行前回调 |	- |
+| 参数               | 说明 | 类型             | 默认值         |
+|------------------| --- |----------------|-------------|
+| `[guard_url]`    | `string` | 路由守卫失败后跳转      | `/403`      |
+| `[hidden_class]` | `string` | 用于隐藏元素的 CSS 类名 | `acl__hide` |
+| `[preCan]`       | `(roleOrAbility: ACLCanType) => ACLType` | `can` 执行前回调    | 	-          |
 
 `ACLService`：
 
-| 方法 | 说明 |
-| --- | --- |
-| `[change]` | 监听 ACL 变更通知 |
-| `[data]` | 获取所有 ACL 数据 |
-| `setFull(val: boolean)` | 标识当前用户为全量，即不受限 |
-| `set(value: ACLType)` | 设置当前用户角色或权限能力（会先清除所有） |
-| `setRole(roles: string[])` | 设置当前用户角色（会先清除所有） |
-| `setAbility(abilities: (number | string)[])` | 设置当前用户权限能力（会先清除所有） |
-| `add(value: ACLType)` | 为当前用户增加角色或权限能力 |
-| `attachRole(roles: string[])` | 为当前用户附加角色 |
-| `attachAbility(abilities: (number | string)[])` | 为当前用户附加权限 |
-| `removeRole(roles: string[])` | 为当前用户移除角色 |
-| `removeAbility(abilities: (number | string)[])` | 为当前用户移除权限 |
-| `can(roleOrAbility: ACLCanType)` | 当前用户是否有对应角色 |
-| `canAbility(ability: ACLCanType)` | 当前用户是否有对应权限点 |
+| 方法                                                 | 说明 |
+|----------------------------------------------------| --- |
+| `[change]`                                         | 监听 ACL 变更通知 |
+| `[data]`                                           | 获取所有 ACL 数据 |
+| `setFull(val: boolean)`                            | 标识当前用户为全量，即不受限 |
+| `set(value: ACLType)`                              | 设置当前用户角色或权限能力（会先清除所有） |
+| `setRoles(roles: string[])`                        | 设置当前用户角色（会先清除所有） |
+| `setAbilities(abilities: (number \| string)[])`    | 设置当前用户权限能力（会先清除所有） |
+| `add(value: ACLType)`                              | 为当前用户增加角色或权限能力 |
+| `attachRoles(roles: string[])`                     | 为当前用户附加角色 |
+| `attachAbilities(abilities: (number \| string)[])` | 为当前用户附加权限 |
+| `removeRoles(roles: string[])`                     | 为当前用户移除角色 |
+| `removeAbilities(abilities: (number \| string)[])` | 为当前用户移除权限 |
+| `can(roleOrAbility: ACLCanType)`                   | 当前用户是否有对应角色 |
+| `canAbility(ability: ACLCanType)`                  | 当前用户是否有对应权限点 |
 
 `ACLCanType`：
 
@@ -74,12 +75,13 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 `ACLType`：
 
-| 属性	 | 说明                                      | 类型                                                        | 默认值 |
-| --- |-----------------------------------------|-----------------------------------------------------------|-----|
-| `[role]` | `string[]`                              | 角色                                                        | -   |
-| `[ability]` | `number[], string[]` | 权限点                                                       | 	-  |
-| `[mode]` | `allOf, oneOf` | `allOf` 表示必须满足所有角色或权限点数组算有效 `oneOf` 表示只须满足角色或权限点数组中的一项算有效 | 	`oneOf`  |
-| `[except]` | `boolean` | 是否取反，即结果为 `true` 时表示未授权                                   | 	`false`  |
+| 属性	           | 说明                   | 类型                                                        | 默认值 |
+|---------------|----------------------|-----------------------------------------------------------|-----|
+| `[roles]`     | `string[]`           | 角色                                                        | -   |
+| `[abilities]` | `number[], string[]` | 权限点                                                       | 	-  |
+| `[mode]`      | `allOf, oneOf`       | `allOf` 表示必须满足所有角色或权限点数组算有效，`oneOf` 表示只须满足角色或权限点数组中的一项算有效 | 	`oneOf`  |
+| `[action]`    | `hide, disable`      | `hide` 表示隐藏元素，`disable` 表示禁用元素                            | 	`hide`  |
+| `[except]`    | `boolean`            | 是否取反，即结果为 `true` 时表示未授权                                   | 	`false`  |
 
 ## 粒度控制
 
@@ -150,12 +152,12 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 ### API
 
-| 参数	                                   | 说明	        | 类型	                        | 默认值 |
-|---------------------------------------|------------|----------------------------| --- |
-| `[aclIf]`                             | 	`can` 方法参数体 | 	`ACLCanType`              | - |
-|  `[aclIfThen]`                        | 已授权时显示模板   | `TemplateRef<void>` `null` | -                                   |      
-| `[aclIfElse]`                         | 未授权时显示模板   | `TemplateRef<void>` `null` | - |    
-| `[except]` | `未授权时显示` | `boolean` | `false` | 
+| 参数	                                  | 说明	        | 类型	                        | 默认值 |
+|--------------------------------------|------------|----------------------------| --- |
+| `[aclIf]`                            | 	`can` 方法参数体 | 	`ACLCanType`              | - |
+| `[aclIfThen]`                        | 已授权时显示模板   | `TemplateRef<void>` `null` | -                                   |
+| `[aclIfElse]`                        | 未授权时显示模板   | `TemplateRef<void>` `null` | - |
+| `[except]` | `未授权时显示` | `boolean` | `false` |
 
 ### 原理
 

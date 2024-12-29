@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ACLService } from './acl.service';
+import { ACLGuardService } from './acl-guard.service';
 
-describe('ACLService', () => {
-  let service: ACLService;
+describe('ACLGuardService', () => {
+  let service: ACLGuardService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ACLService);
+    service = TestBed.inject(ACLGuardService);
   });
 
   it('should be created', () => {

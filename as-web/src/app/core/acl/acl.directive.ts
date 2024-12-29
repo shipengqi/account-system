@@ -1,49 +1,63 @@
-import {Directive, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {Directive, ElementRef, inject, Input, OnDestroy, Renderer2} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+
+import {filter, Subscription} from 'rxjs';
 
 import {ACLService} from './acl.service';
 import {ACLCanType} from './acl.types';
 
 @Directive({
-  // eslint-disable-next-line @angular-eslint/directive-selector
   selector: '[acl]',
-  exportAs: 'acl'
+  exportAs: 'acl',
+  standalone: true
 })
 export class ACLDirective implements OnDestroy {
-  private _value!: ACLCanType;
-  private change$: Subscription;
+  private readonly _el: HTMLElement = inject(ElementRef).nativeElement;
+  private readonly _renderer = inject(Renderer2);
+  private readonly _acl = inject(ACLService);
 
-  @Input()
+  private _value!: ACLCanType;
+  private _change$: Subscription;
+
+  @Input('acl')
   set acl(value: ACLCanType) {
     this.set(value);
   }
 
-  @Input()
+  @Input('acl-ability')
   set ability(value: ACLCanType) {
-    this.set(this._svc.parseAbility(value));
+    this.set(this._acl.parseAbilities(value));
   }
 
   private set(value: ACLCanType): void {
     this._value = value;
-    const CLS = 'acl__hide';
-    const el = this._el.nativeElement;
-    if (this._svc.can(this._value)) {
-      this._renderer.removeClass(el, CLS);
+    const CLS = this._acl.hidden_class;
+    const el = this._el;
+    const pass = this._acl.can(this._value);
+    if (typeof value === 'object' && !Array.isArray(value) && value.action && value.action === 'disable') {
+      if (pass) {
+        this._renderer.setProperty(el, 'disabled', false);
+      } else {
+        // Promise or Timeout is required for some rendering.
+        Promise.resolve().then(() => this._renderer.setProperty(el, 'disabled', true));
+      }
     } else {
-      this._renderer.addClass(el, CLS);
+      if (pass) {
+        this._renderer.removeClass(el, CLS);
+      } else {
+        this._renderer.addClass(el, CLS);
+      }
     }
   }
 
-  constructor(
-    private _el: ElementRef,
-    private _renderer: Renderer2,
-    protected _svc: ACLService
-  ) {
-    this.change$ = this._svc.change.pipe(filter(r => r != null)).subscribe(() => this.set(this._value));
+  constructor() {
+    this._change$ = this._acl.change.pipe(
+      takeUntilDestroyed(),
+      filter(r => r != null)
+    ).subscribe(() => this.set(this._value));
   }
 
   ngOnDestroy(): void {
-    this.change$.unsubscribe();
+    this._change$.unsubscribe();
   }
 }

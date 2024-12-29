@@ -18,4 +18,4 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ]
 })
-export class ExceptionRoutingMoudle {}
+export class ExceptionRoutingModule {}

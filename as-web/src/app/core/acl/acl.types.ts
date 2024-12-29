@@ -1,17 +1,6 @@
-import { Injector } from '@angular/core';
-import { Observable } from 'rxjs';
-
-import type { ACLService } from './acl.service';
-
 export interface ACLType {
-  /**
-   * 角色
-   */
   roles?: string[];
-  /**
-   * 权限点
-   */
-  abilities?: number[] | string[];
+  abilities?: Array<string | number>;
 
   /**
    * Validated against, default: `oneOf`
@@ -21,7 +10,12 @@ export interface ACLType {
   mode?: 'allOf' | 'oneOf';
 
   /**
-   * 是否取反，即结果为 `true` 时表示未授权
+   * Hide element or disable element, default: `hide`
+   */
+  action?: 'hide' | 'disable';
+
+  /**
+   * Inverted or not, i.e., a result of `true` indicates no authorization.
    */
   except?: boolean;
 
@@ -29,6 +23,3 @@ export interface ACLType {
 }
 
 export type ACLCanType = number | number[] | string | string[] | ACLType;
-
-export type ACLGuardFunctionType = (srv: ACLService, injector: Injector) => Observable<ACLCanType>;
-export type ACLGuardType = ACLCanType | Observable<ACLCanType> | ACLGuardFunctionType;
