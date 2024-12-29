@@ -45,10 +45,10 @@ export const TEST_DATA = {
     { k: '+8615900000000', v: true }
   ],
   url: [
-    { k: 'http://ng-alain.com', v: true },
-    { k: 'https://ng-alain.com', v: true },
-    { k: '//ng-alain.com', v: false },
-    { k: 'ng-alain.com', v: false },
+    { k: 'http://example.com', v: true },
+    { k: 'https://example.com', v: true },
+    { k: '//example.com', v: false },
+    { k: 'example.com', v: false },
     { k: '中国.com', v: false }
   ],
   ip: [
