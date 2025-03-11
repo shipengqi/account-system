@@ -43,28 +43,29 @@ export class AppComponent {
 
 `ACLConfig`：
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| `[guard_url]` | `string` | 路由守卫失败后跳转 | `/403` |
-| `[preCan]` | `(roleOrAbility: ACLCanType) => ACLType` | `can` 执行前回调 |	- |
+| 参数               | 说明 | 类型             | 默认值         |
+|------------------| --- |----------------|-------------|
+| `[guard_url]`    | `string` | 路由守卫失败后跳转      | `/403`      |
+| `[hidden_class]` | `string` | 用于隐藏元素的 CSS 类名 | `acl__hide` |
+| `[preCan]`       | `(roleOrAbility: ACLCanType) => ACLType` | `can` 执行前回调    | 	-          |
 
 `ACLService`：
 
-| 方法 | 说明 |
-| --- | --- |
-| `[change]` | 监听 ACL 变更通知 |
-| `[data]` | 获取所有 ACL 数据 |
-| `setFull(val: boolean)` | 标识当前用户为全量，即不受限 |
-| `set(value: ACLType)` | 设置当前用户角色或权限能力（会先清除所有） |
-| `setRole(roles: string[])` | 设置当前用户角色（会先清除所有） |
-| `setAbility(abilities: (number | string)[])` | 设置当前用户权限能力（会先清除所有） |
-| `add(value: ACLType)` | 为当前用户增加角色或权限能力 |
-| `attachRole(roles: string[])` | 为当前用户附加角色 |
-| `attachAbility(abilities: (number | string)[])` | 为当前用户附加权限 |
-| `removeRole(roles: string[])` | 为当前用户移除角色 |
-| `removeAbility(abilities: (number | string)[])` | 为当前用户移除权限 |
-| `can(roleOrAbility: ACLCanType)` | 当前用户是否有对应角色 |
-| `canAbility(ability: ACLCanType)` | 当前用户是否有对应权限点 |
+| 方法                                                 | 说明 |
+|----------------------------------------------------| --- |
+| `[change]`                                         | 监听 ACL 变更通知 |
+| `[data]`                                           | 获取所有 ACL 数据 |
+| `setFull(val: boolean)`                            | 标识当前用户为全量，即不受限 |
+| `set(value: ACLType)`                              | 设置当前用户角色或权限能力（会先清除所有） |
+| `setRoles(roles: string[])`                        | 设置当前用户角色（会先清除所有） |
+| `setAbilities(abilities: (number \| string)[])`    | 设置当前用户权限能力（会先清除所有） |
+| `add(value: ACLType)`                              | 为当前用户增加角色或权限能力 |
+| `attachRoles(roles: string[])`                     | 为当前用户附加角色 |
+| `attachAbilities(abilities: (number \| string)[])` | 为当前用户附加权限 |
+| `removeRoles(roles: string[])`                     | 为当前用户移除角色 |
+| `removeAbilities(abilities: (number \| string)[])` | 为当前用户移除权限 |
+| `can(roleOrAbility: ACLCanType)`                   | 当前用户是否有对应角色 |
+| `canAbility(ability: ACLCanType)`                  | 当前用户是否有对应权限点 |
 
 `ACLCanType`：
 
@@ -74,12 +75,13 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 `ACLType`：
 
-| 属性	 | 说明                                      | 类型                                                        | 默认值 |
-| --- |-----------------------------------------|-----------------------------------------------------------|-----|
-| `[role]` | `string[]`                              | 角色                                                        | -   |
-| `[ability]` | `number[], string[]` | 权限点                                                       | 	-  |
-| `[mode]` | `allOf, oneOf` | `allOf` 表示必须满足所有角色或权限点数组算有效 `oneOf` 表示只须满足角色或权限点数组中的一项算有效 | 	`oneOf`  |
-| `[except]` | `boolean` | 是否取反，即结果为 `true` 时表示未授权                                   | 	`false`  |
+| 属性	           | 说明                   | 类型                                                        | 默认值 |
+|---------------|----------------------|-----------------------------------------------------------|-----|
+| `[roles]`     | `string[]`           | 角色                                                        | -   |
+| `[abilities]` | `number[], string[]` | 权限点                                                       | 	-  |
+| `[mode]`      | `allOf, oneOf`       | `allOf` 表示必须满足所有角色或权限点数组算有效，`oneOf` 表示只须满足角色或权限点数组中的一项算有效 | 	`oneOf`  |
+| `[action]`    | `hide, disable`      | `hide` 表示隐藏元素，`disable` 表示禁用元素                            | 	`hide`  |
+| `[except]`    | `boolean`            | 是否取反，即结果为 `true` 时表示未授权                                   | 	`false`  |
 
 ## 粒度控制
 
@@ -96,15 +98,15 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 <button *aclIf="['user', 'manage']"></button>
 
 <!--按钮必须拥有 user 和 manage 角色显示-->
-<button [acl]="{ role: ['user', 'manage'], mode: 'allOf' }"></button>
-<button *aclIf="{ role: ['user', 'manage'], mode: 'allOf' }"></button>
+<button [acl]="{ roles: ['user', 'manage'], mode: 'allOf' }"></button>
+<button *aclIf="{ roles: ['user', 'manage'], mode: 'allOf' }"></button>
 
 <!--当拥有 user 角色显示文本框，未授权显示文本-->
 <input nz-input *aclIf="'user'; else unauthorized">
 <ng-template #unauthorized>{{user}}</ng-template>
 
 <!--使用 except 反向控制，当未拥有 user 角色时显示-->
-<ng-template [aclIf]="user" except>
+<ng-template *aclIf="'user'" except>
   <input nz-input>
 </ng-template>
 ```
@@ -126,7 +128,7 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 ```html
 <!--按钮必须拥有 10 和 USER-EDIT 权限点时显示-->
-<button [acl]="{ ability: [10, 'USER-EDIT'], mode: 'allOf' }"></button>
+<button [acl]="{ abilities: [10, 'USER-EDIT'], mode: 'allOf' }"></button>
 ```
 
 检查权限是通过 `can` 方法，通过全局配置 `acl.preCan` 方法，可以利用该方法来实现一个字符串区分角色或权限点。
@@ -137,7 +139,7 @@ type ACLCanType = number | number[] | string | string[] | ACLType
   acl: {
     preCan: (roleOrAbility) => {
       const str = roleOrAbility.toString();
-      return str.startsWith('ability.') ? { ability: [ str ] } : null;
+      return str.startsWith('ability.') ? { abilities: [ str ] } : null;
     }
   }
 ```
@@ -150,12 +152,12 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 ### API
 
-| 参数	                                   | 说明	        | 类型	                        | 默认值 |
-|---------------------------------------|------------|----------------------------| --- |
-| `[aclIf]`                             | 	`can` 方法参数体 | 	`ACLCanType`              | - |
-|  `[aclIfThen]`                        | 已授权时显示模板   | `TemplateRef<void>` `null` | -                                   |      
-| `[aclIfElse]`                         | 未授权时显示模板   | `TemplateRef<void>` `null` | - |    
-| `[except]` | `未授权时显示` | `boolean` | `false` | 
+| 参数	                                  | 说明	        | 类型	                        | 默认值 |
+|--------------------------------------|------------|----------------------------| --- |
+| `[aclIf]`                            | 	`can` 方法参数体 | 	`ACLCanType`              | - |
+| `[aclIfThen]`                        | 已授权时显示模板   | `TemplateRef<void>` `null` | -                                   |
+| `[aclIfElse]`                        | 未授权时显示模板   | `TemplateRef<void>` `null` | - |
+| `[except]` | `未授权时显示` | `boolean` | `false` |
 
 ### 原理
 
@@ -183,8 +185,8 @@ const routes: Routes = [
     canActivate: [ ACLGuard ],
     data: {
       guard: {
-        role: [ 'user1' ],
-        ability: [ 10, 'USER-EDIT' ],
+        roles: [ 'user1' ],
+        abilities: [ 10, 'USER-EDIT' ],
         mode: 'allOf'
       } as ACLGuardType,
       guard_url: '/no-permisseion'
@@ -218,7 +220,7 @@ const routes: Routes = [
     ],
     // 所有子路由有效
     canActivateChild: [ ACLGuard ],
-    data: { guard: { role: [ 'user1' ], ability: [ 10, 'USER-EDIT' ], mode: 'allOf' } }
+    data: { guard: { roles: [ 'user1' ], abilities: [ 10, 'USER-EDIT' ], mode: 'allOf' } }
   },
   // 权限点限定
   { path: 'pro', loadChildren: './pro/pro.module#ProModule', canMatch: [ ACLGuard ], data: { guard: 1 } },
