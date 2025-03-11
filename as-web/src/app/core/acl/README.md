@@ -98,15 +98,15 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 <button *aclIf="['user', 'manage']"></button>
 
 <!--按钮必须拥有 user 和 manage 角色显示-->
-<button [acl]="{ role: ['user', 'manage'], mode: 'allOf' }"></button>
-<button *aclIf="{ role: ['user', 'manage'], mode: 'allOf' }"></button>
+<button [acl]="{ roles: ['user', 'manage'], mode: 'allOf' }"></button>
+<button *aclIf="{ roles: ['user', 'manage'], mode: 'allOf' }"></button>
 
 <!--当拥有 user 角色显示文本框，未授权显示文本-->
 <input nz-input *aclIf="'user'; else unauthorized">
 <ng-template #unauthorized>{{user}}</ng-template>
 
 <!--使用 except 反向控制，当未拥有 user 角色时显示-->
-<ng-template [aclIf]="user" except>
+<ng-template *aclIf="'user'" except>
   <input nz-input>
 </ng-template>
 ```
@@ -128,7 +128,7 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 
 ```html
 <!--按钮必须拥有 10 和 USER-EDIT 权限点时显示-->
-<button [acl]="{ ability: [10, 'USER-EDIT'], mode: 'allOf' }"></button>
+<button [acl]="{ abilities: [10, 'USER-EDIT'], mode: 'allOf' }"></button>
 ```
 
 检查权限是通过 `can` 方法，通过全局配置 `acl.preCan` 方法，可以利用该方法来实现一个字符串区分角色或权限点。
@@ -139,7 +139,7 @@ type ACLCanType = number | number[] | string | string[] | ACLType
   acl: {
     preCan: (roleOrAbility) => {
       const str = roleOrAbility.toString();
-      return str.startsWith('ability.') ? { ability: [ str ] } : null;
+      return str.startsWith('ability.') ? { abilities: [ str ] } : null;
     }
   }
 ```
@@ -185,8 +185,8 @@ const routes: Routes = [
     canActivate: [ ACLGuard ],
     data: {
       guard: {
-        role: [ 'user1' ],
-        ability: [ 10, 'USER-EDIT' ],
+        roles: [ 'user1' ],
+        abilities: [ 10, 'USER-EDIT' ],
         mode: 'allOf'
       } as ACLGuardType,
       guard_url: '/no-permisseion'
@@ -220,7 +220,7 @@ const routes: Routes = [
     ],
     // 所有子路由有效
     canActivateChild: [ ACLGuard ],
-    data: { guard: { role: [ 'user1' ], ability: [ 10, 'USER-EDIT' ], mode: 'allOf' } }
+    data: { guard: { roles: [ 'user1' ], abilities: [ 10, 'USER-EDIT' ], mode: 'allOf' } }
   },
   // 权限点限定
   { path: 'pro', loadChildren: './pro/pro.module#ProModule', canMatch: [ ACLGuard ], data: { guard: 1 } },
