@@ -9,6 +9,7 @@ require (
 	github.com/gin-contrib/pprof v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/google/uuid v1.6.0
 	github.com/jinzhu/now v1.1.5
 	github.com/mattn/go-isatty v0.0.20
@@ -21,6 +22,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 	github.com/tpkeeper/gin-dump v1.0.1
+	github.com/wenlng/go-captcha-assets v1.0.4
+	github.com/wenlng/go-captcha/v2 v2.0.3
 	golang.org/x/sync v0.7.0
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.2
@@ -85,9 +88,10 @@ require (
 	golang.org/x/arch v0.7.0 // indirect
 	golang.org/x/crypto v0.22.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
+	golang.org/x/image v0.16.0 // indirect
 	golang.org/x/net v0.22.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/text v0.15.0 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect

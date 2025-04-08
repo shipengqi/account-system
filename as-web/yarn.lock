@@ -4934,6 +4934,13 @@
     "slash" "^5.1.0"
     "unicorn-magic" "^0.1.0"
 
+"go-captcha-angular@^1.0.4":
+  "integrity" "sha512-vJpmnvTSmTZasYD14bw3n/VKPuzE2+JApqhqmvAXAWDg21E+shqOch52EwAq92buF/BLh4jpv+R/pImp++dQ/w=="
+  "resolved" "https://registry.npmjs.org/go-captcha-angular/-/go-captcha-angular-1.0.4.tgz"
+  "version" "1.0.4"
+  dependencies:
+    "tslib" "^2.3.0"
+
 "gopd@^1.0.1":
   "integrity" "sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA=="
   "resolved" "https://registry.npmjs.org/gopd/-/gopd-1.0.1.tgz"

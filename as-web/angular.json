@@ -43,7 +43,8 @@
               }
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "go-captcha-angular/css/go-captcha.css"
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [

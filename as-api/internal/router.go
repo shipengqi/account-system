@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shipengqi/errors"
 
+	"github.com/shipengqi/asapi/internal/controller/v1/captcha"
 	"github.com/shipengqi/asapi/internal/controller/v1/config"
 	"github.com/shipengqi/asapi/internal/controller/v1/dashboard"
 	"github.com/shipengqi/asapi/internal/controller/v1/driver"
@@ -108,6 +109,14 @@ func installControllers(g *gin.Engine) {
 			analysisv1.GET("/timeline/revpay", analysisc.TimelineRevenueAndPayroll)
 			analysisv1.GET("/timeline/exp", analysisc.TimelineExpenditure)
 			analysisv1.GET("/timeline/profit", analysisc.TimelineProfit)
+		}
+
+		captchav1 := v1.Group("/captcha")
+		{
+			captchac := captcha.New(storeIns)
+
+			captchav1.GET("/click-basic", captchac.GetClickBasicCaptData)
+			captchav1.POST("/click-basic", captchac.CheckClickBasicCaptData)
 		}
 	}
 }

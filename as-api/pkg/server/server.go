@@ -126,7 +126,7 @@ func (s *GenericAPIServer) InstallMiddlewares() {
 			continue
 		}
 
-		log.Infof("install middleware: %s", m)
+		log.Infof("installed middleware: %s", m)
 		s.Use(mw)
 	}
 }

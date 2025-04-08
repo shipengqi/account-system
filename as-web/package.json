@@ -27,6 +27,7 @@
     "@ngx-translate/core": "^15.0.0",
     "deepmerge-ts": "^7.0.3",
     "file-saver": "^2.0.5",
+    "go-captcha-angular": "^1.0.4",
     "moment": "^2.30.1",
     "ng-zorro-antd": "^18.1.0",
     "ngx-translate-multi-http-loader": "^18.0.0",

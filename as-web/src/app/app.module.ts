@@ -19,8 +19,10 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
+import {NzModalModule} from "ng-zorro-antd/modal";
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {MultiTranslateHttpLoader} from 'ngx-translate-multi-http-loader';
+import {GoCaptchaModule} from "go-captcha-angular";
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -49,8 +51,11 @@ import {
   UsergroupAddOutline,
   ProductOutline,
   MenuFoldOutline,
-  MenuUnfoldOutline
+  MenuUnfoldOutline,
+  ExperimentOutline
 } from '@ant-design/icons-angular/icons';
+
+
 const icons: IconDefinition[] = [
   UserOutline,
   SearchOutline,
@@ -62,7 +67,8 @@ const icons: IconDefinition[] = [
   UsergroupAddOutline,
   ProductOutline,
   MenuFoldOutline,
-  MenuUnfoldOutline
+  MenuUnfoldOutline,
+  ExperimentOutline
 ];
 
 // AoT requires an exported function for factories
@@ -99,7 +105,9 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
         deps: [HttpBackend],
       },
     }),
-    ACLModule.forRoot({})
+    ACLModule.forRoot({}),
+    GoCaptchaModule,
+    NzModalModule,
   ],
   providers: [
     NzMessageService,
