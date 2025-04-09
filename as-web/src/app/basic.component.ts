@@ -24,18 +24,27 @@ import moment from "moment";
       </ng-template>
     </app-layout>
     <app-base-dialog [visible]="isCaptchaVisible">
-      <go-captcha-click
+<!--      <go-captcha-click
         [data]="captchaClickBasicData"
         [events]="captchaClickBasicEvents"
         [config]="captchaClickBasicConfig"
         #captchaClickBasicRef
       ></go-captcha-click>
+      <br/>
+      <go-captcha-slide
+        [data]="captchaSlideData"
+        [events]="captchaSlideEvents"
+        [config]="captchaSlideConfig"
+        #captchaSlideRef
+      ></go-captcha-slide>
+      <br/>-->
+      <go-captcha-rotate
+        [data]="captchaRotateData"
+        [events]="captchaRotateEvents"
+        [config]="captchaRotateConfig"
+        #captchaRotateRef
+      ></go-captcha-rotate>
     </app-base-dialog>
-<!--    <nz-modal [(nzVisible)]="isCaptchaVisible" nzTitle="Captcha" (nzOnCancel)="handleCaptchaCancel()" (nzOnOk)="handleCaptchaCancel()">-->
-<!--      <ng-container *nzModalContent>-->
-<!--       -->
-<!--      </ng-container>-->
-<!--    </nz-modal>-->
   `,
 })
 export class BasicComponent implements OnInit {
@@ -65,6 +74,120 @@ export class BasicComponent implements OnInit {
       this.isCaptchaVisible = false;
       console.log("close >>>>>>>");
     }
+  }
+
+  captchaSlideKey = '';
+  captchaSlideData = {
+    thumbX: 20,
+    thumbY: 20,
+    thumbWidth: 0,
+    thumbHeight: 0,
+    image: '',
+    thumb: '',
+  }
+
+  captchaSlideConfig = {
+    width: 300,
+    height: 220,
+  }
+
+  captchaSlideEvents = {
+    move: (x: number, y: number): void => {
+      console.log("move >>>>>>>", x, y)
+    },
+    confirm: (point: any, reset: Function) => {
+      this.confirmCaptchaSlideEvent(point, reset)
+    },
+    refresh: () => {
+      this.requestCaptchaSlideData()
+    },
+    close: (): void => {
+      console.log("close >>>>>>>")
+    }
+  }
+
+  confirmCaptchaSlideEvent(point: any, reset: Function) {
+    // Todo reset captcha
+    this._cap.confirmSlideBasicData(point, this.captchaSlideKey).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  requestCaptchaSlideData(){
+    // Todo clear
+    // this.captchaSlideRef.clear && this.captchaSlideRef.clear()
+    this._cap.getSlideBasic().subscribe({
+      next: (res) => {
+        this.captchaSlideData.thumbX = res.tile_x
+        this.captchaSlideData.thumbY = res.tile_y
+        this.captchaSlideData.thumbWidth = res.tile_width
+        this.captchaSlideData.thumbHeight = res.tile_height
+        this.captchaSlideData.image = res.image_base64
+        this.captchaSlideData.thumb = res.tile_base64
+        this.captchaSlideKey = res.key
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+  captchaRotateKey = '';
+  captchaRotateData = {
+    image: '',
+    thumb: '',
+    thumbSize: 0,
+  }
+
+  captchaRotateEvents = {
+    rotate: (angle: number): void => {
+      console.log("rotate >>>>>>>", angle)
+    },
+    confirm: (dot: any, reset: Function) => {
+      this.confirmRotateEvent(dot, reset)
+    },
+    refresh: () => {
+      this.requestRotateData()
+    },
+    close: (): void => {
+      console.log("close >>>>>>>")
+    }
+  }
+
+  captchaRotateConfig = {
+    width: 300,
+    height: 220,
+  }
+
+  confirmRotateEvent(angle: any, reset: Function) {
+    // Todo reset captcha
+    this._cap.confirmRotateBasicData(angle, this.captchaRotateKey).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  requestRotateData(){
+    // Todo clear
+    // this.captchaRotateRef.clear && this.captchaRotateRef.clear()
+    this._cap.getRotateBasic().subscribe({
+      next: (res) => {
+        this.captchaRotateData.image = res.image_base64
+        this.captchaRotateData.thumb = res.thumb_base64
+        this.captchaRotateKey = res.key
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   options: LayoutOptions = {
@@ -99,17 +222,21 @@ export class BasicComponent implements OnInit {
   }
 
   onExperimentClick(): void {
+    this.isCaptchaVisible = true;
+    // Todo clear
+    // this.captchaClickBasicRef.clear && this.captchaClickBasicRef.clear()
     this._cap.getClickBasic().subscribe({
       next: (res) => {
         this.captchaClickBasicData.image = res.image_base64;
         this.captchaClickBasicData.thumb = res.thumb_base64;
         this.captchaClickBasicKey = res.key;
-        this.isCaptchaVisible = true;
       },
       error: (err) => {
         console.log(err);
       }
     })
+    this.requestCaptchaSlideData();
+    this.requestRotateData();
   }
 
   handleCaptchaCancel(): void {
@@ -117,6 +244,7 @@ export class BasicComponent implements OnInit {
   }
 
   confirmCaptchaClickBasicEvent(dot: any, reset: Function) {
+    // Todo reset captcha
     this._cap.confirmClickBasicData(dot, this.captchaClickBasicKey).subscribe({
       next: (res) => {
         console.log(res);

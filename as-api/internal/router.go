@@ -117,6 +117,12 @@ func installControllers(g *gin.Engine) {
 
 			captchav1.GET("/click-basic", captchac.GetClickBasicCaptData)
 			captchav1.POST("/click-basic", captchac.CheckClickBasicCaptData)
+
+			captchav1.GET("/slide-basic", captchac.GetSlideCaptData)
+			captchav1.POST("/slide-basic", captchac.CheckSlideCaptData)
+
+			captchav1.GET("/rotate-basic", captchac.GetRotateCaptData)
+			captchav1.POST("/rotate-basic", captchac.CheckRotateCaptData)
 		}
 	}
 }
