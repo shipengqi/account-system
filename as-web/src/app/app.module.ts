@@ -54,6 +54,7 @@ import {
   MenuUnfoldOutline,
   ExperimentOutline
 } from '@ant-design/icons-angular/icons';
+import {BaseDialogComponent} from "./shared/components/base-dialog/base-dialog.component";
 
 
 const icons: IconDefinition[] = [
@@ -108,6 +109,7 @@ export function HttpLoaderFactory(_httpBackend: HttpBackend) {
     ACLModule.forRoot({}),
     GoCaptchaModule,
     NzModalModule,
+    BaseDialogComponent,
   ],
   providers: [
     NzMessageService,

@@ -23,16 +23,19 @@ import moment from "moment";
         <router-outlet></router-outlet>
       </ng-template>
     </app-layout>
-    <nz-modal [(nzVisible)]="isCaptchaVisible" nzTitle="Captcha" (nzOnCancel)="handleCaptchaCancel()" (nzOnOk)="handleCaptchaCancel()">
-      <ng-container *nzModalContent>
-        <go-captcha-click
-          [data]="captchaClickBasicData"
-          [events]="captchaClickBasicEvents"
-          [config]="captchaClickBasicConfig"
-          #captchaClickBasicRef
-        ></go-captcha-click>
-      </ng-container>
-    </nz-modal>
+    <app-base-dialog [visible]="isCaptchaVisible">
+      <go-captcha-click
+        [data]="captchaClickBasicData"
+        [events]="captchaClickBasicEvents"
+        [config]="captchaClickBasicConfig"
+        #captchaClickBasicRef
+      ></go-captcha-click>
+    </app-base-dialog>
+<!--    <nz-modal [(nzVisible)]="isCaptchaVisible" nzTitle="Captcha" (nzOnCancel)="handleCaptchaCancel()" (nzOnOk)="handleCaptchaCancel()">-->
+<!--      <ng-container *nzModalContent>-->
+<!--       -->
+<!--      </ng-container>-->
+<!--    </nz-modal>-->
   `,
 })
 export class BasicComponent implements OnInit {
@@ -56,6 +59,7 @@ export class BasicComponent implements OnInit {
     },
     refresh: () => {
       console.log("refresh >>>>>>>");
+      this.onExperimentClick();
     },
     close: (): void => {
       this.isCaptchaVisible = false;
